@@ -1,0 +1,15 @@
+name: ddm_env
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - nd2reader
+  - numpy
+  - notebook
+  - matplotlib
+  - pip
+  - python=3.8
+  - readlif
+  - scipy
+  - xarray
+
