@@ -1,3 +1,6 @@
+# Dask
+dask-worker-space/
+
 # Data files
 data/
 *.nd2

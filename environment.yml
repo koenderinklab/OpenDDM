@@ -1,15 +1,25 @@
 name: ddm_env
 channels:
   - conda-forge
+  - pytorch
   - defaults
 dependencies:
-  - nd2reader
-  - numpy
-  - notebook
+  - cpuonly
+  - cudatoolkit=11.3
+  - dask
   - matplotlib
+  - nd2reader
+  - notebook
+  - numba
+  - numpy
   - pip
+  - pip:
+      - nd2
+  - pyfftw
   - python=3.8
+  - python-graphviz
+  - pytorch
   - readlif
   - scipy
+  - tensorflow
   - xarray
-
