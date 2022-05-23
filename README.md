@@ -10,4 +10,5 @@ git clone git@github.com:koenderinklab/ddmPilotCode.git ddm
 cd ddm
 conda env create -f environment.yml
 conda activate ddm_env
+pip install -e .
 ``` 
