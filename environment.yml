@@ -17,6 +17,7 @@ dependencies:
       - nd2
   - pyfftw
   - python=3.8
+  - python-graphviz
   - pytorch
   - readlif
   - scipy
