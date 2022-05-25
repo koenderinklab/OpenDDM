@@ -15,7 +15,7 @@ pip install -e .
 ## Data processing workflow
 
 ```mermaid
-%%{init: {'theme': 'base'}}%%
+%%{init: {'theme': 'dark'}}%%
 flowchart TB
 
     id1(Microscope) .-> Data
