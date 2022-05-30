@@ -7,7 +7,7 @@ A Python package to analyse an image sequence and measure diffusion properties t
 ```
 git clone git@github.com:koenderinklab/ddmPilotCode.git ddm
 cd ddm
-conda env create -f environment.yml
+conda env create -f env.yml
 conda activate ddm_env
 pip install -e .
 ``` 
