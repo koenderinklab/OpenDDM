@@ -25,7 +25,7 @@ setup(
     packages=find_packages(exclude=["*tests*"]),
     key_words=["",],
     classifiers=[
-        "Development Status :: 3 - Alpha",
+        "Development Status :: 2 - Pre-Alpha",
         "Intended Audience :: Education",
         "Intended Audience :: Science/Research",
         "Intended Audience :: Developers",
