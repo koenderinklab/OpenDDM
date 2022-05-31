@@ -31,7 +31,7 @@ def readLIF(filename):
         array with the image data saved as a dask array. Metadata in the dask array includes the spatial resolution in microns per pixel and the temporal resolution in milliseconds per frame.
     
     """
-    lifSeq = pims.Bioformats('data/21-03-31_ddm.lif', read_mode = 'jpype')
+    lifSeq = pims.Bioformats(filename, read_mode = 'jpype')
     xscale = lifSeq.metadata.PixelsPhysicalSizeX(0)
     tscale = lifSeq.metadata.PlaneDeltaT(0,1)
     lifXCoords = np.arange(0., lifSeq.shape[1]*xscale, xscale)
