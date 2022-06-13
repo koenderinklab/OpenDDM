@@ -9,7 +9,7 @@ git clone git@github.com:koenderinklab/ddmPilotCode.git ddm
 cd ddm
 conda env create -f env.yml
 conda activate ddm_env
-pip install -e .
+pip install -e .[dev]
 ``` 
 
 ## Data processing workflow
