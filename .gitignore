@@ -8,7 +8,7 @@ data/
 *.tif
 
 #add in exception to allow the files in the tests folder to be uploaded
-!tests/
+!tests/data/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
