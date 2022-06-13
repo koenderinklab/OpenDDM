@@ -4,6 +4,14 @@ dask-worker-space/
 # Data files
 data/
 *.nd2
+*.lif
+*.tif
+
+#add in exception to allow the files in the tests folder to be uploaded
+!tests/data/
+!tests/data/*.nd2
+!tests/data/*.lif
+!tests/data/*.tif
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
