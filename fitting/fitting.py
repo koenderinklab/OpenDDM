@@ -31,10 +31,10 @@ def singleExp(t, tau, S):
     return np.exp(-1 * (t/tau)**S)
 
 
-# In[ ]:
+# In[2]:
 
 
-def doubleExp(t, tau1, tau2, n, B, S1, S2)
+def doubleExp(t, tau1, tau2, n, B, S1, S2):
     """
     Function for single exponential DDM fits
 
@@ -63,7 +63,7 @@ def doubleExp(t, tau1, tau2, n, B, S1, S2)
 # In[7]:
 
 
-def schultz(t, tau1, tau2, A, S, Z):
+def schultz(t, tau1, tau2, n, S, Z):
     """
     Function for the so called Schultz model for fitting to DDM data containing
     both diffusive and actively directed motion
