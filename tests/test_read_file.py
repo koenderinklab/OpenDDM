@@ -1,9 +1,17 @@
 from pathlib import Path
 from ddm.data_handling import read_file
+import pims
 import pytest
 import xarray
+from urllib.error import HTTPError
 
 THIS_DIR = Path(__file__).parent
+
+# Catch problem with jar library
+try:
+    pims.bioformats._find_jar()
+except HTTPError:
+    pims.bioformats.download_jar(version="6.5")
 
 
 def test_unsupported_filetype():
