@@ -12,6 +12,13 @@ conda activate ddm_env
 pip install -e .[dev]
 ``` 
 
+### Running tests
+
+To run the test, execute in the root of repository
+```bash
+pytest
+```
+
 ## Data processing workflow
 
 ```mermaid
