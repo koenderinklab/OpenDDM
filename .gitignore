@@ -1,6 +1,9 @@
 # Dask
 dask-worker-space/
 
+# IDE
+.vscode/
+
 # Data files
 data/
 *.nd2
@@ -9,9 +12,7 @@ data/
 
 #add in exception to allow the files in the tests folder to be uploaded
 !tests/data/
-!tests/data/*.nd2
-!tests/data/*.lif
-!tests/data/*.tif
+!tests/data/fitting_data/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
