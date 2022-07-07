@@ -3,8 +3,6 @@ name: deploy-documentation
 # Only run this when the master branch
 on:
   push:
-    branches:
-      - master
   # Option to run action manually
   workflow_dispatch:
     inputs:

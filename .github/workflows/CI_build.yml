@@ -62,12 +62,3 @@ jobs:
         run: |
           pip install twine
           python -m twine check dist/*
-      - name: Install package
-        run: |
-          pip install -e .[dev]
-      - name: Show pip list again
-        run: |
-          pip list
-      - name: Run tests
-        run: |
-          pytest
