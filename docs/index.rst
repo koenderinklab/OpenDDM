@@ -6,5 +6,5 @@ Welcome to openddm's documentation!
    :caption: Contents:
   
    readme
-   contributing
+   changelog
    api
