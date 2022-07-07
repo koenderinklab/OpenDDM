@@ -46,6 +46,15 @@ setup(
         "readlif",
     ],
     extras_require={
-        "dev": ["black", "bump2version", "pytest==4.6.2", "pytest-cov", "sphinx"]
+        "dev": [
+            "black",
+            "bump2version",
+            "myst-parser",
+            "pytest==4.6.2",
+            "pytest-cov",
+            "sphinxcontrib-mermaid",
+            "sphinx-rtd-theme",
+            "sphinx",
+        ]
     },
 )

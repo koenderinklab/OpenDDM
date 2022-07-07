@@ -1,6 +1,6 @@
 # Contributing guidelines
 
-We welcome any kind of contribution to our software, from simple comment or question to a full fledged [pull request](https://help.github.com/articles/about-pull-requests/). Please note we have a [Code of Conduct](CODE_OF_CONDUCT.md), please follow it in all your interactions with the project.
+We welcome any kind of contribution to our software, from simple comment or question to a full fledged [pull request](https://help.github.com/articles/about-pull-requests/). Please note we have a [Code of Conduct](https://github.com/koenderinklab/ddmPilotCode/blob/master/CODE_OF_CONDUCT.md), please follow it in all your interactions with the project.
 
 A contribution can be one of the following cases:
 

@@ -1,10 +1,10 @@
 # Open DDM 
 
-A Python package to analyse an image sequence and measure diffusion properties through Fourier techniques
+A Python package to analyse an image sequence and measure diffusion properties through Fourier techniques.
 
 ## Installation for developers
 
-```
+```bash
 git clone git@github.com:koenderinklab/ddmPilotCode.git ddm
 cd ddm
 conda env create -f env.yml
@@ -21,8 +21,9 @@ pytest
 
 ## Data processing workflow
 
-```mermaid
-%%{init: {'theme': 'dark'}}%%
+```{mermaid}
+
+%%{init: {'theme': 'base'}}%%
 flowchart TB
 
     id1(Microscope) .-> Data
