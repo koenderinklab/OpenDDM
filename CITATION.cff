@@ -28,4 +28,4 @@ message: "If you use this software, please cite it using these metadata."
 repository-code: "https://github.com/koenderinklab/ddmPilotCode"
 title: openddm
 doi:
-version:
+version: 0.1.0
