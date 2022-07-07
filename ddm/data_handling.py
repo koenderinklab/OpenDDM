@@ -1,9 +1,50 @@
 import os
-import numpy as np
-import xarray
-import pims
+from typing import List
+
 import dask.array as da
 import nd2
+import numpy as np
+import pims
+import xarray
+
+from .utils import verify_bioformats_jar
+
+
+def read_file(
+    filename: str, xscale: float = None, tscale: float = None
+) -> xarray.DataArray:
+    """A function to read in a generic microscopy series.
+
+    Parameters
+    ----------
+    filename : string
+               the path and name of the file which is to be loaded in
+    xscale : float, optional
+                       the resolution of the image in microns per pixel. Default is None.
+    tscale : float, optional
+                       the time per frame of the image series in milliseconds. Default is None
+
+    Returns
+    -------
+    dask array
+        array with the image data saved as a dask array. Metadata in the dask array includes the spatial resolution in microns per pixel and the temporal resolution in milliseconds per frame.
+    """
+    verify_bioformats_jar()
+
+    # Define supported files
+    supported = {".lif": readLIF, ".nd2": readND2, ".tif": readTIF, ".tiff": readTIF}
+    extension = os.path.splitext(filename)[-1]
+
+    if extension in supported.keys():
+        if not os.path.exists(filename):
+            raise OSError(f"The file {filename} does not exist")
+
+        try:
+            return supported[extension](filename, xscale, tscale)
+        except BaseException as err:
+            print(f"Error: {err}")
+    else:
+        raise ValueError("Not a supported image format")
 
 
 def readND2(
@@ -41,7 +82,7 @@ def readND2(
 
 def readLIF(
     filename: str, xscale: float = None, tscale: float = None
-) -> xarray.DataArray:
+) -> List[xarray.DataArray]:
     """A function to read in a .lif file taken from a Leica microscope. Has been shown to work for files from our Thunder in the Koenderink lab.
 
     Parameters
@@ -55,24 +96,33 @@ def readLIF(
 
     Returns
     -------
-    dask array
-        array with the image data saved as a dask array. Metadata in the dask array includes the spatial resolution in microns per pixel and the temporal resolution in milliseconds per frame.
+    list of dask arrays
+        Metadata in the dask array includes the spatial resolution in microns per pixel and the temporal resolution in milliseconds per frame.
 
     """
+
+    data_sets = []
     lifSeq = pims.Bioformats(filename, read_mode="jpype")
-    xscale = lifSeq.metadata.PixelsPhysicalSizeX(0) if xscale is None else xscale
-    tscale = lifSeq.metadata.PlaneDeltaT(0, 1) * 1000.0 if tscale is None else tscale
-    lifXCoords = np.arange(0.0, lifSeq.shape[1] * xscale, xscale)
-    lifYCoords = np.arange(0.0, lifSeq.shape[2] * xscale, xscale)
-    lifTCoords = np.arange(0.0, lifSeq.shape[0] * tscale, tscale)
-    ds = da.from_array(lifSeq)
-    sequence = xarray.DataArray(
-        data=ds,
-        dims=["T", "Y", "X"],
-        coords=(lifTCoords, lifYCoords, lifXCoords),
-        attrs=dict(xyScale=xscale, tScale=tscale),
-    )
-    return sequence
+    experiments = lifSeq.metadata.ImageCount()
+
+    for experiment in range(experiments):
+        lifSeq.series = experiment
+        xscale = lifSeq.metadata.PixelsPhysicalSizeX(0) if xscale is None else xscale
+        tscale = (
+            lifSeq.metadata.PlaneDeltaT(0, 1) * 1000.0 if tscale is None else tscale
+        )
+        lifXCoords = np.arange(0.0, lifSeq.shape[1] * xscale, xscale)
+        lifYCoords = np.arange(0.0, lifSeq.shape[2] * xscale, xscale)
+        lifTCoords = np.arange(0.0, lifSeq.shape[0] * tscale, tscale)
+        ds = da.from_array(lifSeq)
+        sequence = xarray.DataArray(
+            data=ds,
+            dims=["T", "Y", "X"],
+            coords=(lifTCoords, lifYCoords, lifXCoords),
+            attrs=dict(xyScale=xscale, tScale=tscale),
+        )
+        data_sets.append(sequence)
+    return data_sets
 
 
 def readTIF(
@@ -123,36 +173,3 @@ def readTIF(
     )
     return sequence
 
-
-def read_file(
-    filename: str, xscale: float = None, tscale: float = None
-) -> xarray.DataArray:
-    """A function to read in a generic microscopy series.
-
-    Parameters
-    ----------
-    filename : string
-               the path and name of the file which is to be loaded in
-    xscale : float, optional
-                       the resolution of the image in microns per pixel. Default is None.
-    tscale : float, optional
-                       the time per frame of the image series in milliseconds. Default is None
-
-    Returns
-    -------
-    dask array
-        array with the image data saved as a dask array. Metadata in the dask array includes the spatial resolution in microns per pixel and the temporal resolution in milliseconds per frame.
-    """
-    supported = {".lif": readLIF, ".nd2": readND2, ".tif": readTIF, ".tiff": readTIF}
-    extension = os.path.splitext(filename)[-1]
-
-    if extension in supported.keys():
-        if not os.path.exists(filename):
-            raise OSError(f"The file {filename} does not exist")
-
-        try:
-            return supported[extension](filename, xscale, tscale)
-        except BaseException as err:
-            print(f"Error: {err}")
-    else:
-        raise ValueError("Not a supported image format")

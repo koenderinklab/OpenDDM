@@ -1,17 +1,16 @@
 from pathlib import Path
-from ddm.data_handling import read_file
-import pims
+from typing import List
+
 import pytest
 import xarray
-from urllib.error import HTTPError
+
+from ddm.data_handling import read_file
+from ddm.utils import verify_bioformats_jar
 
 THIS_DIR = Path(__file__).parent
 
 # Catch problem with jar library
-try:
-    pims.bioformats._find_jar()
-except HTTPError:
-    pims.bioformats.download_jar(version="6.5")
+verify_bioformats_jar
 
 
 def test_unsupported_filetype():
@@ -22,13 +21,22 @@ def test_unsupported_filetype():
 
 def test_load_unknown_file():
     with pytest.raises(OSError):
-        read_file("test.tif")  # file does not exist
+        read_file("test.tif")  # non-existing file
 
 
 def test_import_lif_type():
     data_path = THIS_DIR / "data/testData1series.lif"
     data = read_file(data_path)
-    assert isinstance(data, xarray.DataArray)
+    assert isinstance(data, List)
+    assert isinstance(data[0], xarray.DataArray)
+
+
+def test_import_lif_multi_experiment():
+    data_path = THIS_DIR / "data/testData3series.lif"
+    data = read_file(data_path)
+    assert isinstance(data, List)
+    assert len(data) == 3
+    assert isinstance(data[2], xarray.DataArray)
 
 
 def test_import_nd2_type():
@@ -55,17 +63,5 @@ def test_custom_scales_lif():
     data_path = THIS_DIR / "data/testData1series.lif"
     expected_result = 10
     data = read_file(data_path, xscale=expected_result, tscale=expected_result)
-    assert data.attrs["xyScale"] == expected_result
-    assert data.attrs["tScale"] == expected_result
-
-
-def test_metadata_lif():
-    pytest.fail()
-
-
-def test_metadata_tif():
-    pytest.fail()
-
-
-def test_metadata_nd2():
-    pytest.fail()
+    assert data[0].attrs["xyScale"] == expected_result
+    assert data[0].attrs["tScale"] == expected_result
