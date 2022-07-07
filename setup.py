@@ -1,6 +1,6 @@
 import os
-from setuptools import setup
-from setuptools import find_packages
+
+from setuptools import find_packages, setup
 
 here = os.path.abspath(os.path.dirname("__file__"))
 
@@ -23,9 +23,7 @@ setup(
     author_email="i.a.a.muntz@tudelft.nl",
     license="Apache Software License 2.0",
     packages=find_packages(exclude=["*tests*"]),
-    key_words=[
-        "",
-    ],
+    key_words=["",],
     classifiers=[
         "Development Status :: 2 - Pre-Alpha",
         "Intended Audience :: Education",
@@ -47,5 +45,7 @@ setup(
         "scipy",
         "readlif",
     ],
-    extras_require={"dev": ["black", "pytest==4.6.2", "pytest-cov", "sphinx"]},
+    extras_require={
+        "dev": ["black", "isort>=5.1.0", "pytest==4.6.2", "pytest-cov", "sphinx"]
+    },
 )
