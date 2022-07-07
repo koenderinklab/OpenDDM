@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>API Reference &mdash; openddm 0.1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Changelog" href="changelog.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> openddm
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="readme.html">Open DDM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-ddm.data_handling">ddm.data_handling module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-ddm.fitting">ddm.fitting module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-ddm.plotting">ddm.plotting module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-ddm.processing">ddm.processing module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-ddm.utils">ddm.utils module</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">openddm</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>API Reference</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/api.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="api-reference">
+<h1>API Reference<a class="headerlink" href="#api-reference" title="Permalink to this heading"></a></h1>
+<section id="module-ddm.data_handling">
+<span id="ddm-data-handling-module"></span><h2>ddm.data_handling module<a class="headerlink" href="#module-ddm.data_handling" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="ddm.data_handling.readLIF">
+<span class="sig-prename descclassname"><span class="pre">ddm.data_handling.</span></span><span class="sig-name descname"><span class="pre">readLIF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xscale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tscale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataArray</span></span></span><a class="reference internal" href="_modules/ddm/data_handling.html#readLIF"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.data_handling.readLIF" title="Permalink to this definition"></a></dt>
+<dd><p>A function to read in a .lif file taken from a Leica microscope. Has been shown to work for files from our Thunder in the Koenderink lab.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<em>string</em>) – the path and name of the .lif file which is to be loaded in</p></li>
+<li><p><strong>xscale</strong> (<em>float</em><em>, </em><em>optional</em>) – the resolution of the image in microns per pixel</p></li>
+<li><p><strong>tscale</strong> (<em>float</em><em>, </em><em>optional</em>) – the time per frame of the image series in milliseconds</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>array with the image data saved as a dask array. Metadata in the dask array includes the spatial resolution in microns per pixel and the temporal resolution in milliseconds per frame.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dask array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ddm.data_handling.readND2">
+<span class="sig-prename descclassname"><span class="pre">ddm.data_handling.</span></span><span class="sig-name descname"><span class="pre">readND2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xscale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tscale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataArray</span></span></span><a class="reference internal" href="_modules/ddm/data_handling.html#readND2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.data_handling.readND2" title="Permalink to this definition"></a></dt>
+<dd><p>A function to read in a .nd2 file taken from a Nikon microscope. Has been shown to work for files from our Minicell in the Koenderink lab.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<em>string</em>) – the path and name of the .nd2 file which is to be loaded in</p></li>
+<li><p><strong>xscale</strong> (<em>float</em><em>, </em><em>optional</em>) – the resolution of the image in microns per pixel</p></li>
+<li><p><strong>tscale</strong> (<em>float</em><em>, </em><em>optional</em>) – the time per frame of the image series in milliseconds</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>array with the image data saved as a dask array.
+Metadata in the dask array includes the spatial resolution in microns per pixel and the temporal resolution in milliseconds per frame.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dask array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ddm.data_handling.readTIF">
+<span class="sig-prename descclassname"><span class="pre">ddm.data_handling.</span></span><span class="sig-name descname"><span class="pre">readTIF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xscale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tscale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataArray</span></span></span><a class="reference internal" href="_modules/ddm/data_handling.html#readTIF"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.data_handling.readTIF" title="Permalink to this definition"></a></dt>
+<dd><p>A function to read in a .tif file taken from a Leica microscope. Has been shown to work for files from our Thunder in the Koenderink lab.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<em>string</em>) – the path and name of the .tif file which is to be loaded in</p></li>
+<li><p><strong>xscale</strong> (<em>float</em><em>, </em><em>optional</em>) – the resolution of the image in microns per pixel</p></li>
+<li><p><strong>tscale</strong> (<em>float</em><em>, </em><em>optional</em>) – the time per frame of the image series in milliseconds</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>array with the image data saved as a dask array. Metadata in the dask array includes the spatial resolution in microns per pixel and the temporal resolution in milliseconds per frame.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dask array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ddm.data_handling.read_file">
+<span class="sig-prename descclassname"><span class="pre">ddm.data_handling.</span></span><span class="sig-name descname"><span class="pre">read_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xscale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tscale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataArray</span></span></span><a class="reference internal" href="_modules/ddm/data_handling.html#read_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.data_handling.read_file" title="Permalink to this definition"></a></dt>
+<dd><p>A function to read in a generic microscopy series.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<em>string</em>) – the path and name of the file which is to be loaded in</p></li>
+<li><p><strong>xscale</strong> (<em>float</em><em>, </em><em>optional</em>) – the resolution of the image in microns per pixel. Default is None.</p></li>
+<li><p><strong>tscale</strong> (<em>float</em><em>, </em><em>optional</em>) – the time per frame of the image series in milliseconds. Default is None</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>array with the image data saved as a dask array. Metadata in the dask array includes the spatial resolution in microns per pixel and the temporal resolution in milliseconds per frame.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dask array</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-ddm.fitting">
+<span id="ddm-fitting-module"></span><h2>ddm.fitting module<a class="headerlink" href="#module-ddm.fitting" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="ddm.fitting.DDM_Matix">
+<span class="sig-prename descclassname"><span class="pre">ddm.fitting.</span></span><span class="sig-name descname"><span class="pre">DDM_Matix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ISF</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">A</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/fitting.html#DDM_Matix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.fitting.DDM_Matix" title="Permalink to this definition"></a></dt>
+<dd><p>Function to calculate the DDM matrix from a given ISF</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ISF</strong> (<em>array_like</em>) – array containing the ISF</p></li>
+<li><p><strong>A</strong> (<em>float</em>) – scaling amplitude factor</p></li>
+<li><p><strong>B</strong> (<em>float</em>) – background term</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>theoretical DDM matrix for given ISF</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ddm.fitting.doubleExp">
+<span class="sig-prename descclassname"><span class="pre">ddm.fitting.</span></span><span class="sig-name descname"><span class="pre">doubleExp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/fitting.html#doubleExp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.fitting.doubleExp" title="Permalink to this definition"></a></dt>
+<dd><p>Function for single exponential DDM fits</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t</strong> (<em>array_like</em>) – array of the lag times</p></li>
+<li><p><strong>tau1</strong> (<em>float</em>) – decay time for first exponential</p></li>
+<li><p><strong>tau2</strong> (<em>float</em>) – decay time for second exponential</p></li>
+<li><p><strong>n</strong> (<em>float</em>) – fraction of dynamics for first exponential</p></li>
+<li><p><strong>S1</strong> (<em>float</em>) – stretching exponent for first exponential</p></li>
+<li><p><strong>S2</strong> (<em>float</em>) – stretching exponent for second exponential</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>theoretical double exponential ISF for given parameters</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ddm.fitting.schultz">
+<span class="sig-prename descclassname"><span class="pre">ddm.fitting.</span></span><span class="sig-name descname"><span class="pre">schultz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lagtime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/fitting.html#schultz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.fitting.schultz" title="Permalink to this definition"></a></dt>
+<dd><p>Function for the so called Schultz model for fitting to DDM data containing
+both diffusive and actively directed motion</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lagtime</strong> (<em>array_like</em>) – array of the lag times</p></li>
+<li><p><strong>tau1</strong> (<em>float</em>) – decay time for the exponential part of ISF</p></li>
+<li><p><strong>tau2</strong> (<em>floar</em>) – decay time for directed motion part of ISF</p></li>
+<li><p><strong>n</strong> (<em>float</em>) – fraction of dynamics undergoing ballistic motion</p></li>
+<li><p><strong>S</strong> (<em>float</em>) – stretching exponent</p></li>
+<li><p><strong>Z</strong> (<em>float</em>) – Schultz distribution number</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>theoretical ISF for schultz distribution for given values</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ddm.fitting.singleExp">
+<span class="sig-prename descclassname"><span class="pre">ddm.fitting.</span></span><span class="sig-name descname"><span class="pre">singleExp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/fitting.html#singleExp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.fitting.singleExp" title="Permalink to this definition"></a></dt>
+<dd><p>Function for single exponential DDM fits</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t</strong> (<em>array_like</em>) – array of the lag times</p></li>
+<li><p><strong>tau</strong> (<em>float</em>) – decay time</p></li>
+<li><p><strong>S</strong> (<em>float</em>) – stretching exponent</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>theoretical single exponential ISF for given parameters</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-ddm.plotting">
+<span id="ddm-plotting-module"></span><h2>ddm.plotting module<a class="headerlink" href="#module-ddm.plotting" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-ddm.processing">
+<span id="ddm-processing-module"></span><h2>ddm.processing module<a class="headerlink" href="#module-ddm.processing" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="ddm.processing.ddm">
+<span class="sig-prename descclassname"><span class="pre">ddm.processing.</span></span><span class="sig-name descname"><span class="pre">ddm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/processing.html#ddm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.processing.ddm" title="Permalink to this definition"></a></dt>
+<dd><p>_summary_</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>_type_</em>) – _description_</p></li>
+<li><p><strong>tau</strong> (<em>_type_</em>) – _description_</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>_description_</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>_type_</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ddm.processing.ddm_fftw">
+<span class="sig-prename descclassname"><span class="pre">ddm.processing.</span></span><span class="sig-name descname"><span class="pre">ddm_fftw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/processing.html#ddm_fftw"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.processing.ddm_fftw" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate gTau with radial profile using pyfftw</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>_type_</em>) – _description_</p></li>
+<li><p><strong>tau</strong> (<em>_type_</em>) – _description_</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>_description_</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>_type_</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ddm.processing.ddm_numpy">
+<span class="sig-prename descclassname"><span class="pre">ddm.processing.</span></span><span class="sig-name descname"><span class="pre">ddm_numpy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/processing.html#ddm_numpy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.processing.ddm_numpy" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate gTau with radial profile using numpy</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>_type_</em>) – _description_</p></li>
+<li><p><strong>tau</strong> (<em>_type_</em>) – _description_</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>_description_</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>_type_</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ddm.processing.get_diff_images">
+<span class="sig-prename descclassname"><span class="pre">ddm.processing.</span></span><span class="sig-name descname"><span class="pre">get_diff_images</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/processing.html#get_diff_images"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.processing.get_diff_images" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate difference between image [n] and [n + shift] for all images</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>ndarray</em>) – array of images</p></li>
+<li><p><strong>shift</strong> (<em>int</em>) – step between frame number</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-ddm.utils">
+<span id="ddm-utils-module"></span><h2>ddm.utils module<a class="headerlink" href="#module-ddm.utils" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="ddm.utils.print_cpu_count">
+<span class="sig-prename descclassname"><span class="pre">ddm.utils.</span></span><span class="sig-name descname"><span class="pre">print_cpu_count</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/utils.html#print_cpu_count"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.utils.print_cpu_count" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="changelog.html" class="btn btn-neutral float-left" title="Changelog" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Iain Muntz, James Conboy, Irene Istúriz.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

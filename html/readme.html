@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Open DDM &mdash; openddm 0.1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Changelog" href="changelog.html" />
+    <link rel="prev" title="Welcome to openddm’s documentation!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> openddm
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Open DDM</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#installation-for-developers">Installation for developers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#running-tests">Running tests</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#data-processing-workflow">Data processing workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#license">License</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">openddm</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Open DDM</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/readme.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="open-ddm">
+<h1>Open DDM<a class="headerlink" href="#open-ddm" title="Permalink to this heading"></a></h1>
+<p>A Python package to analyse an image sequence and measure diffusion properties through Fourier techniques.</p>
+<section id="installation-for-developers">
+<h2>Installation for developers<a class="headerlink" href="#installation-for-developers" title="Permalink to this heading"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone git@github.com:koenderinklab/ddmPilotCode.git ddm
+<span class="nb">cd</span> ddm
+conda env create -f env.yml
+conda activate ddm_env
+pip install -e .<span class="o">[</span>dev<span class="o">]</span>
+</pre></div>
+</div>
+<section id="running-tests">
+<h3>Running tests<a class="headerlink" href="#running-tests" title="Permalink to this heading"></a></h3>
+<p>To run the test, execute in the root of repository</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pytest
+</pre></div>
+</div>
+</section>
+</section>
+<section id="data-processing-workflow">
+<h2>Data processing workflow<a class="headerlink" href="#data-processing-workflow" title="Permalink to this heading"></a></h2>
+<div class="mermaid">
+            %%{init: {'theme': 'base'}}%%
+flowchart TB
+
+    id1(Microscope) .-&gt; Data
+    Data
+
+    Data --&gt;|&quot;.nd2 | .lif | .tiff&quot;| Import(Import data)
+    Import --&gt;|&quot;xarray (delayed)&quot;| Fourier(Fourier analysis)
+    Data --&gt; Track(pyTrack)
+
+    Fourier --&gt;|np.ndarray| Fit(Fitting)
+    Fit --&gt;|np.ndarray| Plot(Plotting)
+    
+    Fourier --&gt;|np.ndarray| Export(Export data)
+    Fit --&gt;|np.ndarray| Export
+    Plot --&gt;|mpl.fig| Export
+
+    Export --&gt;|&quot;pickle | .csv | .png&quot;| R(Results)    
+    Track --&gt; R    
+
+
+    subgraph Personal Computer
+    Import
+    Fourier
+    Fit
+    Plot
+    Export
+    Track
+    end
+        </div></section>
+<section id="license">
+<h2>License<a class="headerlink" href="#license" title="Permalink to this heading"></a></h2>
+<p>Copyright 2022 Technische Universiteit Delft</p>
+<p>Licensed under the Apache License, Version 2.0 (the “License”);
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>http://www.apache.org/licenses/LICENSE-2.0
+</pre></div>
+</div>
+<p>Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an “AS IS” BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to openddm’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="changelog.html" class="btn btn-neutral float-right" title="Changelog" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Iain Muntz, James Conboy, Irene Istúriz.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
