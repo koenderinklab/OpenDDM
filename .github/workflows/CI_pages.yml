@@ -28,9 +28,7 @@ jobs:
         run: |
           cd docs
           make html
-      - name: Push changes
-        uses: ad-m/github-push-action@master
+      - name: Deploy documentation
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          directory: docs
-          branch: gh-pages
+          folder: _build
