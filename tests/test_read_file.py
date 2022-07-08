@@ -57,15 +57,3 @@ def test_custom_scales_lif():
     data = read_file(data_path, xscale=expected_result, tscale=expected_result)
     assert data.attrs["xyScale"] == expected_result
     assert data.attrs["tScale"] == expected_result
-
-
-def test_metadata_lif():
-    pytest.fail()
-
-
-def test_metadata_tif():
-    pytest.fail()
-
-
-def test_metadata_nd2():
-    pytest.fail()
