@@ -125,7 +125,7 @@
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    ndarray</span>
-
+<span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">data</span><span class="p">[:</span><span class="o">-</span><span class="n">step</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">-</span> <span class="n">data</span><span class="p">[</span><span class="n">step</span><span class="p">:,</span> <span class="p">:,</span> <span class="p">:]</span></div>
 
@@ -193,19 +193,23 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">num_frames</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span>
 
-    <span class="c1"># initialise gTau to hold g(vec(q), tau) which will be radially averaged then saved</span>
-    <span class="n">gTau</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">))</span>
-    <span class="c1"># initialise zeros to hold the squared of the fourier transformed differences</span>
-    <span class="n">imageDiffFTSquared</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">))</span>
+    <span class="n">gTau</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+        <span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
+    <span class="p">)</span>  <span class="c1"># initialise gTau to hold g(vec(q), tau) which will be radially averaged then saved</span>
+    <span class="n">imageDiffFTSquared</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+        <span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
+    <span class="p">)</span>  <span class="c1"># initialise zeros to hold the squared of the fourier transformed differences</span>
 
-    <span class="c1"># j is the initial frame in the difference calculation, usually labelled as t</span>
-    <span class="k">for</span> <span class="n">jj</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_frames</span> <span class="o">-</span> <span class="n">tau</span><span class="p">):</span>
-        <span class="c1"># calculate the difference in pixel intensities between images</span>
-        <span class="n">imageDiff</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">jj</span> <span class="o">+</span> <span class="n">tau</span><span class="p">]</span> <span class="o">-</span> <span class="n">data</span><span class="p">[</span><span class="n">jj</span><span class="p">]</span>
-        <span class="c1"># fourier transform the difference</span>
-        <span class="n">imageDiffFT</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft2</span><span class="p">(</span><span class="n">imageDiff</span><span class="p">)</span>
-        <span class="c1"># for averaging this, add the square of the fourier transform to itself</span>
-        <span class="n">imageDiffFTSquared</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">imageDiffFT</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+    <span class="k">for</span> <span class="n">jj</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span>
+        <span class="n">num_frames</span> <span class="o">-</span> <span class="n">tau</span>
+    <span class="p">):</span>  <span class="c1"># j is the initial frame in the difference calculation, usually labelled as t</span>
+        <span class="n">imageDiff</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">jj</span> <span class="o">+</span> <span class="n">tau</span><span class="p">]</span> <span class="o">-</span> <span class="n">data</span><span class="p">[</span><span class="n">jj</span><span class="p">]</span>
+        <span class="p">)</span>  <span class="c1"># calculate the difference in pixel intensities between images</span>
+        <span class="n">imageDiffFT</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft2</span><span class="p">(</span><span class="n">imageDiff</span><span class="p">)</span>  <span class="c1"># fourier transform the difference</span>
+        <span class="n">imageDiffFTSquared</span> <span class="o">+=</span> <span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">imageDiffFT</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+        <span class="p">)</span>  <span class="c1"># for averaging this, add the square of the fourier transform to itself</span>
 
     <span class="n">imageDiffFTSquared</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftshift</span><span class="p">(</span><span class="n">imageDiffFTSquared</span><span class="p">)</span>
     <span class="n">gTau</span> <span class="o">=</span> <span class="n">imageDiffFTSquared</span> <span class="o">/</span> <span class="p">(</span><span class="n">num_frames</span> <span class="o">-</span> <span class="n">tau</span><span class="p">)</span>
