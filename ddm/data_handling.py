@@ -27,13 +27,14 @@ def readND2(
         Metadata in the dask array includes the spatial resolution in microns per pixel and the temporal resolution in milliseconds per frame.
     """
     sequence = nd2.imread(filename, xarray=True, dask=True)
-    frameT = sequence.metadata["experiment"][
-        0
-    ].parameters.periodDiff.avg  # this is the time per frame in ms
-    xscale = (
-        float(sequence.X[1]) if xscale is None else xscale
-    )  # this is the microns per pixel
+
+    # time per frame in ms
+    frameT = sequence.metadata["experiment"][0].parameters.periodDiff.avg
     tscale = frameT if tscale is None else tscale
+
+    # scale in microns per pixel
+    xscale = float(sequence.X[1]) if xscale is None else xscale
+
     sequence["T"] = np.arange(len(sequence["T"])) * tscale
     sequence.attrs = {"xyScale": xscale, "tScale": tscale}
     return sequence

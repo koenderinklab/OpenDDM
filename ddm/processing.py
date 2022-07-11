@@ -54,7 +54,7 @@ def get_diff_images(data: np.ndarray, step: int):
     Returns
     -------
     ndarray
-        
+
     """
     return data[:-step, :, :] - data[step:, :, :]
 
@@ -122,23 +122,19 @@ def ddm_numpy(data: np.ndarray, tau: int):
     """
     num_frames, height, width = data.shape
 
-    gTau = np.zeros(
-        (width, height)
-    )  # initialise gTau to hold g(vec(q), tau) which will be radially averaged then saved
-    imageDiffFTSquared = np.zeros(
-        (width, height)
-    )  # initialise zeros to hold the squared of the fourier transformed differences
+    # initialise gTau to hold g(vec(q), tau) which will be radially averaged then saved
+    gTau = np.zeros((width, height))
+    # initialise zeros to hold the squared of the fourier transformed differences
+    imageDiffFTSquared = np.zeros((width, height))
 
-    for jj in range(
-        num_frames - tau
-    ):  # j is the initial frame in the difference calculation, usually labelled as t
-        imageDiff = (
-            data[jj + tau] - data[jj]
-        )  # calculate the difference in pixel intensities between images
-        imageDiffFT = np.fft.fft2(imageDiff)  # fourier transform the difference
-        imageDiffFTSquared += (
-            np.abs(imageDiffFT) ** 2
-        )  # for averaging this, add the square of the fourier transform to itself
+    # j is the initial frame in the difference calculation, usually labelled as t
+    for jj in range(num_frames - tau):
+        # calculate the difference in pixel intensities between images
+        imageDiff = data[jj + tau] - data[jj]
+        # fourier transform the difference
+        imageDiffFT = np.fft.fft2(imageDiff)
+        # for averaging this, add the square of the fourier transform to itself
+        imageDiffFTSquared += np.abs(imageDiffFT) ** 2
 
     imageDiffFTSquared = np.fft.fftshift(imageDiffFTSquared)
     gTau = imageDiffFTSquared / (num_frames - tau)

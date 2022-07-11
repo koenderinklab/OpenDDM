@@ -1,14 +1,5 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[4]:
-
-
 import numpy as np
 from scipy.optimize import curve_fit
-
-
-# In[6]:
 
 
 def singleExp(t, tau, S):
@@ -28,10 +19,7 @@ def singleExp(t, tau, S):
     -------
     theoretical single exponential ISF for given parameters
     """
-    return np.exp(-1 * (t/tau)**S)
-
-
-# In[2]:
+    return np.exp(-1 * (t / tau) ** S)
 
 
 def doubleExp(t, tau1, tau2, n, B, S1, S2):
@@ -57,10 +45,7 @@ def doubleExp(t, tau1, tau2, n, B, S1, S2):
     -------
     theoretical double exponential ISF for given parameters
     """
-    return n * np.exp(-1 * (t/tau1)**S1) + (1 - n) * np.exp(-1 * (t/tau2)**S2) 
-
-
-# In[7]:
+    return n * np.exp(-1 * (t / tau1) ** S1) + (1 - n) * np.exp(-1 * (t / tau2) ** S2)
 
 
 def schultz(lagtime, tau1, tau2, n, S, Z):
@@ -87,13 +72,14 @@ def schultz(lagtime, tau1, tau2, n, S, Z):
     -------
     theoretical ISF for schultz distribution for given values
     """
-    
-    theta = (lagtime / tau2)/(Z + 1.0)
-    VDist = ((Z + 1.0)/((Z * lagtime)/tau2)) * np.sin(Z * np.arctan(theta))/((1.0 + theta**2.0)**(Z/2.0))
-    return np.exp(-1.0 * (lagtime/tau1)**S) * ((1.0 - n) + n*VDist)
 
-
-# In[8]:
+    theta = (lagtime / tau2) / (Z + 1.0)
+    VDist = (
+        ((Z + 1.0) / ((Z * lagtime) / tau2))
+        * np.sin(Z * np.arctan(theta))
+        / ((1.0 + theta**2.0) ** (Z / 2.0))
+    )
+    return np.exp(-1.0 * (lagtime / tau1) ** S) * ((1.0 - n) + n * VDist)
 
 
 def DDM_Matix(ISF, A, B):
@@ -113,12 +99,5 @@ def DDM_Matix(ISF, A, B):
     -------
     theoretical DDM matrix for given ISF
     """
-    
+
     return A * (1 - ISF) + B
-
-
-# In[ ]:
-
-
-
-
