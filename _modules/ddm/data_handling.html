@@ -98,13 +98,14 @@
 <span class="sd">        Metadata in the dask array includes the spatial resolution in microns per pixel and the temporal resolution in milliseconds per frame.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">sequence</span> <span class="o">=</span> <span class="n">nd2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">xarray</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dask</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">frameT</span> <span class="o">=</span> <span class="n">sequence</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;experiment&quot;</span><span class="p">][</span>
-        <span class="mi">0</span>
-    <span class="p">]</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">periodDiff</span><span class="o">.</span><span class="n">avg</span>  <span class="c1"># this is the time per frame in ms</span>
-    <span class="n">xscale</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="nb">float</span><span class="p">(</span><span class="n">sequence</span><span class="o">.</span><span class="n">X</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">if</span> <span class="n">xscale</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">xscale</span>
-    <span class="p">)</span>  <span class="c1"># this is the microns per pixel</span>
+
+    <span class="c1"># time per frame in ms</span>
+    <span class="n">frameT</span> <span class="o">=</span> <span class="n">sequence</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;experiment&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">periodDiff</span><span class="o">.</span><span class="n">avg</span>
     <span class="n">tscale</span> <span class="o">=</span> <span class="n">frameT</span> <span class="k">if</span> <span class="n">tscale</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">tscale</span>
+
+    <span class="c1"># scale in microns per pixel</span>
+    <span class="n">xscale</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">sequence</span><span class="o">.</span><span class="n">X</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">if</span> <span class="n">xscale</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">xscale</span>
+
     <span class="n">sequence</span><span class="p">[</span><span class="s2">&quot;T&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sequence</span><span class="p">[</span><span class="s2">&quot;T&quot;</span><span class="p">]))</span> <span class="o">*</span> <span class="n">tscale</span>
     <span class="n">sequence</span><span class="o">.</span><span class="n">attrs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;xyScale&quot;</span><span class="p">:</span> <span class="n">xscale</span><span class="p">,</span> <span class="s2">&quot;tScale&quot;</span><span class="p">:</span> <span class="n">tscale</span><span class="p">}</span>
     <span class="k">return</span> <span class="n">sequence</span></div>
