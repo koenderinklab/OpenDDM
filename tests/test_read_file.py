@@ -67,5 +67,5 @@ def test_custom_scales_lif():
     data_path = THIS_DIR / "data/testData1series.lif"
     expected_result = 10
     data = read_file(data_path, xscale=expected_result, tscale=expected_result)
-    assert data[0].attrs["xyScale"] == expected_result
-    assert data[0].attrs["tScale"] == expected_result
+    assert data.attrs["xyScale"] == expected_result
+    assert data.attrs["tScale"] == expected_result
