@@ -1,5 +1,5 @@
-#Based on co-written by I.Isturiz and H.Verwei, VHove based on F.Burla's notes
-#Working on the better version, but stuck, so for now I upload this. Not definitive, not to use yet
+#Based on co-written by I.Isturiz and H.Verwei, VHove based on F.Burla's notes. Pickle workflow was the upgrade I have to change or get by
+#Working on the better version, but stuck, so for now I upload this so sth is present. Not definitive, not to use yet
 from __future__ import division, unicode_literals, print_function  # for compatibility with Python 2 and 3
 
 import matplotlib as mpl
@@ -44,7 +44,7 @@ def load_obj(name, folder ):
 def track_particles_06(files, rad, numframes=1300, ml=500):
 
     '''This function takes .nd2 files as input and track particles over a given number of frames. This results in a data frame
-    with the x and y position for each particle at each frame. This is safed in the ditionary called traject under the corresponding file name
+    with the x and y position for each particle at each frame. This is saved in traject under the corresponding file name
     the ensamble MSD is calculated and the stretching exponent and transport factor, this is stored in the library ens_msd'''
 
     ens_msd={}
@@ -140,7 +140,7 @@ colorlist=['indianred','coral','yellowgreen','darkolivegreen', 'forestgreen','co
         (mu, sigma) = norm.fit(deltas[f'{lagtime}'])
         #Plot the real data
         n, bins = np.histogram(deltas[f'{lagtime}'],bins=150,density=True)
-        #I think this shifts dsitribution so that it is centered at mu with std sigma
+        # this shifts dsitribution so that it is centered at mu with std sigma
         y_g = norm.pdf(bins, mu, sigma)
         #l = plt.plot(bins, y_g, 'r--', linewidth=2)
         plt.yscale('log')
