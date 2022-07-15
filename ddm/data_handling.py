@@ -18,17 +18,25 @@ def read_file(
     Parameters
     ----------
     filename : string
-               the path and name of the file which is to be loaded in
+        the path and name of the file which is to be loaded in
     xscale : float, optional
-                       the resolution of the image in microns per pixel. Default is None.
+         the resolution of the image in microns per pixel. Default is None.
     tscale : float, optional
-                       the time per frame of the image series in milliseconds. Default is None
+        the time per frame of the image series in milliseconds. Default is None
 
     Returns
     -------
     dask array
         array with the image data saved as a dask array. Metadata in the dask array includes the spatial resolution in microns per pixel and the temporal resolution in milliseconds per frame.
+
+    Raises
+    ------
+    OSError
+        file cannot be found
+    ValueError
+        file extension is not supported
     """
+    # Catch potential problems with jar_file from Bioformats
     verify_bioformats_jar()
 
     # Define supported files
@@ -44,7 +52,9 @@ def read_file(
         except BaseException as err:
             print(f"Error: {err}")
     else:
-        raise ValueError("Not a supported image format")
+        raise ValueError(
+            f"{extension} is not a supported image format. The currently supported formats are {[name for name in supported.keys()]}."
+        )
 
 
 def readND2(
@@ -55,11 +65,11 @@ def readND2(
     Parameters
     ----------
     filename : string
-               the path and name of the .nd2 file which is to be loaded in
+        the path and name of the .nd2 file which is to be loaded in
     xscale : float, optional
-                    the resolution of the image in microns per pixel
+        the resolution of the image in microns per pixel
     tscale : float, optional
-                       the time per frame of the image series in milliseconds
+        the time per frame of the image series in milliseconds
 
     Returns
     -------
@@ -68,12 +78,10 @@ def readND2(
         Metadata in the dask array includes the spatial resolution in microns per pixel and the temporal resolution in milliseconds per frame.
     """
     sequence = nd2.imread(filename, xarray=True, dask=True)
-    frameT = sequence.metadata["experiment"][
-        0
-    ].parameters.periodDiff.avg  # this is the time per frame in ms
-    xscale = (
-        float(sequence.X[1]) if xscale is None else xscale
-    )  # this is the microns per pixel
+    # Find frame time per frame in ms
+    frameT = sequence.metadata["experiment"][0].parameters.periodDiff.avg
+    # Find scale in microns per pixel
+    xscale = float(sequence.X[1]) if xscale is None else xscale
     tscale = frameT if tscale is None else tscale
     sequence["T"] = np.arange(len(sequence["T"])) * tscale
     sequence.attrs = {"xyScale": xscale, "tScale": tscale}
@@ -81,48 +89,78 @@ def readND2(
 
 
 def readLIF(
-    filename: str, xscale: float = None, tscale: float = None
-) -> List[xarray.DataArray]:
-    """A function to read in a .lif file taken from a Leica microscope. Has been shown to work for files from our Thunder in the Koenderink lab.
+    filename: str, xscale: float = None, tscale: float = None, experiment: int = None
+) -> xarray.DataArray:
+    """A function to read in a .lif file taken from a Leica microscope.
+    Verified to work for files from our Thunder in the Koenderink lab.
 
     Parameters
     ----------
     filename : string
-               the path and name of the .lif file which is to be loaded in
+        the path and name of the .lif file which is to be loaded in
     xscale : float, optional
-                    the resolution of the image in microns per pixel
+        the resolution of the image in microns per pixel
     tscale : float, optional
-                       the time per frame of the image series in milliseconds
+        the time per frame of the image series in milliseconds
+    experiment : int, optional
+        selected experiment in a multi-experiment lif file
 
     Returns
     -------
-    list of dask arrays
+    xarray.DataArray
         Metadata in the dask array includes the spatial resolution in microns per pixel and the temporal resolution in milliseconds per frame.
 
     """
 
     data_sets = []
     lifSeq = pims.Bioformats(filename, read_mode="jpype")
-    experiments = lifSeq.metadata.ImageCount()
 
-    for experiment in range(experiments):
-        lifSeq.series = experiment
-        xscale = lifSeq.metadata.PixelsPhysicalSizeX(0) if xscale is None else xscale
-        tscale = (
-            lifSeq.metadata.PlaneDeltaT(0, 1) * 1000.0 if tscale is None else tscale
+    # Select experiment when multiple experiments are available
+    n_experiments = lifSeq.metadata.ImageCount()
+    if n_experiments > 1:
+        experiment = (
+            select_LIF_experiment(lifSeq.metadata) if experiment is None else experiment
         )
-        lifXCoords = np.arange(0.0, lifSeq.shape[1] * xscale, xscale)
-        lifYCoords = np.arange(0.0, lifSeq.shape[2] * xscale, xscale)
-        lifTCoords = np.arange(0.0, lifSeq.shape[0] * tscale, tscale)
-        ds = da.from_array(lifSeq)
-        sequence = xarray.DataArray(
-            data=ds,
-            dims=["T", "Y", "X"],
-            coords=(lifTCoords, lifYCoords, lifXCoords),
-            attrs=dict(xyScale=xscale, tScale=tscale),
-        )
-        data_sets.append(sequence)
-    return data_sets
+    else:
+        experiment = 0
+
+    lifSeq.series = experiment
+    xscale = lifSeq.metadata.PixelsPhysicalSizeX(0) if xscale is None else xscale
+    tscale = lifSeq.metadata.PlaneDeltaT(0, 1) * 1000.0 if tscale is None else tscale
+    lifXCoords = np.arange(0.0, lifSeq.shape[1] * xscale, xscale)
+    lifYCoords = np.arange(0.0, lifSeq.shape[2] * xscale, xscale)
+    lifTCoords = np.arange(0.0, lifSeq.shape[0] * tscale, tscale)
+    ds = da.from_array(lifSeq)
+    sequence = xarray.DataArray(
+        data=ds,
+        dims=["T", "Y", "X"],
+        coords=(lifTCoords, lifYCoords, lifXCoords),
+        attrs=dict(xyScale=xscale, tScale=tscale),
+    )
+
+    return sequence
+
+
+def select_LIF_experiment(metadata):
+    """Prompt user to select single experiment from .lif file
+
+    Parameters
+    ----------
+    metadata :
+        .lif image metadata
+
+    Returns
+    -------
+    int
+        selected experiment
+    """
+    experiments = [x for x in range(metadata.ImageCount())]
+    print(f"The datafile contains the following experiments:")
+    for exp in experiments:
+        print(f"{exp} : {metadata.ImageName(exp)}")
+    return int(
+        input(f"Please select the experiment you want to process {experiments} \n")
+    )
 
 
 def readTIF(
@@ -133,11 +171,11 @@ def readTIF(
     Parameters
     ----------
     filename : string
-               the path and name of the .tif file which is to be loaded in
+        the path and name of the .tif file which is to be loaded in
     xscale : float, optional
-                       the resolution of the image in microns per pixel
+        the resolution of the image in microns per pixel
     tscale : float, optional
-                       the time per frame of the image series in milliseconds
+        the time per frame of the image series in milliseconds
 
     Returns
     -------
@@ -172,4 +210,3 @@ def readTIF(
         attrs=dict(xyScale=xscale, tScale=tscale),
     )
     return sequence
-
