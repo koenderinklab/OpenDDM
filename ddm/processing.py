@@ -1,7 +1,7 @@
 import numpy as np
-from numba import jit
 import pyfftw
 from dask import delayed
+from numba import jit
 
 
 @delayed
