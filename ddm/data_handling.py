@@ -1,5 +1,5 @@
 import os
-from typing import List
+from typing import Int
 
 import dask.array as da
 import nd2
@@ -137,16 +137,15 @@ def readLIF(
         coords=(lifTCoords, lifYCoords, lifXCoords),
         attrs=dict(xyScale=xscale, tScale=tscale),
     )
-
     return sequence
 
 
-def select_LIF_experiment(metadata):
+def select_LIF_experiment(metadata: pims.bioformats.MetadataRetrieve) -> Int:
     """Prompt user to select single experiment from .lif file
 
     Parameters
     ----------
-    metadata :
+    metadata : pims.bioformats.MetadataRetrieve
         .lif image metadata
 
     Returns
