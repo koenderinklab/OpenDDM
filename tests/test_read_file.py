@@ -1,5 +1,4 @@
 from pathlib import Path
-from typing import List
 
 import pytest
 import xarray
@@ -27,16 +26,21 @@ def test_load_unknown_file():
 def test_import_lif_type():
     data_path = THIS_DIR / "data/testData1series.lif"
     data = read_file(data_path)
-    assert isinstance(data, List)
-    assert isinstance(data[0], xarray.DataArray)
+    assert isinstance(data, xarray.DataArray)
 
 
 def test_import_lif_multi_experiment():
     data_path = THIS_DIR / "data/testData3series.lif"
-    data = read_file(data_path)
-    assert isinstance(data, List)
-    assert len(data) == 3
-    assert isinstance(data[2], xarray.DataArray)
+    data = read_file(data_path, experiment=1)
+    assert isinstance(data, xarray.DataArray)
+
+
+def test_lif_invalid_user_input_experiment(monkeypatch):
+    data_path = THIS_DIR / "data/testData3series.lif"
+    monkeypatch.setattr("builtins.input", lambda _: 4)
+    with pytest.raises(IndexError) as exc_info:
+        read_file(data_path)
+    assert "index out of bounds" in str(exc_info.value)
 
 
 def test_import_nd2_type():

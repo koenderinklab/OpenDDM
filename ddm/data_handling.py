@@ -1,5 +1,4 @@
 import os
-from typing import Int
 
 import dask.array as da
 import nd2
@@ -11,7 +10,7 @@ from .utils import verify_bioformats_jar
 
 
 def read_file(
-    filename: str, xscale: float = None, tscale: float = None
+    filename: str, xscale: float = None, tscale: float = None, experiment: int = None
 ) -> xarray.DataArray:
     """A function to read in a generic microscopy series.
 
@@ -23,6 +22,8 @@ def read_file(
          the resolution of the image in microns per pixel. Default is None.
     tscale : float, optional
         the time per frame of the image series in milliseconds. Default is None
+    experiment : int, optional
+        selected experiment in a multi-experiment lif file
 
     Returns
     -------
@@ -48,9 +49,15 @@ def read_file(
             raise OSError(f"The file {filename} does not exist")
 
         try:
-            return supported[extension](filename, xscale, tscale)
+            if extension == ".lif":
+                return supported[extension](filename, xscale, tscale, experiment)
+            else:
+                return supported[extension](filename, xscale, tscale)
+        except IndexError as err:
+            raise
         except BaseException as err:
             print(f"Error: {err}")
+
     else:
         raise ValueError(
             f"{extension} is not a supported image format. The currently supported formats are {[name for name in supported.keys()]}."
@@ -140,7 +147,7 @@ def readLIF(
     return sequence
 
 
-def select_LIF_experiment(metadata: pims.bioformats.MetadataRetrieve) -> Int:
+def select_LIF_experiment(metadata: pims.bioformats.MetadataRetrieve) -> int:
     """Prompt user to select single experiment from .lif file
 
     Parameters
