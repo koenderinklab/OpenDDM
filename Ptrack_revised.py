@@ -5,9 +5,6 @@ from __future__ import division, unicode_literals, print_function  # for compati
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 
-# change the following to %matplotlib notebook for interactive plotting
-
-
 
 # Optionally, tweak styles.
 mpl.rc('figure',  figsize=(10, 5))
@@ -94,118 +91,6 @@ def track_particles_06(files, rad, numframes=1300, ml=500):
 
         ens_msd[f'{sample}_em'] = tp.emsd(t2, 166.56/512, 99.9, max_lagtime=ml)
 
-
-
-        ens_msd[f'{sample}_fit']= tp.utils.fit_powerlaw(ens_msd[f'{sample}_em'])
-
-    return ens_msd, traject, videos
-
-def track_particles_p08(files, rad,numframes=1300, ml=500):
-
-    '''This function takes .nd2 files as input and track particles over a given number of frames. This results in a data frame
-    with the x and y position for each particle at each frame. This is safed in the ditionary called traject under the corresponding file name
-    the ensamble MSD is calculated and the stretching exponent and transport factor, this is stored in the library ens_msd'''
-
-    ens_msd={}
-    traject={}
-    videos=[]
-
-    for file in files:
-        print(file)
-        sample=re.search('\d+_(\w+_[A-Z]_[\d]*).nd2', file).group(1)
-        videos.append(sample)
-        with ND2_Reader(f'{file}') as frames:
-
-
-            f = tp.batch(frames[:numframes], rad+2, minmass=10000, threshold=300)
-            #Link features into particle trajectories
-            t = tp.link(f, 5, memory=3)
-
-        #filter spurious trajectories
-        t1 = tp.filter_stubs(t, 50)
-        # Compare the number of particles in the unfiltered and filtered data.
-        #print('Before:', t['particle'].nunique())
-        #print('After:', t1['particle'].nunique())
-
-        #plt.figure()
-        # convenience function -- just plots size vs. mass
-        #tp.mass_size(t1.groupby('particle').mean());
-
-        t2 = t1[((t1['mass'] > 40000) & (t1['size'] < 3.0) &
-                     (t1['ecc'] < 0.25))]
-        traject[f"{sample}_traject"]=t2
-        #d=tp.compute_drift(t2)
-        #traject[f"{sample}_drift"]=d
-        #traject[f"{sample}_driftcorrected"]=tp.subtract_drift(t2.copy(), d)
-
-       # plt.figure()
-       # plt.suptitle(f"{file}")
-
-        #with ND2_Reader(f'{folder}/{file}') as frames:
-            #tp.annotate(t2[t2['frame'] == 0], frames[0]);
-
-        #plt.figure(figsize=(12,12))
-        #plt.suptitle(f"Trajectories_{sample}")
-        #tp.plot_traj(t2);
-
-        ens_msd[f'{sample}_em'] = tp.emsd(t2, 166.56/512, 99.9, max_lagtime=ml)
-
-
-        ens_msd[f'{sample}_fit']= tp.utils.fit_powerlaw(ens_msd[f'{sample}_em'])
-
-    return ens_msd, traject, videos
-
-def track_particles_p08_set2(files, ens_msd,traject,videos, rad,start=1301,numframes=2300, ml=500):
-
-    '''This function takes .nd2 files as input and track particles over a given number of frames. This results in a data frame
-    with the x and y position for each particle at each frame. This is safed in the ditionary called traject under the corresponding file name
-    the ensamble MSD is calculated and the stretching exponent and transport factor, this is stored in the library ens_msd
-
-    Note this one can be used for particles with a diameter of 0.8 um and 1.1 um you only have to adjust the radius'''
-
-
-
-    for file in files:
-        print(file)
-        sample=re.search('\d+_(\w+_[A-Z]_[\d]*).nd2', file).group(1)
-        sample=f'{sample}_2'
-        if sample not in videos:
-            videos.append(sample)
-        with ND2_Reader(f'{file}') as frames:
-
-
-            f = tp.batch(frames[start:numframes], rad+2, minmass=10000, threshold=300)
-            #Link features into particle trajectories
-            t = tp.link(f, 5, memory=3)
-
-        #filter spurious trajectories
-        t1 = tp.filter_stubs(t, 50)
-        # Compare the number of particles in the unfiltered and filtered data.
-        #print('Before:', t['particle'].nunique())
-        #print('After:', t1['particle'].nunique())
-
-        #plt.figure()
-        # convenience function -- just plots size vs. mass
-        #tp.mass_size(t1.groupby('particle').mean());
-
-        t2 = t1[((t1['mass'] > 40000) & (t1['size'] < 3.0) &
-                     (t1['ecc'] < 0.25))]
-        traject[f"{sample}_traject"]=t2
-        #d=tp.compute_drift(t2)
-        #traject[f"{sample}_drift"]=d
-        #traject[f"{sample}_driftcorrected"]=tp.subtract_drift(t2.copy(), d)
-
-       # plt.figure()
-       # plt.suptitle(f"{file}")
-
-        #with ND2_Reader(f'{folder}/{file}') as frames:
-            #tp.annotate(t2[t2['frame'] == 0], frames[0]);
-
-        #plt.figure(figsize=(12,12))
-        #plt.suptitle(f"Trajectories_{sample}")
-        #tp.plot_traj(t2);
-
-        ens_msd[f'{sample}_em'] = tp.emsd(t2, 166.56/512, 99.9, max_lagtime=ml)
 
 
         ens_msd[f'{sample}_fit']= tp.utils.fit_powerlaw(ens_msd[f'{sample}_em'])
