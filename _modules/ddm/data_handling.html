@@ -199,11 +199,69 @@ title="Fullscreen mode"
                 
   <h1>Source code for ddm.data_handling</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">xarray</span>
-<span class="kn">import</span> <span class="nn">pims</span>
+
 <span class="kn">import</span> <span class="nn">dask.array</span> <span class="k">as</span> <span class="nn">da</span>
 <span class="kn">import</span> <span class="nn">nd2</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pims</span>
+<span class="kn">import</span> <span class="nn">xarray</span>
+
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">verify_bioformats_jar</span>
+
+
+<div class="viewcode-block" id="read_file"><a class="viewcode-back" href="../../api.html#ddm.data_handling.read_file">[docs]</a><span class="k">def</span> <span class="nf">read_file</span><span class="p">(</span>
+    <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">xscale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">tscale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">experiment</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xarray</span><span class="o">.</span><span class="n">DataArray</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;A function to read in a generic microscopy series.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    filename : string</span>
+<span class="sd">        the path and name of the file which is to be loaded in</span>
+<span class="sd">    xscale : float, optional</span>
+<span class="sd">         the resolution of the image in microns per pixel. Default is None.</span>
+<span class="sd">    tscale : float, optional</span>
+<span class="sd">        the time per frame of the image series in milliseconds. Default is None</span>
+<span class="sd">    experiment : int, optional</span>
+<span class="sd">        selected experiment in a multi-experiment lif file</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    dask array</span>
+<span class="sd">        array with the image data saved as a dask array. Metadata in the dask array includes the spatial resolution in microns per pixel and the temporal resolution in milliseconds per frame.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    OSError</span>
+<span class="sd">        file cannot be found</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        file extension is not supported</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Catch potential problems with jar_file from Bioformats</span>
+    <span class="n">verify_bioformats_jar</span><span class="p">()</span>
+
+    <span class="c1"># Define supported files</span>
+    <span class="n">supported</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;.lif&quot;</span><span class="p">:</span> <span class="n">readLIF</span><span class="p">,</span> <span class="s2">&quot;.nd2&quot;</span><span class="p">:</span> <span class="n">readND2</span><span class="p">,</span> <span class="s2">&quot;.tif&quot;</span><span class="p">:</span> <span class="n">readTIF</span><span class="p">,</span> <span class="s2">&quot;.tiff&quot;</span><span class="p">:</span> <span class="n">readTIF</span><span class="p">}</span>
+    <span class="n">extension</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">filename</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">extension</span> <span class="ow">in</span> <span class="n">supported</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The file </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2"> does not exist&quot;</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">extension</span> <span class="o">==</span> <span class="s2">&quot;.lif&quot;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">supported</span><span class="p">[</span><span class="n">extension</span><span class="p">](</span><span class="n">filename</span><span class="p">,</span> <span class="n">xscale</span><span class="p">,</span> <span class="n">tscale</span><span class="p">,</span> <span class="n">experiment</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">supported</span><span class="p">[</span><span class="n">extension</span><span class="p">](</span><span class="n">filename</span><span class="p">,</span> <span class="n">xscale</span><span class="p">,</span> <span class="n">tscale</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">IndexError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="k">raise</span>
+        <span class="k">except</span> <span class="ne">BaseException</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">extension</span><span class="si">}</span><span class="s2"> is not a supported image format. The currently supported formats are </span><span class="si">{</span><span class="p">[</span><span class="n">name</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">supported</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span><span class="si">}</span><span class="s2">.&quot;</span>
+        <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="readND2"><a class="viewcode-back" href="../../api.html#ddm.data_handling.readND2">[docs]</a><span class="k">def</span> <span class="nf">readND2</span><span class="p">(</span>
@@ -214,11 +272,11 @@ title="Fullscreen mode"
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    filename : string</span>
-<span class="sd">               the path and name of the .nd2 file which is to be loaded in</span>
+<span class="sd">        the path and name of the .nd2 file which is to be loaded in</span>
 <span class="sd">    xscale : float, optional</span>
-<span class="sd">                    the resolution of the image in microns per pixel</span>
+<span class="sd">        the resolution of the image in microns per pixel</span>
 <span class="sd">    tscale : float, optional</span>
-<span class="sd">                       the time per frame of the image series in milliseconds</span>
+<span class="sd">        the time per frame of the image series in milliseconds</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -227,12 +285,10 @@ title="Fullscreen mode"
 <span class="sd">        Metadata in the dask array includes the spatial resolution in microns per pixel and the temporal resolution in milliseconds per frame.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">sequence</span> <span class="o">=</span> <span class="n">nd2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">xarray</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dask</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">frameT</span> <span class="o">=</span> <span class="n">sequence</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;experiment&quot;</span><span class="p">][</span>
-        <span class="mi">0</span>
-    <span class="p">]</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">periodDiff</span><span class="o">.</span><span class="n">avg</span>  <span class="c1"># this is the time per frame in ms</span>
-    <span class="n">xscale</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="nb">float</span><span class="p">(</span><span class="n">sequence</span><span class="o">.</span><span class="n">X</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">if</span> <span class="n">xscale</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">xscale</span>
-    <span class="p">)</span>  <span class="c1"># this is the microns per pixel</span>
+    <span class="c1"># Find frame time per frame in ms</span>
+    <span class="n">frameT</span> <span class="o">=</span> <span class="n">sequence</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;experiment&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">periodDiff</span><span class="o">.</span><span class="n">avg</span>
+    <span class="c1"># Find scale in microns per pixel</span>
+    <span class="n">xscale</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">sequence</span><span class="o">.</span><span class="n">X</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">if</span> <span class="n">xscale</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">xscale</span>
     <span class="n">tscale</span> <span class="o">=</span> <span class="n">frameT</span> <span class="k">if</span> <span class="n">tscale</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">tscale</span>
     <span class="n">sequence</span><span class="p">[</span><span class="s2">&quot;T&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sequence</span><span class="p">[</span><span class="s2">&quot;T&quot;</span><span class="p">]))</span> <span class="o">*</span> <span class="n">tscale</span>
     <span class="n">sequence</span><span class="o">.</span><span class="n">attrs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;xyScale&quot;</span><span class="p">:</span> <span class="n">xscale</span><span class="p">,</span> <span class="s2">&quot;tScale&quot;</span><span class="p">:</span> <span class="n">tscale</span><span class="p">}</span>
@@ -240,26 +296,42 @@ title="Fullscreen mode"
 
 
 <div class="viewcode-block" id="readLIF"><a class="viewcode-back" href="../../api.html#ddm.data_handling.readLIF">[docs]</a><span class="k">def</span> <span class="nf">readLIF</span><span class="p">(</span>
-    <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">xscale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">tscale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">xscale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">tscale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">experiment</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xarray</span><span class="o">.</span><span class="n">DataArray</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;A function to read in a .lif file taken from a Leica microscope. Has been shown to work for files from our Thunder in the Koenderink lab.</span>
+    <span class="sd">&quot;&quot;&quot;A function to read in a .lif file taken from a Leica microscope.</span>
+<span class="sd">    Verified to work for files from our Thunder in the Koenderink lab.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    filename : string</span>
-<span class="sd">               the path and name of the .lif file which is to be loaded in</span>
+<span class="sd">        the path and name of the .lif file which is to be loaded in</span>
 <span class="sd">    xscale : float, optional</span>
-<span class="sd">                    the resolution of the image in microns per pixel</span>
+<span class="sd">        the resolution of the image in microns per pixel</span>
 <span class="sd">    tscale : float, optional</span>
-<span class="sd">                       the time per frame of the image series in milliseconds</span>
+<span class="sd">        the time per frame of the image series in milliseconds</span>
+<span class="sd">    experiment : int, optional</span>
+<span class="sd">        selected experiment in a multi-experiment lif file</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    dask array</span>
-<span class="sd">        array with the image data saved as a dask array. Metadata in the dask array includes the spatial resolution in microns per pixel and the temporal resolution in milliseconds per frame.</span>
+<span class="sd">    xarray.DataArray</span>
+<span class="sd">        Metadata in the dask array includes the spatial resolution in microns per pixel and the temporal resolution in milliseconds per frame.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">data_sets</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">lifSeq</span> <span class="o">=</span> <span class="n">pims</span><span class="o">.</span><span class="n">Bioformats</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">read_mode</span><span class="o">=</span><span class="s2">&quot;jpype&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Select experiment when multiple experiments are available</span>
+    <span class="n">n_experiments</span> <span class="o">=</span> <span class="n">lifSeq</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">ImageCount</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">n_experiments</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">experiment</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">select_LIF_experiment</span><span class="p">(</span><span class="n">lifSeq</span><span class="o">.</span><span class="n">metadata</span><span class="p">)</span> <span class="k">if</span> <span class="n">experiment</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">experiment</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">experiment</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="n">lifSeq</span><span class="o">.</span><span class="n">series</span> <span class="o">=</span> <span class="n">experiment</span>
     <span class="n">xscale</span> <span class="o">=</span> <span class="n">lifSeq</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">PixelsPhysicalSizeX</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="k">if</span> <span class="n">xscale</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">xscale</span>
     <span class="n">tscale</span> <span class="o">=</span> <span class="n">lifSeq</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">PlaneDeltaT</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1000.0</span> <span class="k">if</span> <span class="n">tscale</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">tscale</span>
     <span class="n">lifXCoords</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">lifSeq</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">xscale</span><span class="p">,</span> <span class="n">xscale</span><span class="p">)</span>
@@ -275,6 +347,28 @@ title="Fullscreen mode"
     <span class="k">return</span> <span class="n">sequence</span></div>
 
 
+<div class="viewcode-block" id="select_LIF_experiment"><a class="viewcode-back" href="../../api.html#ddm.data_handling.select_LIF_experiment">[docs]</a><span class="k">def</span> <span class="nf">select_LIF_experiment</span><span class="p">(</span><span class="n">metadata</span><span class="p">:</span> <span class="n">pims</span><span class="o">.</span><span class="n">bioformats</span><span class="o">.</span><span class="n">MetadataRetrieve</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Prompt user to select single experiment from .lif file</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    metadata : pims.bioformats.MetadataRetrieve</span>
+<span class="sd">        .lif image metadata</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    int</span>
+<span class="sd">        selected experiment</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">experiments</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">metadata</span><span class="o">.</span><span class="n">ImageCount</span><span class="p">())]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The datafile contains the following experiments:&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">exp</span> <span class="ow">in</span> <span class="n">experiments</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">exp</span><span class="si">}</span><span class="s2"> : </span><span class="si">{</span><span class="n">metadata</span><span class="o">.</span><span class="n">ImageName</span><span class="p">(</span><span class="n">exp</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span>
+        <span class="nb">input</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Please select the experiment you want to process </span><span class="si">{</span><span class="n">experiments</span><span class="si">}</span><span class="s2"> </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="p">)</span></div>
+
+
 <div class="viewcode-block" id="readTIF"><a class="viewcode-back" href="../../api.html#ddm.data_handling.readTIF">[docs]</a><span class="k">def</span> <span class="nf">readTIF</span><span class="p">(</span>
     <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">xscale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">tscale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xarray</span><span class="o">.</span><span class="n">DataArray</span><span class="p">:</span>
@@ -283,11 +377,11 @@ title="Fullscreen mode"
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    filename : string</span>
-<span class="sd">               the path and name of the .tif file which is to be loaded in</span>
+<span class="sd">        the path and name of the .tif file which is to be loaded in</span>
 <span class="sd">    xscale : float, optional</span>
-<span class="sd">                       the resolution of the image in microns per pixel</span>
+<span class="sd">        the resolution of the image in microns per pixel</span>
 <span class="sd">    tscale : float, optional</span>
-<span class="sd">                       the time per frame of the image series in milliseconds</span>
+<span class="sd">        the time per frame of the image series in milliseconds</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -322,40 +416,6 @@ title="Fullscreen mode"
         <span class="n">attrs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">xyScale</span><span class="o">=</span><span class="n">xscale</span><span class="p">,</span> <span class="n">tScale</span><span class="o">=</span><span class="n">tscale</span><span class="p">),</span>
     <span class="p">)</span>
     <span class="k">return</span> <span class="n">sequence</span></div>
-
-
-<div class="viewcode-block" id="read_file"><a class="viewcode-back" href="../../api.html#ddm.data_handling.read_file">[docs]</a><span class="k">def</span> <span class="nf">read_file</span><span class="p">(</span>
-    <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">xscale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">tscale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xarray</span><span class="o">.</span><span class="n">DataArray</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;A function to read in a generic microscopy series.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    filename : string</span>
-<span class="sd">               the path and name of the file which is to be loaded in</span>
-<span class="sd">    xscale : float, optional</span>
-<span class="sd">                       the resolution of the image in microns per pixel. Default is None.</span>
-<span class="sd">    tscale : float, optional</span>
-<span class="sd">                       the time per frame of the image series in milliseconds. Default is None</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    dask array</span>
-<span class="sd">        array with the image data saved as a dask array. Metadata in the dask array includes the spatial resolution in microns per pixel and the temporal resolution in milliseconds per frame.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">supported</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;.lif&quot;</span><span class="p">:</span> <span class="n">readLIF</span><span class="p">,</span> <span class="s2">&quot;.nd2&quot;</span><span class="p">:</span> <span class="n">readND2</span><span class="p">,</span> <span class="s2">&quot;.tif&quot;</span><span class="p">:</span> <span class="n">readTIF</span><span class="p">,</span> <span class="s2">&quot;.tiff&quot;</span><span class="p">:</span> <span class="n">readTIF</span><span class="p">}</span>
-    <span class="n">extension</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">filename</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-
-    <span class="k">if</span> <span class="n">extension</span> <span class="ow">in</span> <span class="n">supported</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The file </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2"> does not exist&quot;</span><span class="p">)</span>
-
-        <span class="k">try</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">supported</span><span class="p">[</span><span class="n">extension</span><span class="p">](</span><span class="n">filename</span><span class="p">,</span> <span class="n">xscale</span><span class="p">,</span> <span class="n">tscale</span><span class="p">)</span>
-        <span class="k">except</span> <span class="ne">BaseException</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Not a supported image format&quot;</span><span class="p">)</span></div>
 </pre></div>
 
               </div>

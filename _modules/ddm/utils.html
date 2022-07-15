@@ -199,10 +199,25 @@ title="Fullscreen mode"
                 
   <h1>Source code for ddm.utils</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">multiprocessing</span>
+<span class="kn">from</span> <span class="nn">urllib.error</span> <span class="kn">import</span> <span class="n">HTTPError</span>
+
+<span class="kn">import</span> <span class="nn">pims</span>
+
 
 <div class="viewcode-block" id="print_cpu_count"><a class="viewcode-back" href="../../api.html#ddm.utils.print_cpu_count">[docs]</a><span class="k">def</span> <span class="nf">print_cpu_count</span><span class="p">():</span>
     <span class="n">ncpus</span> <span class="o">=</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">()</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;We have </span><span class="si">{</span><span class="n">ncpus</span><span class="si">}</span><span class="s2"> cores to work on!&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="verify_bioformats_jar"><a class="viewcode-back" href="../../api.html#ddm.utils.verify_bioformats_jar">[docs]</a><span class="k">def</span> <span class="nf">verify_bioformats_jar</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Check presence of .jar file for pims.bioformats and download verison 6.5 if missing</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Catch problem with jar library</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">pims</span><span class="o">.</span><span class="n">bioformats</span><span class="o">.</span><span class="n">_find_jar</span><span class="p">()</span>
+    <span class="k">except</span> <span class="n">HTTPError</span><span class="p">:</span>
+        <span class="n">pims</span><span class="o">.</span><span class="n">bioformats</span><span class="o">.</span><span class="n">download_jar</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="s2">&quot;6.5&quot;</span><span class="p">)</span></div>
 </pre></div>
 
               </div>
