@@ -1,5 +1,5 @@
 #Based on co-written by I.Isturiz and H.Verwei, VHove based on F.Burla's notes
-#Working on the better version, but stuck, so for now I upload this
+#Working on the better version, but stuck, so for now I upload this. Not definitive, not to use yet
 from __future__ import division, unicode_literals, print_function  # for compatibility with Python 2 and 3
 
 import matplotlib as mpl
