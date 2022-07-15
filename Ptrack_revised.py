@@ -1,4 +1,4 @@
-#Based on co-written by I.Isturiz and H.Verwei, VHove based on F.Burla's notes. Pickle workflow was the upgrade I have to change or get by
+#Based on co-written by I.Isturiz and H.Verwei, VHove based on F.Burla's notes. Pickle workflow was the upgrade I prefer to change or get by
 #Working on the better version, but stuck, so for now I upload this so sth is present. Not definitive, not to use yet
 from __future__ import division, unicode_literals, print_function  # for compatibility with Python 2 and 3
 
