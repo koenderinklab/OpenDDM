@@ -1,17 +1,15 @@
 from pathlib import Path
-from ddm.data_handling import read_file
-import pims
+
 import pytest
 import xarray
-from urllib.error import HTTPError
+
+from ddm.data_handling import read_file
+from ddm.utils import verify_bioformats_jar
 
 THIS_DIR = Path(__file__).parent
 
 # Catch problem with jar library
-try:
-    pims.bioformats._find_jar()
-except HTTPError:
-    pims.bioformats.download_jar(version="6.5")
+verify_bioformats_jar
 
 
 def test_unsupported_filetype():
@@ -22,13 +20,27 @@ def test_unsupported_filetype():
 
 def test_load_unknown_file():
     with pytest.raises(OSError):
-        read_file("test.tif")  # file does not exist
+        read_file("test.tif")  # non-existing file
 
 
 def test_import_lif_type():
     data_path = THIS_DIR / "data/testData1series.lif"
     data = read_file(data_path)
     assert isinstance(data, xarray.DataArray)
+
+
+def test_import_lif_multi_experiment():
+    data_path = THIS_DIR / "data/testData3series.lif"
+    data = read_file(data_path, experiment=1)
+    assert isinstance(data, xarray.DataArray)
+
+
+def test_lif_invalid_user_input_experiment(monkeypatch):
+    data_path = THIS_DIR / "data/testData3series.lif"
+    monkeypatch.setattr("builtins.input", lambda _: 4)
+    with pytest.raises(IndexError) as exc_info:
+        read_file(data_path)
+    assert "index out of bounds" in str(exc_info.value)
 
 
 def test_import_nd2_type():
@@ -57,15 +69,3 @@ def test_custom_scales_lif():
     data = read_file(data_path, xscale=expected_result, tscale=expected_result)
     assert data.attrs["xyScale"] == expected_result
     assert data.attrs["tScale"] == expected_result
-
-
-def test_metadata_lif():
-    pytest.fail()
-
-
-def test_metadata_tif():
-    pytest.fail()
-
-
-def test_metadata_nd2():
-    pytest.fail()
