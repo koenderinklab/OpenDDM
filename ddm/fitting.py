@@ -5,6 +5,42 @@ import numpy as np
 from scipy.optimize import curve_fit
 
 
+def findMeanSqFFT(dData):
+    '''
+    Function to calculate the mean of the square of the FFT over all frames
+
+    Parameters
+    ----------
+    dData : dask array containing the raw image data
+
+    Returns
+    -------
+    sqFFTmean : the mean over all frames of the square of the fourier transform
+    '''
+    sqFFT = 2*da.abs(da.fft.fft2(dData))*np.abs(da.fft.fft2(dData))
+    sqFFT = da.fft.fftshift(sqFFT)
+    sqFFTmean = da.mean(sqFFT, axis = 0)
+    return sqFFTmean
+
+def computeAB(sqFFTmean):
+    '''
+    Function to calculate the parameters A and B
+
+    Parameters
+    ----------
+    sqFFTmean : the result of findMeanSqFFT, the mean over all frames of the square of the fourier transform
+
+    Returns
+    -------
+    a : numpy array containing A(q), the pre-factor of the image structure function which contains info on the imaging conditions
+    
+    b : float representing the magnitude of the noise of the image data
+    '''
+    sqFFTrad = radial_profile(sqFFTmean, (np.shape(sqFFTmean)[0]/2, np.shape(sqFFTmean)[1]/2))
+    b = np.mean(sqFFTrad[-100:-50]) #change depending on size of array
+    a = sqFFTrad - b
+    return a, b
+
 def singleExp(t, tau, S):
     """
     Function for single exponential DDM fits
