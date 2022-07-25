@@ -460,16 +460,16 @@ Metadata in the dask array includes the spatial resolution in microns per pixel 
 
 <dl class="py function">
 <dt class="sig sig-object py" id="ddm.fitting.computeAB">
-<span class="sig-prename descclassname"><span class="pre">ddm.fitting.</span></span><span class="sig-name descname"><span class="pre">computeAB</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sqFFTmean</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/fitting.html#computeAB"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.fitting.computeAB" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">ddm.fitting.</span></span><span class="sig-name descname"><span class="pre">computeAB</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sqFFTmean</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.array</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/ddm/fitting.html#computeAB"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.fitting.computeAB" title="Permalink to this definition">#</a></dt>
 <dd><p>Function to calculate the parameters A and B</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>sqFFTmean</strong> (<em>the result of findMeanSqFFT</em><em>, </em><em>the mean over all frames of the square of the fourier transform</em>) – </p>
+<dd class="field-odd"><p><strong>sqFFTmean</strong> (<em>numpy array</em>) – the result of findMeanSqFFT, the mean over all frames of the square of the fourier transform</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>a</strong> (<em>numpy array containing A(q), the pre-factor of the image structure function which contains info on the imaging conditions</em>)</p></li>
-<li><p><strong>b</strong> (<em>float representing the magnitude of the noise of the image data</em>)</p></li>
+<li><p><strong>a</strong> (<em>numpy array</em>) – array containing A(q), the pre-factor of the image structure function which contains info on the imaging conditions</p></li>
+<li><p><strong>b</strong> (<em>float</em>) – the magnitude of the noise of the image data</p></li>
 </ul>
 </p>
 </dd>
@@ -499,11 +499,11 @@ Metadata in the dask array includes the spatial resolution in microns per pixel 
 
 <dl class="py function">
 <dt class="sig sig-object py" id="ddm.fitting.findMeanSqFFT">
-<span class="sig-prename descclassname"><span class="pre">ddm.fitting.</span></span><span class="sig-name descname"><span class="pre">findMeanSqFFT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dData</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/fitting.html#findMeanSqFFT"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.fitting.findMeanSqFFT" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">ddm.fitting.</span></span><span class="sig-name descname"><span class="pre">findMeanSqFFT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dData:</span> <span class="pre">&lt;module</span> <span class="pre">'dask.array'</span> <span class="pre">from</span> <span class="pre">'/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/dask/array/__init__.py'&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/fitting.html#findMeanSqFFT"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.fitting.findMeanSqFFT" title="Permalink to this definition">#</a></dt>
 <dd><p>Function to calculate the mean of the square of the FFT over all frames</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>dData</strong> (<em>dask array containing the raw image data</em>) – </p>
+<dd class="field-odd"><p><strong>dData</strong> (<em>dask.array</em>) – dask array containing the raw image data</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><strong>sqFFTmean</strong></p>
