@@ -3,43 +3,54 @@
 
 import numpy as np
 from scipy.optimize import curve_fit
+import dask.array as da
+import dask
+from typing import Tuple
+from .processing import radial_profile
 
 
-def findMeanSqFFT(dData):
-    '''
+def findMeanSqFFT(dData: dask.array):
+    """
     Function to calculate the mean of the square of the FFT over all frames
 
     Parameters
     ----------
-    dData : dask array containing the raw image data
+    dData : dask.array
+        dask array containing the raw image data
 
     Returns
     -------
     sqFFTmean : the mean over all frames of the square of the fourier transform
-    '''
-    sqFFT = 2*da.abs(da.fft.fft2(dData))*np.abs(da.fft.fft2(dData))
+    """
+    sqFFT = 2 * da.abs(da.fft.fft2(dData)) * da.abs(da.fft.fft2(dData))
     sqFFT = da.fft.fftshift(sqFFT)
-    sqFFTmean = da.mean(sqFFT, axis = 0)
+    sqFFTmean = da.mean(sqFFT, axis=0)
     return sqFFTmean
 
-def computeAB(sqFFTmean):
-    '''
+
+def computeAB(sqFFTmean: np.array) -> Tuple[np.array, float]:
+    """
     Function to calculate the parameters A and B
 
     Parameters
     ----------
-    sqFFTmean : the result of findMeanSqFFT, the mean over all frames of the square of the fourier transform
+    sqFFTmean : numpy array
+        the result of findMeanSqFFT, the mean over all frames of the square of the fourier transform
 
     Returns
     -------
-    a : numpy array containing A(q), the pre-factor of the image structure function which contains info on the imaging conditions
-    
-    b : float representing the magnitude of the noise of the image data
-    '''
-    sqFFTrad = radial_profile(sqFFTmean, (np.shape(sqFFTmean)[0]/2, np.shape(sqFFTmean)[1]/2))
-    b = np.mean(sqFFTrad[-100:-50]) #change depending on size of array
+    a : numpy array
+        array containing A(q), the pre-factor of the image structure function which contains info on the imaging conditions
+    b : float
+        the magnitude of the noise of the image data
+    """
+    sqFFTrad = radial_profile(
+        sqFFTmean, (np.shape(sqFFTmean)[1] / 2, np.shape(sqFFTmean)[2] / 2)
+    )
+    b = np.mean(sqFFTrad[-100:-50])  # change depending on size of array
     a = sqFFTrad - b
     return a, b
+
 
 def singleExp(t, tau, S):
     """
@@ -116,7 +127,7 @@ def schultz(lagtime, tau1, tau2, n, S, Z):
     VDist = (
         ((Z + 1.0) / ((Z * lagtime) / tau2))
         * np.sin(Z * np.arctan(theta))
-        / ((1.0 + theta ** 2.0) ** (Z / 2.0))
+        / ((1.0 + theta**2.0) ** (Z / 2.0))
     )
     return np.exp(-1.0 * (lagtime / tau1) ** S) * ((1.0 - n) + n * VDist)
 
