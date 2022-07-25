@@ -254,7 +254,7 @@ title="Print to PDF"
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-ddm.plotting">
+  <a class="reference internal nav-link" href="#ddm-plotting-module">
    ddm.plotting module
   </a>
  </li>
@@ -298,7 +298,7 @@ title="Print to PDF"
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-ddm.plotting">
+  <a class="reference internal nav-link" href="#ddm-plotting-module">
    ddm.plotting module
   </a>
  </li>
@@ -441,8 +441,8 @@ Metadata in the dask array includes the spatial resolution in microns per pixel 
 <section id="module-ddm.fitting">
 <span id="ddm-fitting-module"></span><h2>ddm.fitting module<a class="headerlink" href="#module-ddm.fitting" title="Permalink to this headline">#</a></h2>
 <dl class="py function">
-<dt class="sig sig-object py" id="ddm.fitting.DDM_Matix">
-<span class="sig-prename descclassname"><span class="pre">ddm.fitting.</span></span><span class="sig-name descname"><span class="pre">DDM_Matix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ISF</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">A</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/fitting.html#DDM_Matix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.fitting.DDM_Matix" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="ddm.fitting.DDM_Matrix">
+<span class="sig-prename descclassname"><span class="pre">ddm.fitting.</span></span><span class="sig-name descname"><span class="pre">DDM_Matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ISF</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">A</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/fitting.html#DDM_Matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.fitting.DDM_Matrix" title="Permalink to this definition">#</a></dt>
 <dd><p>Function to calculate the DDM matrix from a given ISF</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -515,6 +515,21 @@ Metadata in the dask array includes the spatial resolution in microns per pixel 
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="ddm.fitting.genFit">
+<span class="sig-prename descclassname"><span class="pre">ddm.fitting.</span></span><span class="sig-name descname"><span class="pre">genFit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">isf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">taus</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fitFunc</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/fitting.html#genFit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.fitting.genFit" title="Permalink to this definition">#</a></dt>
+<dd><p>Generalised fitting function to fit the ISF</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>isf</strong> (<em>array_like</em>) – array of the lag times</p></li>
+<li><p><strong>taus</strong> (<em>np.ndarray</em>) – decay time</p></li>
+<li><p><strong>fitFunc</strong> (<em>string</em>) – stretching exponent</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="ddm.fitting.schultz">
 <span class="sig-prename descclassname"><span class="pre">ddm.fitting.</span></span><span class="sig-name descname"><span class="pre">schultz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lagtime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/fitting.html#schultz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.fitting.schultz" title="Permalink to this definition">#</a></dt>
 <dd><p>Function for the so called Schultz model for fitting to DDM data containing
@@ -555,8 +570,8 @@ both diffusive and actively directed motion</p>
 </dd></dl>
 
 </section>
-<section id="module-ddm.plotting">
-<span id="ddm-plotting-module"></span><h2>ddm.plotting module<a class="headerlink" href="#module-ddm.plotting" title="Permalink to this headline">#</a></h2>
+<section id="ddm-plotting-module">
+<h2>ddm.plotting module<a class="headerlink" href="#ddm-plotting-module" title="Permalink to this headline">#</a></h2>
 </section>
 <section id="module-ddm.processing">
 <span id="ddm-processing-module"></span><h2>ddm.processing module<a class="headerlink" href="#module-ddm.processing" title="Permalink to this headline">#</a></h2>
