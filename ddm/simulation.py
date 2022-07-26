@@ -36,6 +36,7 @@ def generate_tracks(
     drift: Tuple[float, float] = (0.1, 0.1),
     window: Tuple[int, int] = (512, 512),
     pixel_size: float = 1e-7,
+    D: float = None,
 ) -> np.ndarray:
     """Generate tracks of particles undergoing 2D Brownian motion
 
@@ -53,13 +54,15 @@ def generate_tracks(
         size of the simulated image in pixels, by default (512, 512)
     pixel_size : float, optional
         size of the pixel in meters, by default 1e-7
+    D : float
+        diffusion coefficient
 
     Returns
     -------
     np.array
         3D array with particle tracks with shape (n_particles, dimensions, time points)
     """
-    D = get_diffusion_coefficient()
+
     k = np.sqrt(2 * D * tau)
 
     x = k * (np.random.randn(n_particles, steps - 1) + drift[0]) / pixel_size
@@ -95,8 +98,8 @@ def generate_frame(
     np.array
         2D array of microscope image with particles
     """
-    amplitudes = 500  # amplitude of the PSF
-    sigmas = 5  # sigma of the amplitude
+    amplitudes = 1000  # amplitude of the PSF
+    sigmas = 2  # sigma of the amplitude
     img = simulate_gauss(window, coords, amplitudes, sigmas)
     img_noisy = np.array(np.random.poisson(img), dtype="float16")  # add shot noise
     img_noisy += np.random.normal(200, 20, img_noisy.shape)  # add camera noise
@@ -134,15 +137,16 @@ def save_stack(file_path: str, stack: np.ndarray):
     stack : np.array
         3D array of simulated microscopy images
     file_path : str, optional
-        path to save file, by default "diffusion.tif"
+        path to save file"
     """
     imwrite(file_path, stack)
 
 
 if __name__ == "__main__":
     print("Generating images...")
-    tracks = generate_tracks(n_particles=1000, steps=2000, drift=(0.0, 0.0))
+    D = get_diffusion_coefficient()
+    tracks = generate_tracks(n_particles=1000, steps=5000, drift=(0.0, 0.0), D=D)
     stack = generate_stack(tracks)
     print("Saving image stack...")
-    save_stack("diffusion.tif", stack)
+    save_stack("./data/sim_diffusion.tif", stack)
     print("Done!")
