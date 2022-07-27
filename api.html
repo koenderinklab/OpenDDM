@@ -254,13 +254,18 @@ title="Print to PDF"
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#ddm-plotting-module">
+  <a class="reference internal nav-link" href="#module-ddm.plotting">
    ddm.plotting module
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#module-ddm.processing">
    ddm.processing module
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-ddm.simulation">
+   ddm.simulation module
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
@@ -298,13 +303,18 @@ title="Print to PDF"
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#ddm-plotting-module">
+  <a class="reference internal nav-link" href="#module-ddm.plotting">
    ddm.plotting module
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#module-ddm.processing">
    ddm.processing module
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-ddm.simulation">
+   ddm.simulation module
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
@@ -570,8 +580,50 @@ both diffusive and actively directed motion</p>
 </dd></dl>
 
 </section>
-<section id="ddm-plotting-module">
-<h2>ddm.plotting module<a class="headerlink" href="#ddm-plotting-module" title="Permalink to this headline">#</a></h2>
+<section id="module-ddm.plotting">
+<span id="ddm-plotting-module"></span><h2>ddm.plotting module<a class="headerlink" href="#module-ddm.plotting" title="Permalink to this headline">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="ddm.plotting.plotISF">
+<span class="sig-prename descclassname"><span class="pre">ddm.plotting.</span></span><span class="sig-name descname"><span class="pre">plotISF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">isf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">taus</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/plotting.html#plotISF"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.plotting.plotISF" title="Permalink to this definition">#</a></dt>
+<dd><p>_summary_</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>isf</strong> (<em>np.ndarray</em>) – _description_</p></li>
+<li><p><strong>taus</strong> (<em>np.ndarray</em>) – _description_</p></li>
+<li><p><strong>q</strong> (<em>int</em><em> or </em><em>tuple of ints</em><em>, </em><em>optional</em>) – _description_</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>_description_</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>_type_</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ddm.plotting.plotSingleExpFit">
+<span class="sig-prename descclassname"><span class="pre">ddm.plotting.</span></span><span class="sig-name descname"><span class="pre">plotSingleExpFit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">isf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">taus</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/plotting.html#plotSingleExpFit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.plotting.plotSingleExpFit" title="Permalink to this definition">#</a></dt>
+<dd><p>_summary_</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>isf</strong> (<em>np.ndarray</em>) – _description_</p></li>
+<li><p><strong>taus</strong> (<em>np.ndarray</em>) – _description_</p></li>
+<li><p><strong>q</strong> (<em>int</em><em> or </em><em>tuple of ints</em><em>, </em><em>optional</em>) – _description_</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>_description_</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>_type_</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 <section id="module-ddm.processing">
 <span id="ddm-processing-module"></span><h2>ddm.processing module<a class="headerlink" href="#module-ddm.processing" title="Permalink to this headline">#</a></h2>
@@ -648,6 +700,106 @@ both diffusive and actively directed motion</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p>ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-ddm.simulation">
+<span id="ddm-simulation-module"></span><h2>ddm.simulation module<a class="headerlink" href="#module-ddm.simulation" title="Permalink to this headline">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="ddm.simulation.generate_frame">
+<span class="sig-prename descclassname"><span class="pre">ddm.simulation.</span></span><span class="sig-name descname"><span class="pre">generate_frame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coords</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(512,</span> <span class="pre">512)</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="_modules/ddm/simulation.html#generate_frame"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.simulation.generate_frame" title="Permalink to this definition">#</a></dt>
+<dd><p>Create microscopy image from tracks at single timepoint</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>coords</strong> (<em>np.array</em>) – coordinates of particles</p></li>
+<li><p><strong>window</strong> (<em>Tuple</em><em>[</em><em>int</em><em>, </em><em>int</em><em>]</em><em>, </em><em>optional</em>) – size of the simulated image in pixels, by default (512, 512)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>2D array of microscope image with particles</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ddm.simulation.generate_images">
+<span class="sig-prename descclassname"><span class="pre">ddm.simulation.</span></span><span class="sig-name descname"><span class="pre">generate_images</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tracks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(512,</span> <span class="pre">512)</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="_modules/ddm/simulation.html#generate_images"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.simulation.generate_images" title="Permalink to this definition">#</a></dt>
+<dd><p>Create an image stack of simulated microscopy images</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>tracks</strong> (<em>np.array</em>) – 3D array with particle tracks with shape (n_particles, 2, time points)</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>3D array of simulated microscopy images</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ddm.simulation.generate_tracks">
+<span class="sig-prename descclassname"><span class="pre">ddm.simulation.</span></span><span class="sig-name descname"><span class="pre">generate_tracks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_particles</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">steps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drift</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(0.1,</span> <span class="pre">0.1)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(512,</span> <span class="pre">512)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pixel_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1e-07</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">D</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="_modules/ddm/simulation.html#generate_tracks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.simulation.generate_tracks" title="Permalink to this definition">#</a></dt>
+<dd><p>Generate tracks of particles undergoing 2D Brownian motion</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n_particles</strong> (<em>int</em><em>, </em><em>optional</em>) – number of particles, by default 100</p></li>
+<li><p><strong>steps</strong> (<em>int</em><em>, </em><em>optional</em>) – number of time points to be simulated, by default 1000</p></li>
+<li><p><strong>tau</strong> (<em>float</em><em>, </em><em>optional</em>) – time between steps in seconds, by default 0.01</p></li>
+<li><p><strong>drift</strong> (<em>Tuple</em><em>[</em><em>float</em><em>, </em><em>float</em><em>]</em><em>, </em><em>optional</em>) – drift in x and y direction in fraction of step size, by default (-0.1, -0.1)</p></li>
+<li><p><strong>window</strong> (<em>Tuple</em><em>[</em><em>int</em><em>, </em><em>int</em><em>]</em><em>, </em><em>optional</em>) – size of the simulated image in pixels, by default (512, 512)</p></li>
+<li><p><strong>pixel_size</strong> (<em>float</em><em>, </em><em>optional</em>) – size of the pixel in meters, by default 1e-7</p></li>
+<li><p><strong>D</strong> (<em>float</em>) – diffusion coefficient</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>3D array with particle tracks with shape (n_particles, dimensions, time points)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ddm.simulation.get_diffusion_coefficient">
+<span class="sig-prename descclassname"><span class="pre">ddm.simulation.</span></span><span class="sig-name descname"><span class="pre">get_diffusion_coefficient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">particle_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1e-06</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">293</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/ddm/simulation.html#get_diffusion_coefficient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.simulation.get_diffusion_coefficient" title="Permalink to this definition">#</a></dt>
+<dd><p>Calculate diffusion coefficient</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>particle_size</strong> (<em>float</em>) – size of the particles in meters, defaults to 1e-6</p></li>
+<li><p><strong>eta</strong> (<em>float</em>) – viscosity of the medium in Pascal-seconds, defaults to 1e-3</p></li>
+<li><p><strong>T</strong> (<em>float</em>) – temperature in Kelvin, defaults to 293</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>diffusion coefficient</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ddm.simulation.save_stack">
+<span class="sig-prename descclassname"><span class="pre">ddm.simulation.</span></span><span class="sig-name descname"><span class="pre">save_stack</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stack</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/simulation.html#save_stack"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.simulation.save_stack" title="Permalink to this definition">#</a></dt>
+<dd><p>Save image stack</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>stack</strong> (<em>np.array</em>) – 3D array of simulated microscopy images</p></li>
+<li><p><strong>file_path</strong> (<em>str</em><em>, </em><em>optional</em>) – path to save file”</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
