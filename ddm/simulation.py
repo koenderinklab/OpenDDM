@@ -7,7 +7,7 @@ from tifffile import imwrite
 from tqdm import tqdm
 
 
-def generate_stack(
+def generate_images(
     tracks: np.ndarray, window: Tuple[int, int] = (512, 512)
 ) -> np.ndarray:
     """Create an image stack of simulated microscopy images
@@ -146,7 +146,7 @@ if __name__ == "__main__":
     print("Generating images...")
     D = get_diffusion_coefficient()
     tracks = generate_tracks(n_particles=1000, steps=5000, drift=(0.0, 0.0), D=D)
-    stack = generate_stack(tracks)
+    stack = generate_images(tracks)
     print("Saving image stack...")
     save_stack("./data/sim_diffusion.tif", stack)
     print("Done!")
