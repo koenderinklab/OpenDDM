@@ -2,6 +2,7 @@ name: ddm_env
 channels:
   - conda-forge
   - pytorch
+  - anaconda
   - defaults
 dependencies:
   - cpuonly
@@ -15,13 +16,16 @@ dependencies:
   - pims
   - pip
   - pip:
-      - nd2=>0.3.0
+      - nd2==0.3.0
+      - git+https://github.com/schuetzgroup/sdt-python.git@17.3
   - pyfftw
   - python=3.8
   - python-graphviz
   - pytorch
   - readlif
+  - scikit-image
   - scipy
   - tensorflow
   - torchvision
+  - tqdm
   - xarray
