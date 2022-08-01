@@ -12,3 +12,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add support for delayed xarray datasets
 - Add fitting routines
 - Add plotting routines
+- Add functionality for simullating microscopy data with particles undergoing Brownian motion
