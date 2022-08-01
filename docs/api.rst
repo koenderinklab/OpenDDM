@@ -33,6 +33,14 @@ ddm.processing module
    :undoc-members:
    :show-inheritance:
 
+ddm.simulation module
+---------------------
+
+.. automodule:: ddm.simulation
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 ddm.utils module
 ----------------
 

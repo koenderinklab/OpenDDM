@@ -22,7 +22,7 @@ In future, the package will be made available through PyPI, for now users can in
 ```bash
 git clone git@github.com:koenderinklab/ddmPilotCode.git ddm
 cd ddm
-conda env create -f env.yml
+conda env create -f environment.yml
 conda activate ddm_env
 pip install -e .[dev]
 ``` 

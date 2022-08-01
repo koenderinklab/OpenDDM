@@ -131,8 +131,34 @@ def schultz(lagtime, tau1, tau2, n, S, Z):
     )
     return np.exp(-1.0 * (lagtime / tau1) ** S) * ((1.0 - n) + n * VDist)
 
+def genFit(isf, taus, fitFunc):
+    """
+    Generalised fitting function to fit the ISF
 
-def DDM_Matix(ISF, A, B):
+    Parameters
+    ----------
+    isf : array_like
+        array of the lag times
+    taus : np.ndarray
+        decay time
+    fitFunc: string
+        stretching exponent
+
+    Returns
+    -------
+    
+    """
+    supported = {"singleExp": singleExp, "doubleExp": doubleExp, "schultz": schultz}
+    
+    if fitFunc in supported.keys():
+        popt, pcov = curve_fit(supported[fitFunc], taus, isf)
+        errs = np.sqrt(np.diag(pcov))
+        return popt, errs
+    else:
+        raise ValueError(
+            f"{fitFunc} is not a supported fitting function. The currently supported functions are {[name for name in supported.keys()]}.")
+
+def DDM_Matrix(ISF, A, B):
     """
     Function to calculate the DDM matrix from a given ISF
 
