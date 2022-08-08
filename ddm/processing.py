@@ -4,7 +4,7 @@ from dask import delayed
 from numba import jit
 
 
-@delayed
+# @delayed
 def radial_profile(data: np.ndarray, centre: tuple):
     """_summary_
 
@@ -54,7 +54,7 @@ def get_diff_images(data: np.ndarray, step: int):
     Returns
     -------
     ndarray
-        
+
     """
     return data[:-step, :, :] - data[step:, :, :]
 
