@@ -204,8 +204,8 @@ title="Fullscreen mode"
 <span class="kn">from</span> <span class="nn">numba</span> <span class="kn">import</span> <span class="n">jit</span>
 
 
-<span class="nd">@delayed</span>
-<span class="k">def</span> <span class="nf">radial_profile</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">centre</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">):</span>
+<span class="c1"># @delayed</span>
+<div class="viewcode-block" id="radial_profile"><a class="viewcode-back" href="../../api.html#ddm.processing.radial_profile">[docs]</a><span class="k">def</span> <span class="nf">radial_profile</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">centre</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;_summary_</span>
 
 <span class="sd">    Parameters</span>
@@ -226,7 +226,7 @@ title="Fullscreen mode"
     <span class="n">tbin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">bincount</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">data</span><span class="o">.</span><span class="n">ravel</span><span class="p">())</span>
     <span class="n">nr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">bincount</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">ravel</span><span class="p">())</span>
     <span class="n">radialprofile</span> <span class="o">=</span> <span class="n">tbin</span> <span class="o">/</span> <span class="n">nr</span>
-    <span class="k">return</span> <span class="n">radialprofile</span>
+    <span class="k">return</span> <span class="n">radialprofile</span></div>
 
 
 <span class="nd">@delayed</span>
@@ -254,7 +254,7 @@ title="Fullscreen mode"
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    ndarray</span>
-<span class="sd">        </span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">data</span><span class="p">[:</span><span class="o">-</span><span class="n">step</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">-</span> <span class="n">data</span><span class="p">[</span><span class="n">step</span><span class="p">:,</span> <span class="p">:,</span> <span class="p">:]</span></div>
 
