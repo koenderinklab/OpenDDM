@@ -5,9 +5,9 @@ channels:
   - anaconda
   - defaults
 dependencies:
-  - cpuonly
   - dask
-  - jpype1>0.6
+  - dask-image
+  - jpype1=>0.6.1
   - matplotlib
   - nd2reader
   - notebook
@@ -21,11 +21,8 @@ dependencies:
   - pyfftw
   - python=3.8
   - python-graphviz
-  - pytorch
   - readlif
   - scikit-image
   - scipy
-  - tensorflow
-  - torchvision
   - tqdm
   - xarray
