@@ -1,7 +1,7 @@
 # Open DDM 
 
 ![GitHub](https://img.shields.io/github/license/koenderinklab/ddmPilotCode)
-[![codecov](https://codecov.io/gh/koenderinklab/ddmPilotCode/branch/develop/graph/badge.svg?token=V4VZcNYyMG)](https://codecov.io/gh/koenderinklab/ddmPilotCode)
+[![codecov](https://codecov.io/gh/koenderinklab/ddmPilotCode/branch/master/graph/badge.svg?token=V4VZcNYyMG)](https://codecov.io/gh/koenderinklab/ddmPilotCode)
 ![GitHub Workflow Status (event)](https://img.shields.io/github/workflow/status/koenderinklab/ddmPilotCode/deploy-documentation?label=documentation)
 ![GitHub Workflow Status (event)](https://img.shields.io/github/workflow/status/koenderinklab/ddmPilotCode/Build%20and%20test%20Python%20package)
 ![GitHub repo size](https://img.shields.io/github/repo-size/koenderinklab/ddmPilotCode)
