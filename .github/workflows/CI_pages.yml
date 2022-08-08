@@ -1,0 +1,38 @@
+name: deploy-documentation
+
+# Only run this when the master branch
+on:
+  push:
+    branches:
+      - master
+      - develop
+  # Option to run action manually
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Tag for manually deploying jupyterbook
+        required: False
+        default: ""
+
+# This job installs dependencies, builds the documentaiton, and pushes it to `gh-pages`
+jobs:
+  deploy-book:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - name: Install dependencies
+        run: |
+          pip install -e .[dev]
+      - name: Build the documentation
+        run: |
+          cd docs
+          make html
+          touch _build/html/.nojekyll
+      - name: Deploy documentation
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: docs/_build/html

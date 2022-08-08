@@ -1,0 +1,56 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+
+\usepackage{amsmath}
+
+\begin{document}
+
+	To obtain $A$ and $B$ when performing DDM some Fourier analysis is required. Starting from the definition of the image structure function, 
+	
+	\begin{equation}
+		\label{eq:dNormal}
+		D(\vec{q}, t) = A(\vec{q})(1-f(\vec{q}, t) + B(\vec{q}),
+	\end{equation}
+
+	which is calculated as
+	
+	\begin{equation}
+		\label{eq:dFull}
+		D(\vec{q}, t) = \langle|\tilde{I}(\vec{q}, t + \tau) - \tilde{I}(\vec{q}, t)|^2\rangle_t.
+	\end{equation}
+
+	Here, $\tilde{I}(\vec{q}, t)$ is the Fourier transform of the image at time $t$ and $\tau$ is the lag time. By expanding equation \ref{eq:dFull} we can write this as
+	
+	\begin{equation}
+		\label{eq:dExpanded}
+		D(\vec{q}, t) = 2\langle|\tilde{I}(\vec{q}, t)|^2\rangle_t - 2\langle\Re[\tilde{I}(\vec{q}, t+ \tau)\tilde{I}^\ast(\vec{q}, t)]\rangle_t.
+	\end{equation}
+
+	To get to this point, there is a simplification made that $\langle|\tilde{I}(\vec{q}, t+\tau)|^2\rangle_t$ is independent on $\tau$, i.e. $\langle|\tilde{I}(\vec{q}, t+\tau)|^2\rangle_t = \langle|\tilde{I}(\vec{q}, t)|^2\rangle_t$. By comparing terms dependent and independent of $\tau$ in equations \ref{eq:dExpanded} and \ref{eq:dNormal}, one can write
+
+	\begin{equation}
+		\label{eq:aPlusb}
+		A(\vec{q}) + B(\vec{q}) = 2\langle|\tilde{I}(\vec{q}, t)|^2\rangle_t
+	\end{equation}
+	and
+	\begin{equation}
+		\label{eq:af}
+		A(\vec{q})f(\vec{q}, t) = 2\langle\Re[\tilde{I}(\vec{q}, t+ \tau)\tilde{I}^\ast(\vec{q}, t)]\rangle_t.
+	\end{equation}
+
+	At this point we can do one of two things. Firstly, we can assume that at very large $q$, $A(\vec{q}) = 0$. This is because $A$ represents an amplitude term which depends on spatial intensity correlations. Therefore one can calculate
+	
+	\begin{equation}
+		B(\vec{q}; q \to \infty) = 2\langle|\tilde{I}(\vec{q}; q \to \infty, t)|^2\rangle_t,
+	\end{equation}
+	
+	where $q = |\vec{q}|$. It is then simple to calculate $A(\vec{q})$ for all $\vec{q}$ from equation \ref{eq:aPlusb}.
+
+	Alternatively, we can use \emph{a priori} knowledge of the Intermediate Scattering Function (ISF), $f(\vec{q}, \tau)$ to say that $f(\vec{q}, \tau \to 0)$. With this and equation \ref{eq:af} we can calculate $A(\vec{q})$ as
+	
+	\begin{equation}
+		A(\vec{q}) = \lim_{\tau\to 0}2\langle\Re[\tilde{I}(\vec{q}, t+ \tau)\tilde{I}^\ast(\vec{q}, t)]\rangle_t.
+	\end{equation}
+	
+	
+\end{document}
