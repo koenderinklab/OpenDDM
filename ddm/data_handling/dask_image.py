@@ -2,8 +2,11 @@
 # All rights reserved.
 
 import glob
+import threading
 import numbers
 import warnings
+
+from typing import Any
 
 import dask.array as da
 import numpy as np
@@ -73,7 +76,7 @@ def read_data_into_dask(fname, nframes: int = 1, *, experiment: int = 0):
         multiple_files = False
 
     # read in data using encoded filenames
-    a = ar.map_blocks(
+    dask_arr = ar.map_blocks(
         _map_read_frame,
         chunks=da.core.normalize_chunks((nframes,) + shape[1:], shape),
         multiple_files=multiple_files,
@@ -82,7 +85,7 @@ def read_data_into_dask(fname, nframes: int = 1, *, experiment: int = 0):
         arrayfunc=arrayfunc,
         meta=arrayfunc([]).astype(dtype),  # meta overwrites `dtype` argument
     )
-    return a
+    return dask_arr
 
 
 def _map_read_frame(x, multiple_files, block_info=None, **kwargs):
@@ -92,12 +95,16 @@ def _map_read_frame(x, multiple_files, block_info=None, **kwargs):
     if multiple_files:
         i, j = 0, 1
     else:
-        print(block_info)
         i, j = block_info[None]["array-location"][0]
 
-    return _read_frame(fn=fn, i=slice(i, j), **kwargs)
+    with threading.RLock():
+        return _read_frame(fn=fn, i=slice(i, j), **kwargs)
 
 
 def _read_frame(fn, i, *, arrayfunc=np.asanyarray, experiment=0):
-    with pims.Bioformats(fn, series=experiment, read_mode="jpype") as imgs:
-        return arrayfunc(imgs[i])
+    # with pims.Bioformats(fn, series=experiment, read_mode="jpype") as imgs:
+    # with pims.Bioformats(fn) as imgs:
+    with pims.open(fn) as imgs:
+        data = arrayfunc(imgs[i])
+        data = data.copy()
+        return data
