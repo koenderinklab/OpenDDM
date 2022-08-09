@@ -72,7 +72,7 @@ def singleExp(t, tau, S):
     return np.exp(-1 * (t / tau) ** S)
 
 
-def doubleExp(t, tau1, tau2, n, B, S1, S2):
+def doubleExp(t, tau1, tau2, n, S1, S2):
     """
     Function for single exponential DDM fits
 
@@ -131,6 +131,19 @@ def schultz(lagtime, tau1, tau2, n, S, Z):
     )
     return np.exp(-1.0 * (lagtime / tau1) ** S) * ((1.0 - n) + n * VDist)
 
+def test_linear(isf, taus):
+    """
+    """
+    linFit, pcov = curve_fit(_linear, taus, isf, p0 = [0.,1.], bounds = ([-np.inf,0.],[0.,np.inf]))
+    errs = np.sqrt(np.diag(pcov))
+    if (errs < linFit/100.).all():
+        return True
+    else:
+        return False
+    
+def _linear(dat, m, c):
+    return m*dat + c
+
 def genFit(isf, taus, fitFunc):
     """
     Generalised fitting function to fit the ISF
@@ -150,13 +163,20 @@ def genFit(isf, taus, fitFunc):
     """
     supported = {"singleExp": singleExp, "doubleExp": doubleExp, "schultz": schultz}
     
-    if fitFunc in supported.keys():
-        popt, pcov = curve_fit(supported[fitFunc], taus, isf)
-        errs = np.sqrt(np.diag(pcov))
-        return popt, errs
-    else:
+    if fitFunc not in supported.keys():
         raise ValueError(
-            f"{fitFunc} is not a supported fitting function. The currently supported functions are {[name for name in supported.keys()]}.")
+                f"{fitFunc} is not a supported fitting function. The currently supported functions are {[name for name in supported.keys()]}.")
+    else:
+        if test_linear(isf, taus):
+            raise ValueError(
+                f"The data fits well to a linear function, implying very little decorrelation which cannot be fitted to a model based on exponential decorellation.")
+        else:
+            if fitFunc == 'doubleExp':
+        	    popt, pcov = curve_fit(supported[fitFunc], taus, isf, bounds = ([0.,0.,0.,1.,1.], [np.inf, np.inf, 1., 2., 2.]))
+            else:
+                popt, pcov = curve_fit(supported[fitFunc], taus, isf)
+            errs = np.sqrt(np.diag(pcov))
+            return popt, errs
 
 def DDM_Matrix(ISF, A, B):
     """
