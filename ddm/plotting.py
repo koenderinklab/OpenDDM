@@ -1,6 +1,6 @@
 import matplotlib.pyplot as pl
 import numpy as np
-from .fitting import singleExp
+from .fitting import singleExp, genFit
 
 def plotISF(isf, taus, q = None):
     """_summary_
@@ -44,5 +44,5 @@ def plotSingleExpFit(isf, taus, q = None):
     q = len(isf)//2 if q is None else q
     q = [q] if type(q) is int else q
     for x in q:
-        pExpFit, pExpErrs = ddm.genFit(isf[x], taus, 'singleExp')
+        pExpFit, pExpErrs = genFit(isf[x], taus, 'singleExp')
         pl.plot(taus, singleExp(taus, *pExpFit))

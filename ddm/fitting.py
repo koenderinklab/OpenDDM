@@ -27,6 +27,24 @@ def findMeanSqFFT(dData: dask.array):
     sqFFTmean = da.mean(sqFFT, axis=0)
     return sqFFTmean
 
+def findMeanSqFFT_np(dData: np.array):
+    """
+    Function to calculate the mean of the square of the FFT over all frames
+
+    Parameters
+    ----------
+    dData : dask.array
+        dask array containing the raw image data
+
+    Returns
+    -------
+    sqFFTmean : the mean over all frames of the square of the fourier transform
+    """
+    sqFFT = 2 * np.abs(np.fft.fft2(dData)) * np.abs(np.fft.fft2(dData))
+    sqFFT = np.fft.fftshift(sqFFT)
+    sqFFTmean = np.mean(sqFFT, axis=0)
+    return sqFFTmean
+
 
 def computeAB(sqFFTmean: np.array) -> Tuple[np.array, float]:
     """
@@ -45,7 +63,7 @@ def computeAB(sqFFTmean: np.array) -> Tuple[np.array, float]:
         the magnitude of the noise of the image data
     """
     sqFFTrad = radial_profile(
-        sqFFTmean, (np.shape(sqFFTmean)[1] / 2, np.shape(sqFFTmean)[2] / 2)
+        sqFFTmean, (np.shape(sqFFTmean)[0] / 2, np.shape(sqFFTmean)[1] / 2)
     )
     b = np.mean(sqFFTrad[-100:-50])  # change depending on size of array
     a = sqFFTrad - b
