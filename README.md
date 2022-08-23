@@ -9,7 +9,7 @@
 
 A Python package to analyse an image sequence and measure diffusion properties through Fourier techniques.
 
-This package is under active development and currently in a pre-alpha state.
+:warning: **This package is under active development and currently in a pre-alpha state.**
 
 ## Installation for users
 In future, the package will be made available through PyPI, for now users can install the package with the following command
