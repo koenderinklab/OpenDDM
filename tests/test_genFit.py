@@ -31,10 +31,10 @@ def test_fitting_dummy_doubleExp():
     assert (np.abs(popt - [tau1, tau2, frac, s1, s2]) < [tau1/100., tau2/100., frac/100., s1/100., s2/100.]).all() or (np.abs(popt - [tau2, tau1, 1.-frac, s2, s1]) < [tau2/100., tau1/100., (1-frac)/100., s2/100., s1/100.]).all()
     
 def test_fitting_linear():
-    tau = 1000.
+    tau = 0.1
     b = 1.
     tData = np.linspace(0.,tau/10., 1000)
     isfData = np.exp(-1.*(tData/tau)**b)
     with pytest.raises(ValueError) as exc_info:
         genFit(isfData, tData, 'singleExp')
-    assert "decay" in str(exc_info.value)
+    assert "very little decorrelation" in str(exc_info.value)

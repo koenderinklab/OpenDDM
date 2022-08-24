@@ -134,15 +134,13 @@ def schultz(lagtime, tau1, tau2, n, S, Z):
 def test_linear(isf, taus):
     """
     """
-    linFit, pcov = curve_fit(_linear, taus, isf, p0 = [0.,1.], bounds = ([-np.inf,0.],[0.,np.inf]))
-    errs = np.sqrt(np.diag(pcov))
-    if (errs < linFit/100.).all():
+    linGrad = (isf[-1] - isf[0])/(taus[-1]-taus[0])
+    linInter = 1.
+    residual = np.sqrt(np.sum((isf - (linGrad*taus + linInter))**2))
+    if (residual < 0.1):
         return True
     else:
         return False
-    
-def _linear(dat, m, c):
-    return m*dat + c
 
 def genFit(isf, taus, fitFunc):
     """
@@ -172,7 +170,7 @@ def genFit(isf, taus, fitFunc):
                 f"The data fits well to a linear function, implying very little decorrelation which cannot be fitted to a model based on exponential decorellation.")
         else:
             if fitFunc == 'doubleExp':
-        	    popt, pcov = curve_fit(supported[fitFunc], taus, isf, bounds = ([0.,0.,0.,1.,1.], [np.inf, np.inf, 1., 2., 2.]))
+                popt, pcov = curve_fit(supported[fitFunc], taus, isf, bounds = ([0.,0.,0.,1.,1.], [np.inf, np.inf, 1., 2., 2.]))
             else:
                 popt, pcov = curve_fit(supported[fitFunc], taus, isf)
             errs = np.sqrt(np.diag(pcov))
