@@ -12,11 +12,7 @@ A Python package to analyse an image sequence and measure diffusion properties t
 :warning: **This package is under active development and currently in a pre-alpha state.**
 
 ## Installation for users
-In future, the package will be made available through PyPI, for now users can install the package with the following command
-
- ```bash
- pip install git+https://github.com/koenderinklab/ddmPilotCode.git@develop
- ```
+Cuurently, the package is not ready for users. In future, the package will be made available through PyPI.
 
 ## Installation for developers
 
