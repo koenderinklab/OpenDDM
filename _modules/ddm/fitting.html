@@ -227,24 +227,6 @@ title="Fullscreen mode"
     <span class="n">sqFFTmean</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">sqFFT</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">sqFFTmean</span></div>
 
-<div class="viewcode-block" id="findMeanSqFFT_np"><a class="viewcode-back" href="../../api.html#ddm.fitting.findMeanSqFFT_np">[docs]</a><span class="k">def</span> <span class="nf">findMeanSqFFT_np</span><span class="p">(</span><span class="n">dData</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Function to calculate the mean of the square of the FFT over all frames</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    dData : dask.array</span>
-<span class="sd">        dask array containing the raw image data</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    sqFFTmean : the mean over all frames of the square of the fourier transform</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">sqFFT</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft2</span><span class="p">(</span><span class="n">dData</span><span class="p">))</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft2</span><span class="p">(</span><span class="n">dData</span><span class="p">))</span>
-    <span class="n">sqFFT</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftshift</span><span class="p">(</span><span class="n">sqFFT</span><span class="p">)</span>
-    <span class="n">sqFFTmean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">sqFFT</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">sqFFTmean</span></div>
-
 
 <div class="viewcode-block" id="computeAB"><a class="viewcode-back" href="../../api.html#ddm.fitting.computeAB">[docs]</a><span class="k">def</span> <span class="nf">computeAB</span><span class="p">(</span><span class="n">sqFFTmean</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -263,7 +245,7 @@ title="Fullscreen mode"
 <span class="sd">        the magnitude of the noise of the image data</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">sqFFTrad</span> <span class="o">=</span> <span class="n">radial_profile</span><span class="p">(</span>
-        <span class="n">sqFFTmean</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">sqFFTmean</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">sqFFTmean</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">sqFFTmean</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">sqFFTmean</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">sqFFTmean</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
     <span class="p">)</span>
     <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">sqFFTrad</span><span class="p">[</span><span class="o">-</span><span class="mi">100</span><span class="p">:</span><span class="o">-</span><span class="mi">50</span><span class="p">])</span>  <span class="c1"># change depending on size of array</span>
     <span class="n">a</span> <span class="o">=</span> <span class="n">sqFFTrad</span> <span class="o">-</span> <span class="n">b</span>
@@ -290,7 +272,7 @@ title="Fullscreen mode"
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="p">(</span><span class="n">t</span> <span class="o">/</span> <span class="n">tau</span><span class="p">)</span> <span class="o">**</span> <span class="n">S</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="doubleExp"><a class="viewcode-back" href="../../api.html#ddm.fitting.doubleExp">[docs]</a><span class="k">def</span> <span class="nf">doubleExp</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">tau1</span><span class="p">,</span> <span class="n">tau2</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">S1</span><span class="p">,</span> <span class="n">S2</span><span class="p">):</span>
+<div class="viewcode-block" id="doubleExp"><a class="viewcode-back" href="../../api.html#ddm.fitting.doubleExp">[docs]</a><span class="k">def</span> <span class="nf">doubleExp</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">tau1</span><span class="p">,</span> <span class="n">tau2</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">S1</span><span class="p">,</span> <span class="n">S2</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function for single exponential DDM fits</span>
 
@@ -349,17 +331,6 @@ title="Fullscreen mode"
     <span class="p">)</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span> <span class="o">*</span> <span class="p">(</span><span class="n">lagtime</span> <span class="o">/</span> <span class="n">tau1</span><span class="p">)</span> <span class="o">**</span> <span class="n">S</span><span class="p">)</span> <span class="o">*</span> <span class="p">((</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">n</span><span class="p">)</span> <span class="o">+</span> <span class="n">n</span> <span class="o">*</span> <span class="n">VDist</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="test_linear"><a class="viewcode-back" href="../../api.html#ddm.fitting.test_linear">[docs]</a><span class="k">def</span> <span class="nf">test_linear</span><span class="p">(</span><span class="n">isf</span><span class="p">,</span> <span class="n">taus</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">linGrad</span> <span class="o">=</span> <span class="p">(</span><span class="n">isf</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">isf</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="p">(</span><span class="n">taus</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">taus</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-    <span class="n">linInter</span> <span class="o">=</span> <span class="mf">1.</span>
-    <span class="n">residual</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">isf</span> <span class="o">-</span> <span class="p">(</span><span class="n">linGrad</span><span class="o">*</span><span class="n">taus</span> <span class="o">+</span> <span class="n">linInter</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">residual</span> <span class="o">&lt;</span> <span class="mf">0.1</span><span class="p">):</span>
-        <span class="k">return</span> <span class="kc">True</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="kc">False</span></div>
-
 <div class="viewcode-block" id="genFit"><a class="viewcode-back" href="../../api.html#ddm.fitting.genFit">[docs]</a><span class="k">def</span> <span class="nf">genFit</span><span class="p">(</span><span class="n">isf</span><span class="p">,</span> <span class="n">taus</span><span class="p">,</span> <span class="n">fitFunc</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generalised fitting function to fit the ISF</span>
@@ -379,20 +350,13 @@ title="Fullscreen mode"
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">supported</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;singleExp&quot;</span><span class="p">:</span> <span class="n">singleExp</span><span class="p">,</span> <span class="s2">&quot;doubleExp&quot;</span><span class="p">:</span> <span class="n">doubleExp</span><span class="p">,</span> <span class="s2">&quot;schultz&quot;</span><span class="p">:</span> <span class="n">schultz</span><span class="p">}</span>
     
-    <span class="k">if</span> <span class="n">fitFunc</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">supported</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fitFunc</span><span class="si">}</span><span class="s2"> is not a supported fitting function. The currently supported functions are </span><span class="si">{</span><span class="p">[</span><span class="n">name</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">supported</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">fitFunc</span> <span class="ow">in</span> <span class="n">supported</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">popt</span><span class="p">,</span> <span class="n">pcov</span> <span class="o">=</span> <span class="n">curve_fit</span><span class="p">(</span><span class="n">supported</span><span class="p">[</span><span class="n">fitFunc</span><span class="p">],</span> <span class="n">taus</span><span class="p">,</span> <span class="n">isf</span><span class="p">)</span>
+        <span class="n">errs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">pcov</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">popt</span><span class="p">,</span> <span class="n">errs</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">test_linear</span><span class="p">(</span><span class="n">isf</span><span class="p">,</span> <span class="n">taus</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;The data fits well to a linear function, implying very little decorrelation which cannot be fitted to a model based on exponential decorellation.&quot;</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">fitFunc</span> <span class="o">==</span> <span class="s1">&#39;doubleExp&#39;</span><span class="p">:</span>
-                <span class="n">popt</span><span class="p">,</span> <span class="n">pcov</span> <span class="o">=</span> <span class="n">curve_fit</span><span class="p">(</span><span class="n">supported</span><span class="p">[</span><span class="n">fitFunc</span><span class="p">],</span> <span class="n">taus</span><span class="p">,</span> <span class="n">isf</span><span class="p">,</span> <span class="n">bounds</span> <span class="o">=</span> <span class="p">([</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">1.</span><span class="p">,</span><span class="mf">1.</span><span class="p">],</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">]))</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">popt</span><span class="p">,</span> <span class="n">pcov</span> <span class="o">=</span> <span class="n">curve_fit</span><span class="p">(</span><span class="n">supported</span><span class="p">[</span><span class="n">fitFunc</span><span class="p">],</span> <span class="n">taus</span><span class="p">,</span> <span class="n">isf</span><span class="p">)</span>
-            <span class="n">errs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">pcov</span><span class="p">))</span>
-            <span class="k">return</span> <span class="n">popt</span><span class="p">,</span> <span class="n">errs</span></div>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fitFunc</span><span class="si">}</span><span class="s2"> is not a supported fitting function. The currently supported functions are </span><span class="si">{</span><span class="p">[</span><span class="n">name</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">supported</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="DDM_Matrix"><a class="viewcode-back" href="../../api.html#ddm.fitting.DDM_Matrix">[docs]</a><span class="k">def</span> <span class="nf">DDM_Matrix</span><span class="p">(</span><span class="n">ISF</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>

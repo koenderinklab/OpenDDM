@@ -377,7 +377,7 @@ title="Print to PDF"
 
 <dl class="py function">
 <dt class="sig sig-object py" id="ddm.fitting.doubleExp">
-<span class="sig-prename descclassname"><span class="pre">ddm.fitting.</span></span><span class="sig-name descname"><span class="pre">doubleExp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/fitting.html#doubleExp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.fitting.doubleExp" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">ddm.fitting.</span></span><span class="sig-name descname"><span class="pre">doubleExp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/fitting.html#doubleExp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.fitting.doubleExp" title="Permalink to this definition">#</a></dt>
 <dd><p>Function for single exponential DDM fits</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -399,23 +399,6 @@ title="Print to PDF"
 <dl class="py function">
 <dt class="sig sig-object py" id="ddm.fitting.findMeanSqFFT">
 <span class="sig-prename descclassname"><span class="pre">ddm.fitting.</span></span><span class="sig-name descname"><span class="pre">findMeanSqFFT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dData:</span> <span class="pre">&lt;module</span> <span class="pre">'dask.array'</span> <span class="pre">from</span> <span class="pre">'/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/dask/array/__init__.py'&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/fitting.html#findMeanSqFFT"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.fitting.findMeanSqFFT" title="Permalink to this definition">#</a></dt>
-<dd><p>Function to calculate the mean of the square of the FFT over all frames</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>dData</strong> (<em>dask.array</em>) – dask array containing the raw image data</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>sqFFTmean</strong></p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>the mean over all frames of the square of the fourier transform</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="ddm.fitting.findMeanSqFFT_np">
-<span class="sig-prename descclassname"><span class="pre">ddm.fitting.</span></span><span class="sig-name descname"><span class="pre">findMeanSqFFT_np</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dData</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.array</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/fitting.html#findMeanSqFFT_np"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.fitting.findMeanSqFFT_np" title="Permalink to this definition">#</a></dt>
 <dd><p>Function to calculate the mean of the square of the FFT over all frames</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -484,11 +467,6 @@ both diffusive and actively directed motion</p>
 </dd>
 </dl>
 </dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="ddm.fitting.test_linear">
-<span class="sig-prename descclassname"><span class="pre">ddm.fitting.</span></span><span class="sig-name descname"><span class="pre">test_linear</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">isf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">taus</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/fitting.html#test_linear"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.fitting.test_linear" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
 
 </section>
 <section id="module-ddm.plotting">
