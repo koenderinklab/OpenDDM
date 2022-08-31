@@ -26,7 +26,7 @@ def generate_images(
     for i in tqdm(range(tracks.shape[-1])):
         frame = util.invert(generate_frame(tracks[:, :, i], window))
         stack.append(frame)
-    return np.asarray(stack)
+    return np.asarray(stack).astype("uint16")
 
 
 def generate_tracks(
