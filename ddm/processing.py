@@ -1,10 +1,129 @@
 import numpy as np
 import pyfftw
-from dask import delayed
-from numba import jit
+
+import dask
+from dask.diagnostics import ProgressBar
+import dask.array as da
 
 
-# @delayed
+def ddm_numpy(data):
+    """_summary_
+
+    Parameters
+    ----------
+    data : np.array
+        image stack
+
+    Returns
+    -------
+    np.array
+        ddm matrix
+    """
+    taus = np.arange(1, len(data) // 2)
+    num_frames, height, width = data.shape
+    results = []
+
+    img_fft = np.fft.fft2(data).astype("complex64")
+
+    for tau in taus:
+        result = dask.delayed(calc_matrix)(img_fft, tau, num_frames, height, width)
+        results.append(result)
+
+    with ProgressBar():
+        out = dask.compute(*results)
+    return np.asarray(out)
+
+
+def ddm_dask(data, temp_folder: str):
+    taus = da.arange(1, len(data) // 2)
+    num_frames, height, width = data.shape
+    results = []
+
+    fft_data = store_img_fft_temp(data, temp_folder)
+
+    for tau in taus:
+        result = calc_matrix_dask(fft_data, tau)
+        results.append(result)
+
+    with ProgressBar():
+        out = dask.compute(*results)
+    fft_shift = np.asarray(out)
+
+    out = []
+    for row in fft_shift:
+        out.append(calc_radial(fft_shift, num_frames, tau, width, height))
+
+
+def store_img_fft_temp(data, temp_folder: str = "../data/_temp"):
+    img_fft = da.fft.fft2(data.data).astype("complex64")
+    da.to_npy_stack(temp_folder, img_fft)
+    return da.from_npy_stack(temp_folder)
+
+
+def calc_matrix(img_fft, tau, num_frames, height, width):
+    """_summary_
+
+    Parameters
+    ----------
+    img_fft : np.array
+        _description_
+    tau : _type_
+        _description_
+    num_frames : _type_
+        _description_
+    height : _type_
+        _description_
+    width : _type_
+        _description_
+
+    Returns
+    -------
+    _type_
+        _description_
+    """
+    img_diff = img_fft[:-tau, :, :] - img_fft[tau:, :, :]
+    img_fft_sq = np.abs(img_diff) ** 2
+    img_sum = np.sum(img_fft_sq, axis=0)
+    fft_shift = np.fft.fftshift(img_sum)
+    gTau = fft_shift / (num_frames - tau)
+    gTauRadial = radial_profile(gTau, (width / 2.0, height / 2.0))
+    return gTauRadial
+
+
+def calc_matrix_dask(img_fft, tau):
+    """_summary_
+
+    Parameters
+    ----------
+    img_fft : np.array
+        _description_
+    tau : _type_
+        _description_
+    num_frames : _type_
+        _description_
+    height : _type_
+        _description_
+    width : _type_
+        _description_
+
+    Returns
+    -------
+    _type_
+        _description_
+    """
+    img_diff = img_fft[:-tau, :, :] - img_fft[tau:, :, :]
+    img_fft_sq = da.abs(img_diff) ** 2
+    img_sum = da.sum(img_fft_sq, axis=0)
+    fft_shift = da.fft.fftshift(img_sum)
+    return fft_shift
+
+
+def calc_radial(fft_shift, num_frames, tau, width, height):
+    gTau = fft_shift / (num_frames - tau)
+    gTauRadial = radial_profile(gTau, (width / 2.0, height / 2.0))
+    return gTauRadial
+
+
 def radial_profile(data: np.ndarray, centre: tuple):
     """_summary_
 
@@ -27,36 +146,6 @@ def radial_profile(data: np.ndarray, centre: tuple):
     nr = np.bincount(r.ravel())
     radialprofile = tbin / nr
     return radialprofile
-
-
-@delayed
-@jit(nopython=True, nogil=True)
-def radial_profile_jit(data, centre, x, y):
-    # x, y = np.indices((data.shape))
-    r = np.sqrt((x - centre[0]) ** 2 + (y - centre[1]) ** 2)
-    r = r.astype(np.int64)
-    tbin = np.bincount(r.ravel(), data.ravel())
-    nr = np.bincount(r.ravel())
-    radialprofile = tbin / nr
-    return radialprofile
-
-
-def get_diff_images(data: np.ndarray, step: int):
-    """Calculate difference between image [n] and [n + shift] for all images
-
-    Parameters
-    ----------
-    data : ndarray
-        array of images
-    shift : int
-        step between frame number
-
-    Returns
-    -------
-    ndarray
-
-    """
-    return data[:-step, :, :] - data[step:, :, :]
 
 
 def ddm_fftw(data: np.ndarray, tau: int):
@@ -105,71 +194,70 @@ def ddm_fftw(data: np.ndarray, tau: int):
     return gTauRadial
 
 
-def ddm_numpy(data: np.ndarray, tau: int):
-    """Calculate gTau with radial profile using numpy
+# def ddm_numpy(data: np.ndarray, tau: int):
+#     """Calculate gTau with radial profile using numpy
 
-    Parameters
-    ----------
-    data : _type_
-        _description_
-    tau : _type_
-        _description_
+#     Parameters
+#     ----------
+#     data : _type_
+#         _description_
+#     tau : _type_
+#         _description_
 
-    Returns
-    -------
-    _type_
-        _description_
-    """
-    num_frames, height, width = data.shape
+#     Returns
+#     -------
+#     _type_
+#         _description_
+#     """
+#     num_frames, height, width = data.shape
 
-    gTau = np.zeros(
-        (width, height)
-    )  # initialise gTau to hold g(vec(q), tau) which will be radially averaged then saved
-    imageDiffFTSquared = np.zeros(
-        (width, height)
-    )  # initialise zeros to hold the squared of the fourier transformed differences
+#     gTau = np.zeros(
+#         (width, height)
+#     )  # initialise gTau to hold g(vec(q), tau) which will be radially averaged then saved
+#     imageDiffFTSquared = np.zeros(
+#         (width, height)
+#     )  # initialise zeros to hold the squared of the fourier transformed differences
 
-    for jj in range(
-        num_frames - tau
-    ):  # j is the initial frame in the difference calculation, usually labelled as t
-        imageDiff = (
-            data[jj + tau] - data[jj]
-        )  # calculate the difference in pixel intensities between images
-        imageDiffFT = np.fft.fft2(imageDiff)  # fourier transform the difference
-        imageDiffFTSquared += (
-            np.abs(imageDiffFT) ** 2
-        )  # for averaging this, add the square of the fourier transform to itself
+#     for jj in range(
+#         num_frames - tau
+#     ):  # j is the initial frame in the difference calculation, usually labelled as t
+#         imageDiff = (
+#             data[jj + tau] - data[jj]
+#         )  # calculate the difference in pixel intensities between images
+#         imageDiffFT = np.fft.fft2(imageDiff)  # fourier transform the difference
+#         imageDiffFTSquared += (
+#             np.abs(imageDiffFT) ** 2
+#         )  # for averaging this, add the square of the fourier transform to itself
 
-    imageDiffFTSquared = np.fft.fftshift(imageDiffFTSquared)
-    gTau = imageDiffFTSquared / (num_frames - tau)
-    gTauRadial = radial_profile(gTau, (width / 2.0, height / 2.0))
-    return gTauRadial
-
-
-def ddm(data, tau: int):
-    """_summary_
-
-    Parameters
-    ----------
-    data : _type_
-        _description_
-    tau : _type_
-        _description_
-
-    Returns
-    -------
-    _type_
-        _description_
-    """
-    num_frames, height, width = data.shape
-    fft_shift = calc_fft_pyfftw(data, tau=tau)
-    gTau = fft_shift / (num_frames - tau)
-    x, y = np.indices((width, height))
-    gTau_radial = radial_profile_jit(gTau, (width / 2.0, height / 2.0), x, y)
-    return gTau_radial
+#     imageDiffFTSquared = np.fft.fftshift(imageDiffFTSquared)
+#     gTau = imageDiffFTSquared / (num_frames - tau)
+#     gTauRadial = radial_profile(gTau, (width / 2.0, height / 2.0))
+#     return gTauRadial
 
 
-@delayed
+# def ddm(data, tau: int):
+#     """_summary_
+
+#     Parameters
+#     ----------
+#     data : _type_
+#         _description_
+#     tau : _type_
+#         _description_
+
+#     Returns
+#     -------
+#     _type_
+#         _description_
+#     """
+#     num_frames, height, width = data.shape
+#     fft_shift = calc_fft_pyfftw(data, tau=tau)
+#     gTau = fft_shift / (num_frames - tau)
+#     x, y = np.indices((width, height))
+#     gTau_radial = radial_profile(gTau, (width / 2.0, height / 2.0), x, y)
+#     return gTau_radial
+
+
 def calc_fft_pyfftw(data, tau: int):
     """_summary_
 
@@ -202,7 +290,6 @@ def calc_fft_pyfftw(data, tau: int):
     return fft_shift
 
 
-@delayed
 def calc_fft(data, tau: int):
     """_summary_
 
