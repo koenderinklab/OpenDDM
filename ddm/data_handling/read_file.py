@@ -5,6 +5,7 @@ import dask
 import numpy as np
 import xarray
 from typing import Dict
+import pims
 
 from .read_metadata import read_metadata
 from .dask_image import read_data_into_dask
@@ -16,7 +17,8 @@ SUPPORTED_FORMATS = [".lif", ".nd2", ".tif", ".tiff"]
 
 def read_file(
     filename: str,
-    nframes: int = 1,
+    delayed: bool = False,
+    chunk_size: int = 1,
     xscale: float = None,
     tscale: float = None,
     experiment: int = None,
@@ -27,7 +29,9 @@ def read_file(
     ----------
     filename : string
         the path and name of the file which is to be loaded in
-    nframes : int
+    delayed : bool, optional
+        Lazy import of data as a dask array
+    chunk_size : int, optional
         Number of the frames to include in each dask chunk. Default is 1.
     xscale : float, optional
         the resolution of the image in microns per pixel. Default is None.
@@ -63,7 +67,7 @@ def read_file(
             raise OSError(f"The file {filename} does not exist")
 
         try:
-            return load_data(filename, nframes, xscale, tscale, experiment)
+            return load_data(filename, delayed, chunk_size, xscale, tscale, experiment)
         except IndexError:
             raise
         except TypeError:
@@ -79,7 +83,8 @@ def read_file(
 
 def load_data(
     filename: str,
-    nframes: int = 1,
+    delayed: bool = False,
+    chunk_size: int = 1,
     xscale: float = None,
     tscale: float = None,
     experiment: int = None,
@@ -90,7 +95,9 @@ def load_data(
     ----------
     filename : string
         the path and name of the file which is to be loaded in
-    nframes : int
+    delayed : bool, optional
+        Lazy import of data as a dask array
+    chunk_size : int
         Number of the frames to include in each dask chunk. Default is 1.
     xscale : float, optional
         the resolution of the image in microns per pixel. Default is None.
@@ -117,8 +124,12 @@ def load_data(
     else:
         experiment = 0
 
-    # Load delayed data
-    arr = read_data_into_dask(filename, nframes, experiment=experiment)
+    # Load delayed dask array or numpy array
+    if delayed:
+        arr = read_data_into_dask(filename, chunk_size, experiment=experiment)
+    else:
+        with pims.Bioformats(filename, series=experiment) as imgs:
+            arr = np.stack([np.asarray(img) for img in imgs])
 
     # Return xarray
     return create_xarray(arr, xscale, tscale)
