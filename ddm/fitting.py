@@ -22,10 +22,11 @@ def findMeanSqFFT(dData: dask.array):
     -------
     sqFFTmean : the mean over all frames of the square of the fourier transform
     """
-    sqFFT = 2 * da.abs(da.fft.fft2(dData)) * da.abs(da.fft.fft2(dData))
+    sqFFT = 2 * da.abs(da.fft.fft2(dData).astype("complex64")) ** 2
     sqFFT = da.fft.fftshift(sqFFT)
     sqFFTmean = da.mean(sqFFT, axis=0)
     return sqFFTmean
+
 
 def findMeanSqFFT_np(dData: np.array):
     """
@@ -40,7 +41,7 @@ def findMeanSqFFT_np(dData: np.array):
     -------
     sqFFTmean : the mean over all frames of the square of the fourier transform
     """
-    sqFFT = 2 * np.abs(np.fft.fft2(dData)) * np.abs(np.fft.fft2(dData))
+    sqFFT = 2 * np.abs(np.fft.fft2(dData).astype("complex64")) ** 2
     sqFFT = np.fft.fftshift(sqFFT)
     sqFFTmean = np.mean(sqFFT, axis=0)
     return sqFFTmean
@@ -149,16 +150,17 @@ def schultz(lagtime, tau1, tau2, n, S, Z):
     )
     return np.exp(-1.0 * (lagtime / tau1) ** S) * ((1.0 - n) + n * VDist)
 
+
 def test_linear(isf, taus):
-    """
-    """
-    linGrad = (isf[-1] - isf[0])/(taus[-1]-taus[0])
-    linInter = 1.
-    residual = np.sqrt(np.sum((isf - (linGrad*taus + linInter))**2))
-    if (residual < 0.1):
+    """ """
+    linGrad = (isf[-1] - isf[0]) / (taus[-1] - taus[0])
+    linInter = 1.0
+    residual = np.sqrt(np.sum((isf - (linGrad * taus + linInter)) ** 2))
+    if residual < 0.1:
         return True
     else:
         return False
+
 
 def genFit(isf, taus, fitFunc):
     """
@@ -175,24 +177,32 @@ def genFit(isf, taus, fitFunc):
 
     Returns
     -------
-    
+
     """
     supported = {"singleExp": singleExp, "doubleExp": doubleExp, "schultz": schultz}
-    
+
     if fitFunc not in supported.keys():
         raise ValueError(
-                f"{fitFunc} is not a supported fitting function. The currently supported functions are {[name for name in supported.keys()]}.")
+            f"{fitFunc} is not a supported fitting function. The currently supported functions are {[name for name in supported.keys()]}."
+        )
     else:
         if test_linear(isf, taus):
             raise ValueError(
-                f"The data fits well to a linear function, implying very little decorrelation which cannot be fitted to a model based on exponential decorellation.")
+                f"The data fits well to a linear function, implying very little decorrelation which cannot be fitted to a model based on exponential decorellation."
+            )
         else:
-            if fitFunc == 'doubleExp':
-                popt, pcov = curve_fit(supported[fitFunc], taus, isf, bounds = ([0.,0.,0.,1.,1.], [np.inf, np.inf, 1., 2., 2.]))
+            if fitFunc == "doubleExp":
+                popt, pcov = curve_fit(
+                    supported[fitFunc],
+                    taus,
+                    isf,
+                    bounds=([0.0, 0.0, 0.0, 1.0, 1.0], [np.inf, np.inf, 1.0, 2.0, 2.0]),
+                )
             else:
                 popt, pcov = curve_fit(supported[fitFunc], taus, isf)
             errs = np.sqrt(np.diag(pcov))
             return popt, errs
+
 
 def DDM_Matrix(ISF, A, B):
     """
