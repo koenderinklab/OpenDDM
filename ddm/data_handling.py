@@ -63,6 +63,11 @@ def read_file(
             f"{extension} is not a supported image format. The currently supported formats are {[name for name in supported.keys()]}."
         )
 
+def write_file(
+    filename: str, ddm_matrix: np.ndarray, a: np.ndarray, b: float, origFile: str = None, tscale: float = None, xscale: float = None, imageSize: int = None
+):
+    np.savetxt(filename, ddm_matrix, header = 'original data {}; fps {}; x-resolution {}; q-resolution {}'.format(origFile, tscale, xscale, 2.*np.pi/(xscale*imageSize)))
+    np.savetxt(filename + 'ab.txt', a, header = 'b = ' + str(b)) 
 
 def readND2(
     filename: str, xscale: float = None, tscale: float = None
