@@ -2,6 +2,8 @@ from pathlib import Path
 
 import pytest
 import xarray
+import dask
+import numpy
 
 from ddm.data_handling.read_file import read_file
 from ddm.utils import verify_bioformats_jar
@@ -26,7 +28,7 @@ def test_load_unknown_file():
 def test_import_lif_type():
     data_path = THIS_DIR / "data/testData1series.lif"
     data = read_file(data_path)
-    assert isinstance(data, xarray.core.dataarray.DataArray)
+    assert isinstance(data, xarray.DataArray)
 
 
 def test_import_lif_multi_experiment():
@@ -59,8 +61,22 @@ def test_import_nd2_type():
 
 def test_import_tif_type():
     data_path = THIS_DIR / "data/21-03-31_ddm_fb_2mg-mll_sample.tif"
-    data = read_file(data_path)
+    data = read_file(data_path, delayed=False)
     assert isinstance(data, xarray.DataArray)
+    assert isinstance(data.data, numpy.ndarray)
+
+
+def test_import_tif_img_selection():
+    data_path = THIS_DIR / "data/21-03-31_ddm_fb_2mg-mll_sample.tif"
+    data = read_file(data_path, delayed=False, img_selection=slice(0, 5, 1))
+    assert data.shape[0] == 5
+
+
+def test_import_tif_type_delayed():
+    data_path = THIS_DIR / "data/21-03-31_ddm_fb_2mg-mll_sample.tif"
+    data = read_file(data_path, delayed=True)
+    assert isinstance(data, xarray.DataArray)
+    assert isinstance(data.data, dask.array.core.Array)
 
 
 def test_custom_scales_tif():
