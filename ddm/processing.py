@@ -43,8 +43,14 @@ def ddm(
         return ddm_numpy(data, taus)
     elif isinstance(data_type, dask.array.core.Array):
         if is_gpu_available:
-            print("Running analysis on GPU")
-            return ddm_dask_gpu(data, taus)
+            try:
+                import cupy as cp
+
+                print("Running analysis on GPU")
+                return ddm_dask_gpu(data, taus)
+            except ImportError:
+                print("ImportError CuPy, running analysis on CPU")
+                return ddm_dask_cpu(data, taus)
         else:
             print("Running analysis on CPU")
             return ddm_dask_cpu(data, taus)
