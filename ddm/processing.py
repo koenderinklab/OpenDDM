@@ -1,12 +1,16 @@
 from typing import Union
 import numpy as np
-import cupy as cp
 import dask
 from dask.diagnostics import ProgressBar
 import dask.array as da
 from tqdm import tqdm
 
 from .utils import is_gpu_available
+
+try:
+    import cupy as cp
+except ImportError:
+    pass
 
 
 def ddm(
