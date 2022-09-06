@@ -22,7 +22,7 @@ def ddm(
     ----------
     data : Union[dask.array.core.Array, np.ndarray]
     taus : np.ndarray, optional
-        array of lag times (in frames), by default np.arange(0)
+        array of lag times (in frames), by default half of number of frames
 
     Returns
     -------
@@ -33,6 +33,11 @@ def ddm(
     TypeError
         Data type is not supported. Supported types are np.ndarray and dask.array.core.Array.
     """
+    # Check lag time range
+    taus = np.arange(1, len(data) // 2) if taus.size == 0 else taus
+    if taus[0] == 0:
+        raise ValueError("Cannot calculate 0 lag time, please start range at 1")
+
     data_type = data.data
     if isinstance(data_type, np.ndarray):
         return ddm_numpy(data, taus)
@@ -42,12 +47,12 @@ def ddm(
             return ddm_dask_gpu(data, taus)
         else:
             print("Running analysis on CPU")
-            return ddm_dask(data, taus)
+            return ddm_dask_cpu(data, taus)
     else:
         raise (TypeError, f"Data of type {data_type} is not supported")
 
 
-def ddm_numpy(data, taus: np.ndarray = np.arange(0)):
+def ddm_numpy(data, taus: np.ndarray):
     """_summary_
 
     Parameters
@@ -60,7 +65,6 @@ def ddm_numpy(data, taus: np.ndarray = np.arange(0)):
     np.array
         ddm matrix
     """
-    taus = np.arange(1, len(data) // 2) if taus.size == 0 else taus
     num_frames, height, width = data.shape
     results = []
 
@@ -75,7 +79,7 @@ def ddm_numpy(data, taus: np.ndarray = np.arange(0)):
     return np.asarray(out)
 
 
-def ddm_dask(data, taus: np.ndarray = np.arange(0)):
+def ddm_dask_cpu(data, taus: np.ndarray):
     """_summary_
 
     Parameters
@@ -90,8 +94,7 @@ def ddm_dask(data, taus: np.ndarray = np.arange(0)):
     _type_
         _description_
     """
-    taus = np.arange(1, len(data) // 2) if taus.size == 0 else taus
-    num_frames, width, height = data.shape
+    num_frames, _, _ = data.shape
     results = []
 
     fft_data = da.fft.fft2(data.data)
