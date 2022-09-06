@@ -198,18 +198,49 @@ title="Fullscreen mode"
               <div>
                 
   <h1>Source code for ddm.fitting</h1><div class="highlight"><pre>
-<span></span><span class="ch">#!/usr/bin/env python</span>
-<span class="c1"># coding: utf-8</span>
-
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">curve_fit</span>
+<span class="kn">import</span> <span class="nn">xarray</span> <span class="k">as</span> <span class="nn">xr</span>
 <span class="kn">import</span> <span class="nn">dask.array</span> <span class="k">as</span> <span class="nn">da</span>
 <span class="kn">import</span> <span class="nn">dask</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">dask.diagnostics</span> <span class="kn">import</span> <span class="n">ProgressBar</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Union</span>
 <span class="kn">from</span> <span class="nn">.processing</span> <span class="kn">import</span> <span class="n">radial_profile</span>
 
 
-<div class="viewcode-block" id="findMeanSqFFT"><a class="viewcode-back" href="../../api.html#ddm.fitting.findMeanSqFFT">[docs]</a><span class="k">def</span> <span class="nf">findMeanSqFFT</span><span class="p">(</span><span class="n">dData</span><span class="p">:</span> <span class="n">dask</span><span class="o">.</span><span class="n">array</span><span class="p">):</span>
+<div class="viewcode-block" id="compute_AB"><a class="viewcode-back" href="../../api.html#ddm.fitting.compute_AB">[docs]</a><span class="k">def</span> <span class="nf">compute_AB</span><span class="p">(</span><span class="n">dData</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function to calculate the parameters A and B</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dData : xarray.DataArray</span>
+<span class="sd">        xarray containing the raw image data</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    A : np.ndarray</span>
+<span class="sd">        array containing A(q), the pre-factor of the image structure function which contains info on the imaging conditions</span>
+<span class="sd">    B : float</span>
+<span class="sd">        the magnitude of the noise of the image data</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dData</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="n">sqFFTmean</span> <span class="o">=</span> <span class="n">findMeanSqFFT_numpy</span><span class="p">(</span><span class="n">dData</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dData</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">dask</span><span class="o">.</span><span class="n">array</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">Array</span><span class="p">):</span>
+        <span class="n">sqFFTmean</span> <span class="o">=</span> <span class="n">findMeanSqFFT</span><span class="p">(</span><span class="n">dData</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">dData</span><span class="p">)</span><span class="si">}</span><span class="s2"> is not supported&quot;</span><span class="p">)</span>
+
+    <span class="n">sqFFTrad</span> <span class="o">=</span> <span class="n">radial_profile</span><span class="p">(</span>
+        <span class="n">sqFFTmean</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">sqFFTmean</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">sqFFTmean</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">sqFFTrad</span><span class="p">[</span><span class="o">-</span><span class="mi">100</span><span class="p">:</span><span class="o">-</span><span class="mi">50</span><span class="p">])</span>  <span class="c1"># change depending on size of array</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">sqFFTrad</span> <span class="o">-</span> <span class="n">b</span>
+    <span class="k">return</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span></div>
+
+
+<div class="viewcode-block" id="findMeanSqFFT"><a class="viewcode-back" href="../../api.html#ddm.fitting.findMeanSqFFT">[docs]</a><span class="k">def</span> <span class="nf">findMeanSqFFT</span><span class="p">(</span><span class="n">dData</span><span class="p">:</span> <span class="n">dask</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function to calculate the mean of the square of the FFT over all frames</span>
 
@@ -222,34 +253,31 @@ title="Fullscreen mode"
 <span class="sd">    -------</span>
 <span class="sd">    sqFFTmean : the mean over all frames of the square of the fourier transform</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">sqFFT</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">da</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">da</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft2</span><span class="p">(</span><span class="n">dData</span><span class="p">))</span> <span class="o">*</span> <span class="n">da</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">da</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft2</span><span class="p">(</span><span class="n">dData</span><span class="p">))</span>
-    <span class="n">sqFFT</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftshift</span><span class="p">(</span><span class="n">sqFFT</span><span class="p">)</span>
-    <span class="n">sqFFTmean</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">sqFFT</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="n">ProgressBar</span><span class="p">():</span>
+        <span class="n">sqFFT</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">da</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">da</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft2</span><span class="p">(</span><span class="n">dData</span><span class="o">.</span><span class="n">data</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">complex64</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span>
+        <span class="n">sqFFT</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftshift</span><span class="p">(</span><span class="n">sqFFT</span><span class="p">)</span>
+        <span class="n">sqFFTmean</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">sqFFT</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">sqFFTmean</span></div>
 
 
-<div class="viewcode-block" id="computeAB"><a class="viewcode-back" href="../../api.html#ddm.fitting.computeAB">[docs]</a><span class="k">def</span> <span class="nf">computeAB</span><span class="p">(</span><span class="n">sqFFTmean</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<div class="viewcode-block" id="findMeanSqFFT_numpy"><a class="viewcode-back" href="../../api.html#ddm.fitting.findMeanSqFFT_numpy">[docs]</a><span class="k">def</span> <span class="nf">findMeanSqFFT_numpy</span><span class="p">(</span><span class="n">dData</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Function to calculate the parameters A and B</span>
+<span class="sd">    Function to calculate the mean of the square of the FFT over all frames</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    sqFFTmean : numpy array</span>
-<span class="sd">        the result of findMeanSqFFT, the mean over all frames of the square of the fourier transform</span>
+<span class="sd">    dData : dask.array</span>
+<span class="sd">        dask array containing the raw image data</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    a : numpy array</span>
-<span class="sd">        array containing A(q), the pre-factor of the image structure function which contains info on the imaging conditions</span>
-<span class="sd">    b : float</span>
-<span class="sd">        the magnitude of the noise of the image data</span>
+<span class="sd">    sqFFTmean : the mean over all frames of the square of the fourier transform</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">sqFFTrad</span> <span class="o">=</span> <span class="n">radial_profile</span><span class="p">(</span>
-        <span class="n">sqFFTmean</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">sqFFTmean</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">sqFFTmean</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
-    <span class="p">)</span>
-    <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">sqFFTrad</span><span class="p">[</span><span class="o">-</span><span class="mi">100</span><span class="p">:</span><span class="o">-</span><span class="mi">50</span><span class="p">])</span>  <span class="c1"># change depending on size of array</span>
-    <span class="n">a</span> <span class="o">=</span> <span class="n">sqFFTrad</span> <span class="o">-</span> <span class="n">b</span>
-    <span class="k">return</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span></div>
+    <span class="n">sqFFT</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft2</span><span class="p">(</span><span class="n">dData</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">complex64</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span>
+    <span class="n">sqFFT</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftshift</span><span class="p">(</span><span class="n">sqFFT</span><span class="p">)</span>
+    <span class="n">sqFFTmean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">sqFFT</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">sqFFTmean</span></div>
 
 
 <div class="viewcode-block" id="singleExp"><a class="viewcode-back" href="../../api.html#ddm.fitting.singleExp">[docs]</a><span class="k">def</span> <span class="nf">singleExp</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">S</span><span class="p">):</span>
@@ -272,7 +300,7 @@ title="Fullscreen mode"
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="p">(</span><span class="n">t</span> <span class="o">/</span> <span class="n">tau</span><span class="p">)</span> <span class="o">**</span> <span class="n">S</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="doubleExp"><a class="viewcode-back" href="../../api.html#ddm.fitting.doubleExp">[docs]</a><span class="k">def</span> <span class="nf">doubleExp</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">tau1</span><span class="p">,</span> <span class="n">tau2</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">S1</span><span class="p">,</span> <span class="n">S2</span><span class="p">):</span>
+<div class="viewcode-block" id="doubleExp"><a class="viewcode-back" href="../../api.html#ddm.fitting.doubleExp">[docs]</a><span class="k">def</span> <span class="nf">doubleExp</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">tau1</span><span class="p">,</span> <span class="n">tau2</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">S1</span><span class="p">,</span> <span class="n">S2</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function for single exponential DDM fits</span>
 
@@ -331,6 +359,18 @@ title="Fullscreen mode"
     <span class="p">)</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span> <span class="o">*</span> <span class="p">(</span><span class="n">lagtime</span> <span class="o">/</span> <span class="n">tau1</span><span class="p">)</span> <span class="o">**</span> <span class="n">S</span><span class="p">)</span> <span class="o">*</span> <span class="p">((</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">n</span><span class="p">)</span> <span class="o">+</span> <span class="n">n</span> <span class="o">*</span> <span class="n">VDist</span><span class="p">)</span></div>
 
+
+<div class="viewcode-block" id="test_linear"><a class="viewcode-back" href="../../api.html#ddm.fitting.test_linear">[docs]</a><span class="k">def</span> <span class="nf">test_linear</span><span class="p">(</span><span class="n">isf</span><span class="p">,</span> <span class="n">taus</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; &quot;&quot;&quot;</span>
+    <span class="n">linGrad</span> <span class="o">=</span> <span class="p">(</span><span class="n">isf</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">isf</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="p">(</span><span class="n">taus</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">taus</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">linInter</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="n">residual</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">isf</span> <span class="o">-</span> <span class="p">(</span><span class="n">linGrad</span> <span class="o">*</span> <span class="n">taus</span> <span class="o">+</span> <span class="n">linInter</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">residual</span> <span class="o">&lt;</span> <span class="mf">0.1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+
 <div class="viewcode-block" id="genFit"><a class="viewcode-back" href="../../api.html#ddm.fitting.genFit">[docs]</a><span class="k">def</span> <span class="nf">genFit</span><span class="p">(</span><span class="n">isf</span><span class="p">,</span> <span class="n">taus</span><span class="p">,</span> <span class="n">fitFunc</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generalised fitting function to fit the ISF</span>
@@ -346,17 +386,32 @@ title="Fullscreen mode"
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    </span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">supported</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;singleExp&quot;</span><span class="p">:</span> <span class="n">singleExp</span><span class="p">,</span> <span class="s2">&quot;doubleExp&quot;</span><span class="p">:</span> <span class="n">doubleExp</span><span class="p">,</span> <span class="s2">&quot;schultz&quot;</span><span class="p">:</span> <span class="n">schultz</span><span class="p">}</span>
-    
-    <span class="k">if</span> <span class="n">fitFunc</span> <span class="ow">in</span> <span class="n">supported</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-        <span class="n">popt</span><span class="p">,</span> <span class="n">pcov</span> <span class="o">=</span> <span class="n">curve_fit</span><span class="p">(</span><span class="n">supported</span><span class="p">[</span><span class="n">fitFunc</span><span class="p">],</span> <span class="n">taus</span><span class="p">,</span> <span class="n">isf</span><span class="p">)</span>
-        <span class="n">errs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">pcov</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">popt</span><span class="p">,</span> <span class="n">errs</span>
-    <span class="k">else</span><span class="p">:</span>
+
+    <span class="k">if</span> <span class="n">fitFunc</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">supported</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fitFunc</span><span class="si">}</span><span class="s2"> is not a supported fitting function. The currently supported functions are </span><span class="si">{</span><span class="p">[</span><span class="n">name</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">supported</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span></div>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fitFunc</span><span class="si">}</span><span class="s2"> is not a supported fitting function. The currently supported functions are </span><span class="si">{</span><span class="p">[</span><span class="n">name</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">supported</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span><span class="si">}</span><span class="s2">.&quot;</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">test_linear</span><span class="p">(</span><span class="n">isf</span><span class="p">,</span> <span class="n">taus</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;The data fits well to a linear function, implying very little decorrelation which cannot be fitted to a model based on exponential decorellation.&quot;</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">fitFunc</span> <span class="o">==</span> <span class="s2">&quot;doubleExp&quot;</span><span class="p">:</span>
+                <span class="n">popt</span><span class="p">,</span> <span class="n">pcov</span> <span class="o">=</span> <span class="n">curve_fit</span><span class="p">(</span>
+                    <span class="n">supported</span><span class="p">[</span><span class="n">fitFunc</span><span class="p">],</span>
+                    <span class="n">taus</span><span class="p">,</span>
+                    <span class="n">isf</span><span class="p">,</span>
+                    <span class="n">bounds</span><span class="o">=</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">]),</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">popt</span><span class="p">,</span> <span class="n">pcov</span> <span class="o">=</span> <span class="n">curve_fit</span><span class="p">(</span><span class="n">supported</span><span class="p">[</span><span class="n">fitFunc</span><span class="p">],</span> <span class="n">taus</span><span class="p">,</span> <span class="n">isf</span><span class="p">)</span>
+            <span class="n">errs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">pcov</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">popt</span><span class="p">,</span> <span class="n">errs</span></div>
+
 
 <div class="viewcode-block" id="DDM_Matrix"><a class="viewcode-back" href="../../api.html#ddm.fitting.DDM_Matrix">[docs]</a><span class="k">def</span> <span class="nf">DDM_Matrix</span><span class="p">(</span><span class="n">ISF</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -377,6 +432,28 @@ title="Fullscreen mode"
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">return</span> <span class="n">A</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">ISF</span><span class="p">)</span> <span class="o">+</span> <span class="n">B</span></div>
+
+
+<div class="viewcode-block" id="compute_ISF"><a class="viewcode-back" href="../../api.html#ddm.fitting.compute_ISF">[docs]</a><span class="k">def</span> <span class="nf">compute_ISF</span><span class="p">(</span><span class="n">ddmMatrix</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">A</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">B</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Calculate ISF</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ddmMatrix : np.ndarray</span>
+<span class="sd">        theoretical DDM matrix for given ISF</span>
+<span class="sd">    A : float</span>
+<span class="sd">        scaling amplitude factor</span>
+<span class="sd">    B : float</span>
+<span class="sd">        background term</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    np.ndarray</span>
+<span class="sd">        ISF</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">isf</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="p">(</span><span class="n">ddmMatrix</span> <span class="o">-</span> <span class="n">B</span><span class="p">)</span> <span class="o">/</span> <span class="n">A</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">isf</span><span class="p">)</span></div>
 </pre></div>
 
               </div>

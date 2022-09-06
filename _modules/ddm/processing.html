@@ -198,13 +198,259 @@ title="Fullscreen mode"
               <div>
                 
   <h1>Source code for ddm.processing</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pyfftw</span>
-<span class="kn">from</span> <span class="nn">dask</span> <span class="kn">import</span> <span class="n">delayed</span>
-<span class="kn">from</span> <span class="nn">numba</span> <span class="kn">import</span> <span class="n">jit</span>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">dask</span>
+<span class="kn">from</span> <span class="nn">dask.diagnostics</span> <span class="kn">import</span> <span class="n">ProgressBar</span>
+<span class="kn">import</span> <span class="nn">dask.array</span> <span class="k">as</span> <span class="nn">da</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">is_gpu_available</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">cupy</span> <span class="k">as</span> <span class="nn">cp</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="k">pass</span>
 
 
-<span class="c1"># @delayed</span>
+<div class="viewcode-block" id="ddm"><a class="viewcode-back" href="../../api.html#ddm.processing.ddm">[docs]</a><span class="k">def</span> <span class="nf">ddm</span><span class="p">(</span>
+    <span class="n">data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">dask</span><span class="o">.</span><span class="n">array</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">Array</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">taus</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;_summary_</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    data : Union[dask.array.core.Array, np.ndarray]</span>
+<span class="sd">    taus : np.ndarray, optional</span>
+<span class="sd">        array of lag times (in frames), by default half of number of frames</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    np.ndarray</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        Data type is not supported. Supported types are np.ndarray and dask.array.core.Array.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Check lag time range</span>
+    <span class="n">taus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span> <span class="k">if</span> <span class="n">taus</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">taus</span>
+    <span class="k">if</span> <span class="n">taus</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot calculate 0 lag time, please start range at 1&quot;</span><span class="p">)</span>
+
+    <span class="n">data_type</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">data</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data_type</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">ddm_numpy</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">taus</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data_type</span><span class="p">,</span> <span class="n">dask</span><span class="o">.</span><span class="n">array</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">Array</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">is_gpu_available</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Running analysis on GPU&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">ddm_dask_gpu</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">taus</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Running analysis on CPU&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">ddm_dask_cpu</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">taus</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="p">(</span><span class="ne">TypeError</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Data of type </span><span class="si">{</span><span class="n">data_type</span><span class="si">}</span><span class="s2"> is not supported&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ddm_numpy"><a class="viewcode-back" href="../../api.html#ddm.processing.ddm_numpy">[docs]</a><span class="k">def</span> <span class="nf">ddm_numpy</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">taus</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;_summary_</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    data : np.array</span>
+<span class="sd">        image stack</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    np.array</span>
+<span class="sd">        ddm matrix</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">num_frames</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="n">img_fft</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft2</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">complex64</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">tau</span> <span class="ow">in</span> <span class="n">taus</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">dask</span><span class="o">.</span><span class="n">delayed</span><span class="p">(</span><span class="n">calc_matrix</span><span class="p">)(</span><span class="n">img_fft</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">num_frames</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">)</span>
+        <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="n">ProgressBar</span><span class="p">():</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">dask</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="o">*</span><span class="n">results</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">out</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ddm_dask_cpu"><a class="viewcode-back" href="../../api.html#ddm.processing.ddm_dask_cpu">[docs]</a><span class="k">def</span> <span class="nf">ddm_dask_cpu</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">taus</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;_summary_</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    data : _type_</span>
+<span class="sd">        _description_</span>
+<span class="sd">    taus : _type_, optional</span>
+<span class="sd">        _description_, by default np.arange(0)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    _type_</span>
+<span class="sd">        _description_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">num_frames</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="n">fft_data</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft2</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">tau</span> <span class="ow">in</span> <span class="n">taus</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">calc_matrix_dask</span><span class="p">(</span><span class="n">fft_data</span><span class="p">,</span> <span class="n">tau</span><span class="p">)</span>
+        <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="n">ProgressBar</span><span class="p">():</span>
+        <span class="n">fft_shift</span> <span class="o">=</span> <span class="n">dask</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="o">*</span><span class="n">results</span><span class="p">)</span>
+
+    <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">row</span><span class="p">,</span> <span class="n">tau</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">fft_shift</span><span class="p">,</span> <span class="n">taus</span><span class="p">):</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">calc_radial</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">num_frames</span><span class="p">,</span> <span class="n">tau</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">out</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ddm_dask_gpu"><a class="viewcode-back" href="../../api.html#ddm.processing.ddm_dask_gpu">[docs]</a><span class="k">def</span> <span class="nf">ddm_dask_gpu</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">taus</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">)):</span>
+    <span class="sd">&quot;&quot;&quot;_summary_</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    data : _type_</span>
+<span class="sd">        _description_</span>
+<span class="sd">    taus : _type_, optional</span>
+<span class="sd">        _description_, by default np.arange(0)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    _type_</span>
+<span class="sd">        _description_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">taus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span> <span class="k">if</span> <span class="n">taus</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">taus</span>
+    <span class="n">num_frames</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="n">chunk_size</span> <span class="o">=</span> <span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">chunks</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
+
+    <span class="n">data_gpu</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">from_array</span><span class="p">(</span><span class="n">cp</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">data</span><span class="p">),</span> <span class="n">chunks</span><span class="o">=</span><span class="n">chunk_size</span><span class="p">,</span> <span class="n">asarray</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">fft_data</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft2</span><span class="p">(</span><span class="n">data_gpu</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">cp</span><span class="o">.</span><span class="n">complex64</span><span class="p">)</span>
+    <span class="k">del</span> <span class="n">data_gpu</span>
+
+    <span class="k">for</span> <span class="n">tau</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">taus</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">calc_matrix_dask</span><span class="p">(</span><span class="n">fft_data</span><span class="p">,</span> <span class="n">tau</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">dask</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">scheduler</span><span class="o">=</span><span class="s2">&quot;single-threaded&quot;</span><span class="p">)</span>
+        <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cp</span><span class="o">.</span><span class="n">asnumpy</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="k">del</span> <span class="n">result</span><span class="p">,</span> <span class="n">out</span>
+        <span class="n">cp</span><span class="o">.</span><span class="n">_default_memory_pool</span><span class="o">.</span><span class="n">free_all_blocks</span><span class="p">()</span>
+
+    <span class="k">del</span> <span class="n">fft_data</span>
+    <span class="n">cp</span><span class="o">.</span><span class="n">_default_memory_pool</span><span class="o">.</span><span class="n">free_all_blocks</span><span class="p">()</span>
+
+    <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">data</span><span class="p">,</span> <span class="n">tau</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">taus</span><span class="p">):</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">calc_radial</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">num_frames</span><span class="p">,</span> <span class="n">tau</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">out</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="calc_matrix"><a class="viewcode-back" href="../../api.html#ddm.processing.calc_matrix">[docs]</a><span class="k">def</span> <span class="nf">calc_matrix</span><span class="p">(</span><span class="n">img_fft</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">num_frames</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;_summary_</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    img_fft : np.array</span>
+<span class="sd">        _description_</span>
+<span class="sd">    tau : _type_</span>
+<span class="sd">        _description_</span>
+<span class="sd">    num_frames : _type_</span>
+<span class="sd">        _description_</span>
+<span class="sd">    height : _type_</span>
+<span class="sd">        _description_</span>
+<span class="sd">    width : _type_</span>
+<span class="sd">        _description_</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    _type_</span>
+<span class="sd">        _description_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">img_diff</span> <span class="o">=</span> <span class="n">img_fft</span><span class="p">[:</span><span class="o">-</span><span class="n">tau</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">-</span> <span class="n">img_fft</span><span class="p">[</span><span class="n">tau</span><span class="p">:,</span> <span class="p">:,</span> <span class="p">:]</span>
+    <span class="n">img_fft_sq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">img_diff</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+    <span class="n">img_sum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">img_fft_sq</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">fft_shift</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftshift</span><span class="p">(</span><span class="n">img_sum</span><span class="p">)</span>
+    <span class="n">gTau</span> <span class="o">=</span> <span class="n">fft_shift</span> <span class="o">/</span> <span class="p">(</span><span class="n">num_frames</span> <span class="o">-</span> <span class="n">tau</span><span class="p">)</span>
+    <span class="n">gTauRadial</span> <span class="o">=</span> <span class="n">radial_profile</span><span class="p">(</span><span class="n">gTau</span><span class="p">,</span> <span class="p">(</span><span class="n">width</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">,</span> <span class="n">height</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">gTauRadial</span></div>
+
+
+<div class="viewcode-block" id="calc_matrix_dask"><a class="viewcode-back" href="../../api.html#ddm.processing.calc_matrix_dask">[docs]</a><span class="k">def</span> <span class="nf">calc_matrix_dask</span><span class="p">(</span><span class="n">img_fft</span><span class="p">,</span> <span class="n">tau</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;_summary_</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    img_fft : np.array</span>
+<span class="sd">        _description_</span>
+<span class="sd">    tau : _type_</span>
+<span class="sd">        _description_</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    _type_</span>
+<span class="sd">        _description_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">img_diff</span> <span class="o">=</span> <span class="n">img_fft</span><span class="p">[:</span><span class="o">-</span><span class="n">tau</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">-</span> <span class="n">img_fft</span><span class="p">[</span><span class="n">tau</span><span class="p">:,</span> <span class="p">:,</span> <span class="p">:]</span>
+    <span class="n">img_fft_sq</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">img_diff</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+    <span class="n">img_sum</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">img_fft_sq</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">fft_shift</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftshift</span><span class="p">(</span><span class="n">img_sum</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">fft_shift</span></div>
+
+
+<div class="viewcode-block" id="calc_radial"><a class="viewcode-back" href="../../api.html#ddm.processing.calc_radial">[docs]</a><span class="k">def</span> <span class="nf">calc_radial</span><span class="p">(</span><span class="n">fft_shift</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">num_frames</span><span class="p">,</span> <span class="n">tau</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;_summary_</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fft_shift : _type_</span>
+<span class="sd">        _description_</span>
+<span class="sd">    num_frames : _type_</span>
+<span class="sd">        _description_</span>
+<span class="sd">    tau : _type_</span>
+<span class="sd">        _description_</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    _type_</span>
+<span class="sd">        _description_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="n">fft_shift</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">gTau</span> <span class="o">=</span> <span class="n">fft_shift</span> <span class="o">/</span> <span class="p">(</span><span class="n">num_frames</span> <span class="o">-</span> <span class="n">tau</span><span class="p">)</span>
+    <span class="n">gTauRadial</span> <span class="o">=</span> <span class="n">radial_profile</span><span class="p">(</span><span class="n">gTau</span><span class="p">,</span> <span class="p">(</span><span class="n">width</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">,</span> <span class="n">height</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">gTauRadial</span></div>
+
+
+<div class="viewcode-block" id="calc_radial_gpu"><a class="viewcode-back" href="../../api.html#ddm.processing.calc_radial_gpu">[docs]</a><span class="k">def</span> <span class="nf">calc_radial_gpu</span><span class="p">(</span><span class="n">fft_shift</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">num_frames</span><span class="p">,</span> <span class="n">tau</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;_summary_</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fft_shift : _type_</span>
+<span class="sd">        _description_</span>
+<span class="sd">    num_frames : _type_</span>
+<span class="sd">        _description_</span>
+<span class="sd">    tau : _type_</span>
+<span class="sd">        _description_</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    _type_</span>
+<span class="sd">        _description_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="n">fft_shift</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">gTau</span> <span class="o">=</span> <span class="n">fft_shift</span> <span class="o">/</span> <span class="p">(</span><span class="n">num_frames</span> <span class="o">-</span> <span class="n">tau</span><span class="p">)</span>
+    <span class="n">gTauRadial</span> <span class="o">=</span> <span class="n">radial_profile_gpu</span><span class="p">(</span><span class="n">gTau</span><span class="p">,</span> <span class="p">(</span><span class="n">width</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">,</span> <span class="n">height</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">gTauRadial</span></div>
+
+
 <div class="viewcode-block" id="radial_profile"><a class="viewcode-back" href="../../api.html#ddm.processing.radial_profile">[docs]</a><span class="k">def</span> <span class="nf">radial_profile</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">centre</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;_summary_</span>
 
@@ -229,204 +475,28 @@ title="Fullscreen mode"
     <span class="k">return</span> <span class="n">radialprofile</span></div>
 
 
-<span class="nd">@delayed</span>
-<span class="nd">@jit</span><span class="p">(</span><span class="n">nopython</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">nogil</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">radial_profile_jit</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">centre</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
-    <span class="c1"># x, y = np.indices((data.shape))</span>
-    <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">x</span> <span class="o">-</span> <span class="n">centre</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">centre</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
-    <span class="n">r</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
-    <span class="n">tbin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">bincount</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">data</span><span class="o">.</span><span class="n">ravel</span><span class="p">())</span>
-    <span class="n">nr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">bincount</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">ravel</span><span class="p">())</span>
+<div class="viewcode-block" id="radial_profile_gpu"><a class="viewcode-back" href="../../api.html#ddm.processing.radial_profile_gpu">[docs]</a><span class="k">def</span> <span class="nf">radial_profile_gpu</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">centre</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;_summary_</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    data : np.ndarray</span>
+<span class="sd">        _description_</span>
+<span class="sd">    centre : tuple</span>
+<span class="sd">        _description_</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    _type_</span>
+<span class="sd">        _description_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">indices</span><span class="p">((</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">x</span> <span class="o">-</span> <span class="n">centre</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">centre</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">cp</span><span class="o">.</span><span class="n">int</span><span class="p">)</span>
+    <span class="n">tbin</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">bincount</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">data</span><span class="o">.</span><span class="n">ravel</span><span class="p">())</span>
+    <span class="n">nr</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">bincount</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">ravel</span><span class="p">())</span>
     <span class="n">radialprofile</span> <span class="o">=</span> <span class="n">tbin</span> <span class="o">/</span> <span class="n">nr</span>
-    <span class="k">return</span> <span class="n">radialprofile</span>
-
-
-<div class="viewcode-block" id="get_diff_images"><a class="viewcode-back" href="../../api.html#ddm.processing.get_diff_images">[docs]</a><span class="k">def</span> <span class="nf">get_diff_images</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">step</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Calculate difference between image [n] and [n + shift] for all images</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    data : ndarray</span>
-<span class="sd">        array of images</span>
-<span class="sd">    shift : int</span>
-<span class="sd">        step between frame number</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    ndarray</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">data</span><span class="p">[:</span><span class="o">-</span><span class="n">step</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">-</span> <span class="n">data</span><span class="p">[</span><span class="n">step</span><span class="p">:,</span> <span class="p">:,</span> <span class="p">:]</span></div>
-
-
-<div class="viewcode-block" id="ddm_fftw"><a class="viewcode-back" href="../../api.html#ddm.processing.ddm_fftw">[docs]</a><span class="k">def</span> <span class="nf">ddm_fftw</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">tau</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Calculate gTau with radial profile using pyfftw</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    data : _type_</span>
-<span class="sd">        _description_</span>
-<span class="sd">    tau : _type_</span>
-<span class="sd">        _description_</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    _type_</span>
-<span class="sd">        _description_</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">num_frames</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span>
-
-    <span class="n">pyfftw</span><span class="o">.</span><span class="n">interfaces</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">enable</span><span class="p">()</span>
-    <span class="n">imageDiff</span> <span class="o">=</span> <span class="n">pyfftw</span><span class="o">.</span><span class="n">empty_aligned</span><span class="p">((</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;complex64&quot;</span><span class="p">)</span>
-    <span class="n">fft_object</span> <span class="o">=</span> <span class="n">pyfftw</span><span class="o">.</span><span class="n">builders</span><span class="o">.</span><span class="n">fft2</span><span class="p">(</span>
-        <span class="n">imageDiff</span><span class="p">,</span> <span class="n">threads</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">overwrite_input</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">planner_effort</span><span class="o">=</span><span class="s2">&quot;FFTW_ESTIMATE&quot;</span>
-    <span class="p">)</span>
-
-    <span class="n">gTau</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
-        <span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
-    <span class="p">)</span>  <span class="c1"># initialise gTau to hold g(vec(q), tau) which will be radially averaged then saved</span>
-    <span class="n">imageDiffFTSquared</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
-        <span class="p">[</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">]</span>
-    <span class="p">)</span>  <span class="c1"># initialise zeros to hold the squared of the fourier transformed differences</span>
-
-    <span class="k">for</span> <span class="n">jj</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span>
-        <span class="n">num_frames</span> <span class="o">-</span> <span class="n">tau</span>
-    <span class="p">):</span>  <span class="c1"># j is the initial frame in the difference calculation, usually labelled as t</span>
-        <span class="n">imageDiff</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">data</span><span class="p">[</span><span class="n">jj</span> <span class="o">+</span> <span class="n">tau</span><span class="p">]</span> <span class="o">-</span> <span class="n">data</span><span class="p">[</span><span class="n">jj</span><span class="p">]</span>
-        <span class="p">)</span>  <span class="c1"># calculate the difference in pixel intensities between images</span>
-        <span class="n">imageDiffFTSquared</span> <span class="o">+=</span> <span class="p">(</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">fft_object</span><span class="p">(</span><span class="n">imageDiff</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span>
-        <span class="p">)</span>  <span class="c1"># for averaging this, add the square of the fourier transform to itself</span>
-
-    <span class="n">imageDiffFTSquared</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftshift</span><span class="p">(</span><span class="n">imageDiffFTSquared</span><span class="p">)</span>
-    <span class="n">gTau</span> <span class="o">=</span> <span class="n">imageDiffFTSquared</span> <span class="o">/</span> <span class="p">(</span><span class="n">num_frames</span> <span class="o">-</span> <span class="n">tau</span><span class="p">)</span>
-    <span class="n">gTauRadial</span> <span class="o">=</span> <span class="n">radial_profile</span><span class="p">(</span><span class="n">gTau</span><span class="p">,</span> <span class="p">(</span><span class="n">width</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">,</span> <span class="n">height</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">))</span>
-    <span class="k">return</span> <span class="n">gTauRadial</span></div>
-
-
-<div class="viewcode-block" id="ddm_numpy"><a class="viewcode-back" href="../../api.html#ddm.processing.ddm_numpy">[docs]</a><span class="k">def</span> <span class="nf">ddm_numpy</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">tau</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Calculate gTau with radial profile using numpy</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    data : _type_</span>
-<span class="sd">        _description_</span>
-<span class="sd">    tau : _type_</span>
-<span class="sd">        _description_</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    _type_</span>
-<span class="sd">        _description_</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">num_frames</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span>
-
-    <span class="n">gTau</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
-        <span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
-    <span class="p">)</span>  <span class="c1"># initialise gTau to hold g(vec(q), tau) which will be radially averaged then saved</span>
-    <span class="n">imageDiffFTSquared</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
-        <span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
-    <span class="p">)</span>  <span class="c1"># initialise zeros to hold the squared of the fourier transformed differences</span>
-
-    <span class="k">for</span> <span class="n">jj</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span>
-        <span class="n">num_frames</span> <span class="o">-</span> <span class="n">tau</span>
-    <span class="p">):</span>  <span class="c1"># j is the initial frame in the difference calculation, usually labelled as t</span>
-        <span class="n">imageDiff</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">data</span><span class="p">[</span><span class="n">jj</span> <span class="o">+</span> <span class="n">tau</span><span class="p">]</span> <span class="o">-</span> <span class="n">data</span><span class="p">[</span><span class="n">jj</span><span class="p">]</span>
-        <span class="p">)</span>  <span class="c1"># calculate the difference in pixel intensities between images</span>
-        <span class="n">imageDiffFT</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft2</span><span class="p">(</span><span class="n">imageDiff</span><span class="p">)</span>  <span class="c1"># fourier transform the difference</span>
-        <span class="n">imageDiffFTSquared</span> <span class="o">+=</span> <span class="p">(</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">imageDiffFT</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
-        <span class="p">)</span>  <span class="c1"># for averaging this, add the square of the fourier transform to itself</span>
-
-    <span class="n">imageDiffFTSquared</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftshift</span><span class="p">(</span><span class="n">imageDiffFTSquared</span><span class="p">)</span>
-    <span class="n">gTau</span> <span class="o">=</span> <span class="n">imageDiffFTSquared</span> <span class="o">/</span> <span class="p">(</span><span class="n">num_frames</span> <span class="o">-</span> <span class="n">tau</span><span class="p">)</span>
-    <span class="n">gTauRadial</span> <span class="o">=</span> <span class="n">radial_profile</span><span class="p">(</span><span class="n">gTau</span><span class="p">,</span> <span class="p">(</span><span class="n">width</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">,</span> <span class="n">height</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">))</span>
-    <span class="k">return</span> <span class="n">gTauRadial</span></div>
-
-
-<div class="viewcode-block" id="ddm"><a class="viewcode-back" href="../../api.html#ddm.processing.ddm">[docs]</a><span class="k">def</span> <span class="nf">ddm</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">tau</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;_summary_</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    data : _type_</span>
-<span class="sd">        _description_</span>
-<span class="sd">    tau : _type_</span>
-<span class="sd">        _description_</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    _type_</span>
-<span class="sd">        _description_</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">num_frames</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span>
-    <span class="n">fft_shift</span> <span class="o">=</span> <span class="n">calc_fft_pyfftw</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">tau</span><span class="o">=</span><span class="n">tau</span><span class="p">)</span>
-    <span class="n">gTau</span> <span class="o">=</span> <span class="n">fft_shift</span> <span class="o">/</span> <span class="p">(</span><span class="n">num_frames</span> <span class="o">-</span> <span class="n">tau</span><span class="p">)</span>
-    <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">indices</span><span class="p">((</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">))</span>
-    <span class="n">gTau_radial</span> <span class="o">=</span> <span class="n">radial_profile_jit</span><span class="p">(</span><span class="n">gTau</span><span class="p">,</span> <span class="p">(</span><span class="n">width</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">,</span> <span class="n">height</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">),</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">gTau_radial</span></div>
-
-
-<span class="nd">@delayed</span>
-<span class="k">def</span> <span class="nf">calc_fft_pyfftw</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">tau</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;_summary_</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    data : _type_</span>
-<span class="sd">        _description_</span>
-<span class="sd">    tau : _type_</span>
-<span class="sd">        _description_</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    _type_</span>
-<span class="sd">        _description_</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">num_frames</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span>
-    <span class="n">image_fft_squared</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">))</span>
-
-    <span class="n">pyfftw</span><span class="o">.</span><span class="n">interfaces</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">enable</span><span class="p">()</span>
-    <span class="n">image_diff</span> <span class="o">=</span> <span class="n">pyfftw</span><span class="o">.</span><span class="n">empty_aligned</span><span class="p">((</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;complex64&quot;</span><span class="p">)</span>
-    <span class="n">fft_object</span> <span class="o">=</span> <span class="n">pyfftw</span><span class="o">.</span><span class="n">builders</span><span class="o">.</span><span class="n">fft2</span><span class="p">(</span>
-        <span class="n">image_diff</span><span class="p">,</span> <span class="n">threads</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">overwrite_input</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">planner_effort</span><span class="o">=</span><span class="s2">&quot;FFTW_ESTIMATE&quot;</span>
-    <span class="p">)</span>
-
-    <span class="k">for</span> <span class="n">jj</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_frames</span> <span class="o">-</span> <span class="n">tau</span><span class="p">):</span>
-        <span class="n">image_diff</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">jj</span> <span class="o">+</span> <span class="n">tau</span><span class="p">]</span> <span class="o">-</span> <span class="n">data</span><span class="p">[</span><span class="n">jj</span><span class="p">]</span>
-        <span class="n">image_fft_squared</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">fft_object</span><span class="p">(</span><span class="n">image_diff</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span>
-
-    <span class="n">fft_shift</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftshift</span><span class="p">(</span><span class="n">image_fft_squared</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">fft_shift</span>
-
-
-<span class="nd">@delayed</span>
-<span class="k">def</span> <span class="nf">calc_fft</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">tau</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;_summary_</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    data : _type_</span>
-<span class="sd">        _description_</span>
-<span class="sd">    tau : _type_</span>
-<span class="sd">        _description_</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    _type_</span>
-<span class="sd">        _description_</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">num_frames</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span>
-    <span class="n">image_fft_squared</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">))</span>
-    <span class="k">for</span> <span class="n">jj</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_frames</span> <span class="o">-</span> <span class="n">tau</span><span class="p">):</span>
-        <span class="n">image_diff</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">jj</span> <span class="o">+</span> <span class="n">tau</span><span class="p">]</span> <span class="o">-</span> <span class="n">data</span><span class="p">[</span><span class="n">jj</span><span class="p">]</span>
-        <span class="n">image_fft</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft2</span><span class="p">(</span><span class="n">image_diff</span><span class="p">)</span>
-        <span class="n">image_fft_squared</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">image_fft</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
-
-    <span class="n">fft_shift</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftshift</span><span class="p">(</span><span class="n">image_fft_squared</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">fft_shift</span>
+    <span class="k">return</span> <span class="n">radialprofile</span></div>
 </pre></div>
 
               </div>

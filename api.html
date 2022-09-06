@@ -358,17 +358,17 @@ title="Print to PDF"
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="ddm.fitting.computeAB">
-<span class="sig-prename descclassname"><span class="pre">ddm.fitting.</span></span><span class="sig-name descname"><span class="pre">computeAB</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sqFFTmean</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.array</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/ddm/fitting.html#computeAB"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.fitting.computeAB" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="ddm.fitting.compute_AB">
+<span class="sig-prename descclassname"><span class="pre">ddm.fitting.</span></span><span class="sig-name descname"><span class="pre">compute_AB</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dData</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">xarray.core.dataarray.DataArray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/ddm/fitting.html#compute_AB"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.fitting.compute_AB" title="Permalink to this definition">#</a></dt>
 <dd><p>Function to calculate the parameters A and B</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>sqFFTmean</strong> (<em>numpy array</em>) – the result of findMeanSqFFT, the mean over all frames of the square of the fourier transform</p>
+<dd class="field-odd"><p><strong>dData</strong> (<em>xarray.DataArray</em>) – xarray containing the raw image data</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>a</strong> (<em>numpy array</em>) – array containing A(q), the pre-factor of the image structure function which contains info on the imaging conditions</p></li>
-<li><p><strong>b</strong> (<em>float</em>) – the magnitude of the noise of the image data</p></li>
+<li><p><strong>A</strong> (<em>np.ndarray</em>) – array containing A(q), the pre-factor of the image structure function which contains info on the imaging conditions</p></li>
+<li><p><strong>B</strong> (<em>float</em>) – the magnitude of the noise of the image data</p></li>
 </ul>
 </p>
 </dd>
@@ -376,8 +376,29 @@ title="Print to PDF"
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="ddm.fitting.compute_ISF">
+<span class="sig-prename descclassname"><span class="pre">ddm.fitting.</span></span><span class="sig-name descname"><span class="pre">compute_ISF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ddmMatrix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">A</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="_modules/ddm/fitting.html#compute_ISF"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.fitting.compute_ISF" title="Permalink to this definition">#</a></dt>
+<dd><p>Calculate ISF</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ddmMatrix</strong> (<em>np.ndarray</em>) – theoretical DDM matrix for given ISF</p></li>
+<li><p><strong>A</strong> (<em>float</em>) – scaling amplitude factor</p></li>
+<li><p><strong>B</strong> (<em>float</em>) – background term</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>ISF</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="ddm.fitting.doubleExp">
-<span class="sig-prename descclassname"><span class="pre">ddm.fitting.</span></span><span class="sig-name descname"><span class="pre">doubleExp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/fitting.html#doubleExp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.fitting.doubleExp" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">ddm.fitting.</span></span><span class="sig-name descname"><span class="pre">doubleExp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/fitting.html#doubleExp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.fitting.doubleExp" title="Permalink to this definition">#</a></dt>
 <dd><p>Function for single exponential DDM fits</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -398,7 +419,24 @@ title="Print to PDF"
 
 <dl class="py function">
 <dt class="sig sig-object py" id="ddm.fitting.findMeanSqFFT">
-<span class="sig-prename descclassname"><span class="pre">ddm.fitting.</span></span><span class="sig-name descname"><span class="pre">findMeanSqFFT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dData:</span> <span class="pre">&lt;module</span> <span class="pre">'dask.array'</span> <span class="pre">from</span> <span class="pre">'/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/dask/array/__init__.py'&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/fitting.html#findMeanSqFFT"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.fitting.findMeanSqFFT" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">ddm.fitting.</span></span><span class="sig-name descname"><span class="pre">findMeanSqFFT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dData:</span> <span class="pre">&lt;module</span> <span class="pre">'dask.array'</span> <span class="pre">from</span> <span class="pre">'/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/dask/array/__init__.py'&gt;</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="_modules/ddm/fitting.html#findMeanSqFFT"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.fitting.findMeanSqFFT" title="Permalink to this definition">#</a></dt>
+<dd><p>Function to calculate the mean of the square of the FFT over all frames</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>dData</strong> (<em>dask.array</em>) – dask array containing the raw image data</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>sqFFTmean</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>the mean over all frames of the square of the fourier transform</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ddm.fitting.findMeanSqFFT_numpy">
+<span class="sig-prename descclassname"><span class="pre">ddm.fitting.</span></span><span class="sig-name descname"><span class="pre">findMeanSqFFT_numpy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dData</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.array</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="_modules/ddm/fitting.html#findMeanSqFFT_numpy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.fitting.findMeanSqFFT_numpy" title="Permalink to this definition">#</a></dt>
 <dd><p>Function to calculate the mean of the square of the FFT over all frames</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -468,6 +506,11 @@ both diffusive and actively directed motion</p>
 </dl>
 </dd></dl>
 
+<dl class="py function">
+<dt class="sig sig-object py" id="ddm.fitting.test_linear">
+<span class="sig-prename descclassname"><span class="pre">ddm.fitting.</span></span><span class="sig-name descname"><span class="pre">test_linear</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">isf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">taus</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/fitting.html#test_linear"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.fitting.test_linear" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
 </section>
 <section id="module-ddm.plotting">
 <span id="ddm-plotting-module"></span><h2>ddm.plotting module<a class="headerlink" href="#module-ddm.plotting" title="Permalink to this headline">#</a></h2>
@@ -517,13 +560,36 @@ both diffusive and actively directed motion</p>
 <section id="module-ddm.processing">
 <span id="ddm-processing-module"></span><h2>ddm.processing module<a class="headerlink" href="#module-ddm.processing" title="Permalink to this headline">#</a></h2>
 <dl class="py function">
-<dt class="sig sig-object py" id="ddm.processing.ddm">
-<span class="sig-prename descclassname"><span class="pre">ddm.processing.</span></span><span class="sig-name descname"><span class="pre">ddm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/processing.html#ddm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.processing.ddm" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="ddm.processing.calc_matrix">
+<span class="sig-prename descclassname"><span class="pre">ddm.processing.</span></span><span class="sig-name descname"><span class="pre">calc_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img_fft</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_frames</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/processing.html#calc_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.processing.calc_matrix" title="Permalink to this definition">#</a></dt>
 <dd><p>_summary_</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<em>_type_</em>) – _description_</p></li>
+<li><p><strong>img_fft</strong> (<em>np.array</em>) – _description_</p></li>
+<li><p><strong>tau</strong> (<em>_type_</em>) – _description_</p></li>
+<li><p><strong>num_frames</strong> (<em>_type_</em>) – _description_</p></li>
+<li><p><strong>height</strong> (<em>_type_</em>) – _description_</p></li>
+<li><p><strong>width</strong> (<em>_type_</em>) – _description_</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>_description_</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>_type_</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ddm.processing.calc_matrix_dask">
+<span class="sig-prename descclassname"><span class="pre">ddm.processing.</span></span><span class="sig-name descname"><span class="pre">calc_matrix_dask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img_fft</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/processing.html#calc_matrix_dask"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.processing.calc_matrix_dask" title="Permalink to this definition">#</a></dt>
+<dd><p>_summary_</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>img_fft</strong> (<em>np.array</em>) – _description_</p></li>
 <li><p><strong>tau</strong> (<em>_type_</em>) – _description_</p></li>
 </ul>
 </dd>
@@ -537,14 +603,96 @@ both diffusive and actively directed motion</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="ddm.processing.ddm_fftw">
-<span class="sig-prename descclassname"><span class="pre">ddm.processing.</span></span><span class="sig-name descname"><span class="pre">ddm_fftw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/processing.html#ddm_fftw"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.processing.ddm_fftw" title="Permalink to this definition">#</a></dt>
-<dd><p>Calculate gTau with radial profile using pyfftw</p>
+<dt class="sig sig-object py" id="ddm.processing.calc_radial">
+<span class="sig-prename descclassname"><span class="pre">ddm.processing.</span></span><span class="sig-name descname"><span class="pre">calc_radial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fft_shift</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_frames</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/processing.html#calc_radial"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.processing.calc_radial" title="Permalink to this definition">#</a></dt>
+<dd><p>_summary_</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fft_shift</strong> (<em>_type_</em>) – _description_</p></li>
+<li><p><strong>num_frames</strong> (<em>_type_</em>) – _description_</p></li>
+<li><p><strong>tau</strong> (<em>_type_</em>) – _description_</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>_description_</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>_type_</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ddm.processing.calc_radial_gpu">
+<span class="sig-prename descclassname"><span class="pre">ddm.processing.</span></span><span class="sig-name descname"><span class="pre">calc_radial_gpu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fft_shift</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_frames</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/processing.html#calc_radial_gpu"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.processing.calc_radial_gpu" title="Permalink to this definition">#</a></dt>
+<dd><p>_summary_</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fft_shift</strong> (<em>_type_</em>) – _description_</p></li>
+<li><p><strong>num_frames</strong> (<em>_type_</em>) – _description_</p></li>
+<li><p><strong>tau</strong> (<em>_type_</em>) – _description_</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>_description_</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>_type_</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ddm.processing.ddm">
+<span class="sig-prename descclassname"><span class="pre">ddm.processing.</span></span><span class="sig-name descname"><span class="pre">ddm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">dask.array.core.Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">taus</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">array([],</span> <span class="pre">dtype=int64)</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="_modules/ddm/processing.html#ddm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.processing.ddm" title="Permalink to this definition">#</a></dt>
+<dd><p>_summary_</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>Union</em><em>[</em><em>dask.array.core.Array</em><em>, </em><em>np.ndarray</em><em>]</em>) – </p></li>
+<li><p><strong>taus</strong> (<em>np.ndarray</em><em>, </em><em>optional</em>) – array of lag times (in frames), by default half of number of frames</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>np.ndarray</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>TypeError</strong> – Data type is not supported. Supported types are np.ndarray and dask.array.core.Array.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ddm.processing.ddm_dask_cpu">
+<span class="sig-prename descclassname"><span class="pre">ddm.processing.</span></span><span class="sig-name descname"><span class="pre">ddm_dask_cpu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">taus</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/processing.html#ddm_dask_cpu"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.processing.ddm_dask_cpu" title="Permalink to this definition">#</a></dt>
+<dd><p>_summary_</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>data</strong> (<em>_type_</em>) – _description_</p></li>
-<li><p><strong>tau</strong> (<em>_type_</em>) – _description_</p></li>
+<li><p><strong>taus</strong> (<em>_type_</em><em>, </em><em>optional</em>) – _description_, by default np.arange(0)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>_description_</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>_type_</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ddm.processing.ddm_dask_gpu">
+<span class="sig-prename descclassname"><span class="pre">ddm.processing.</span></span><span class="sig-name descname"><span class="pre">ddm_dask_gpu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">taus</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">array([],</span> <span class="pre">dtype=int64)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/processing.html#ddm_dask_gpu"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.processing.ddm_dask_gpu" title="Permalink to this definition">#</a></dt>
+<dd><p>_summary_</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>_type_</em>) – _description_</p></li>
+<li><p><strong>taus</strong> (<em>_type_</em><em>, </em><em>optional</em>) – _description_, by default np.arange(0)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -558,13 +706,30 @@ both diffusive and actively directed motion</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="ddm.processing.ddm_numpy">
-<span class="sig-prename descclassname"><span class="pre">ddm.processing.</span></span><span class="sig-name descname"><span class="pre">ddm_numpy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/processing.html#ddm_numpy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.processing.ddm_numpy" title="Permalink to this definition">#</a></dt>
-<dd><p>Calculate gTau with radial profile using numpy</p>
+<span class="sig-prename descclassname"><span class="pre">ddm.processing.</span></span><span class="sig-name descname"><span class="pre">ddm_numpy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">taus</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/processing.html#ddm_numpy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.processing.ddm_numpy" title="Permalink to this definition">#</a></dt>
+<dd><p>_summary_</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>np.array</em>) – image stack</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>ddm matrix</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ddm.processing.radial_profile">
+<span class="sig-prename descclassname"><span class="pre">ddm.processing.</span></span><span class="sig-name descname"><span class="pre">radial_profile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">centre</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/processing.html#radial_profile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.processing.radial_profile" title="Permalink to this definition">#</a></dt>
+<dd><p>_summary_</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<em>_type_</em>) – _description_</p></li>
-<li><p><strong>tau</strong> (<em>_type_</em>) – _description_</p></li>
+<li><p><strong>data</strong> (<em>np.ndarray</em>) – _description_</p></li>
+<li><p><strong>centre</strong> (<em>tuple</em>) – _description_</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -577,25 +742,8 @@ both diffusive and actively directed motion</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="ddm.processing.get_diff_images">
-<span class="sig-prename descclassname"><span class="pre">ddm.processing.</span></span><span class="sig-name descname"><span class="pre">get_diff_images</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/processing.html#get_diff_images"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.processing.get_diff_images" title="Permalink to this definition">#</a></dt>
-<dd><p>Calculate difference between image [n] and [n + shift] for all images</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<em>ndarray</em>) – array of images</p></li>
-<li><p><strong>shift</strong> (<em>int</em>) – step between frame number</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>ndarray</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="ddm.processing.radial_profile">
-<span class="sig-prename descclassname"><span class="pre">ddm.processing.</span></span><span class="sig-name descname"><span class="pre">radial_profile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">centre</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/processing.html#radial_profile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.processing.radial_profile" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="ddm.processing.radial_profile_gpu">
+<span class="sig-prename descclassname"><span class="pre">ddm.processing.</span></span><span class="sig-name descname"><span class="pre">radial_profile_gpu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">centre</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/processing.html#radial_profile_gpu"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.processing.radial_profile_gpu" title="Permalink to this definition">#</a></dt>
 <dd><p>_summary_</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -717,8 +865,23 @@ both diffusive and actively directed motion</p>
 <section id="module-ddm.utils">
 <span id="ddm-utils-module"></span><h2>ddm.utils module<a class="headerlink" href="#module-ddm.utils" title="Permalink to this headline">#</a></h2>
 <dl class="py function">
+<dt class="sig sig-object py" id="ddm.utils.is_gpu_available">
+<span class="sig-prename descclassname"><span class="pre">ddm.utils.</span></span><span class="sig-name descname"><span class="pre">is_gpu_available</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/utils.html#is_gpu_available"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.utils.is_gpu_available" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ddm.utils.print_available_ram">
+<span class="sig-prename descclassname"><span class="pre">ddm.utils.</span></span><span class="sig-name descname"><span class="pre">print_available_ram</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/utils.html#print_available_ram"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.utils.print_available_ram" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="ddm.utils.print_cpu_count">
 <span class="sig-prename descclassname"><span class="pre">ddm.utils.</span></span><span class="sig-name descname"><span class="pre">print_cpu_count</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/utils.html#print_cpu_count"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.utils.print_cpu_count" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ddm.utils.print_file_size">
+<span class="sig-prename descclassname"><span class="pre">ddm.utils.</span></span><span class="sig-name descname"><span class="pre">print_file_size</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/utils.html#print_file_size"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.utils.print_file_size" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">

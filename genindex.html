@@ -205,17 +205,31 @@ title="Fullscreen mode"
  | <a href="#D"><strong>D</strong></a>
  | <a href="#F"><strong>F</strong></a>
  | <a href="#G"><strong>G</strong></a>
+ | <a href="#I"><strong>I</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#P"><strong>P</strong></a>
  | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
+ | <a href="#T"><strong>T</strong></a>
  | <a href="#V"><strong>V</strong></a>
  
 </div>
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#ddm.fitting.computeAB">computeAB() (in module ddm.fitting)</a>
+      <li><a href="api.html#ddm.processing.calc_matrix">calc_matrix() (in module ddm.processing)</a>
+</li>
+      <li><a href="api.html#ddm.processing.calc_matrix_dask">calc_matrix_dask() (in module ddm.processing)</a>
+</li>
+      <li><a href="api.html#ddm.processing.calc_radial">calc_radial() (in module ddm.processing)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api.html#ddm.processing.calc_radial_gpu">calc_radial_gpu() (in module ddm.processing)</a>
+</li>
+      <li><a href="api.html#ddm.fitting.compute_AB">compute_AB() (in module ddm.fitting)</a>
+</li>
+      <li><a href="api.html#ddm.fitting.compute_ISF">compute_ISF() (in module ddm.fitting)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -269,7 +283,9 @@ title="Fullscreen mode"
         <li><a href="api.html#module-ddm.utils">module</a>
 </li>
       </ul></li>
-      <li><a href="api.html#ddm.processing.ddm_fftw">ddm_fftw() (in module ddm.processing)</a>
+      <li><a href="api.html#ddm.processing.ddm_dask_cpu">ddm_dask_cpu() (in module ddm.processing)</a>
+</li>
+      <li><a href="api.html#ddm.processing.ddm_dask_gpu">ddm_dask_gpu() (in module ddm.processing)</a>
 </li>
       <li><a href="api.html#ddm.fitting.DDM_Matrix">DDM_Matrix() (in module ddm.fitting)</a>
 </li>
@@ -286,6 +302,10 @@ title="Fullscreen mode"
       <li><a href="api.html#ddm.fitting.findMeanSqFFT">findMeanSqFFT() (in module ddm.fitting)</a>
 </li>
   </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api.html#ddm.fitting.findMeanSqFFT_numpy">findMeanSqFFT_numpy() (in module ddm.fitting)</a>
+</li>
+  </ul></td>
 </tr></table>
 
 <h2 id="G">G</h2>
@@ -295,15 +315,21 @@ title="Fullscreen mode"
 </li>
       <li><a href="api.html#ddm.simulation.generate_images">generate_images() (in module ddm.simulation)</a>
 </li>
-      <li><a href="api.html#ddm.simulation.generate_tracks">generate_tracks() (in module ddm.simulation)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api.html#ddm.simulation.generate_tracks">generate_tracks() (in module ddm.simulation)</a>
+</li>
       <li><a href="api.html#ddm.fitting.genFit">genFit() (in module ddm.fitting)</a>
 </li>
-      <li><a href="api.html#ddm.processing.get_diff_images">get_diff_images() (in module ddm.processing)</a>
-</li>
       <li><a href="api.html#ddm.simulation.get_diffusion_coefficient">get_diffusion_coefficient() (in module ddm.simulation)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="I">I</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api.html#ddm.utils.is_gpu_available">is_gpu_available() (in module ddm.utils)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -336,11 +362,15 @@ title="Fullscreen mode"
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api.html#ddm.plotting.plotISF">plotISF() (in module ddm.plotting)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api.html#ddm.plotting.plotSingleExpFit">plotSingleExpFit() (in module ddm.plotting)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api.html#ddm.utils.print_available_ram">print_available_ram() (in module ddm.utils)</a>
+</li>
       <li><a href="api.html#ddm.utils.print_cpu_count">print_cpu_count() (in module ddm.utils)</a>
+</li>
+      <li><a href="api.html#ddm.utils.print_file_size">print_file_size() (in module ddm.utils)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -349,6 +379,10 @@ title="Fullscreen mode"
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api.html#ddm.processing.radial_profile">radial_profile() (in module ddm.processing)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api.html#ddm.processing.radial_profile_gpu">radial_profile_gpu() (in module ddm.processing)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -363,6 +397,14 @@ title="Fullscreen mode"
       <li><a href="api.html#ddm.fitting.schultz">schultz() (in module ddm.fitting)</a>
 </li>
       <li><a href="api.html#ddm.fitting.singleExp">singleExp() (in module ddm.fitting)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="T">T</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api.html#ddm.fitting.test_linear">test_linear() (in module ddm.fitting)</a>
 </li>
   </ul></td>
 </tr></table>

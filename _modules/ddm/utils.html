@@ -198,10 +198,25 @@ title="Fullscreen mode"
               <div>
                 
   <h1>Source code for ddm.utils</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">multiprocessing</span>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">multiprocessing</span>
 <span class="kn">from</span> <span class="nn">urllib.error</span> <span class="kn">import</span> <span class="n">HTTPError</span>
+<span class="kn">import</span> <span class="nn">psutil</span>
+
 
 <span class="kn">import</span> <span class="nn">pims</span>
+
+
+<div class="viewcode-block" id="is_gpu_available"><a class="viewcode-back" href="../../api.html#ddm.utils.is_gpu_available">[docs]</a><span class="k">def</span> <span class="nf">is_gpu_available</span><span class="p">():</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">cupy</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">if</span> <span class="n">cupy</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">runtime</span><span class="o">.</span><span class="n">getDeviceCount</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
 
 
 <div class="viewcode-block" id="print_cpu_count"><a class="viewcode-back" href="../../api.html#ddm.utils.print_cpu_count">[docs]</a><span class="k">def</span> <span class="nf">print_cpu_count</span><span class="p">():</span>
@@ -209,10 +224,20 @@ title="Fullscreen mode"
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;We have </span><span class="si">{</span><span class="n">ncpus</span><span class="si">}</span><span class="s2"> cores to work on!&quot;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="verify_bioformats_jar"><a class="viewcode-back" href="../../api.html#ddm.utils.verify_bioformats_jar">[docs]</a><span class="k">def</span> <span class="nf">verify_bioformats_jar</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;Check presence of .jar file for pims.bioformats and download verison 6.5 if missing</span>
+<div class="viewcode-block" id="print_available_ram"><a class="viewcode-back" href="../../api.html#ddm.utils.print_available_ram">[docs]</a><span class="k">def</span> <span class="nf">print_available_ram</span><span class="p">():</span>
+    <span class="n">available_ram</span> <span class="o">=</span> <span class="n">psutil</span><span class="o">.</span><span class="n">virtual_memory</span><span class="p">()</span><span class="o">.</span><span class="n">available</span> <span class="o">/</span> <span class="mi">1024</span><span class="o">**</span><span class="mi">3</span>
+    <span class="n">used_ram</span> <span class="o">=</span> <span class="n">psutil</span><span class="o">.</span><span class="n">virtual_memory</span><span class="p">()</span><span class="o">.</span><span class="n">used</span> <span class="o">/</span> <span class="mi">1024</span><span class="o">**</span><span class="mi">3</span>
+    <span class="n">percentage</span> <span class="o">=</span> <span class="p">(</span><span class="n">available_ram</span> <span class="o">/</span> <span class="p">(</span><span class="n">used_ram</span> <span class="o">+</span> <span class="n">available_ram</span><span class="p">))</span> <span class="o">*</span> <span class="mi">100</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Available ram: </span><span class="si">{</span><span class="n">available_ram</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> GB (</span><span class="si">{</span><span class="n">percentage</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">%)&quot;</span><span class="p">)</span></div>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="print_file_size"><a class="viewcode-back" href="../../api.html#ddm.utils.print_file_size">[docs]</a><span class="k">def</span> <span class="nf">print_file_size</span><span class="p">(</span><span class="n">file</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="n">file_size</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">stat</span><span class="p">(</span><span class="n">file</span><span class="p">)</span><span class="o">.</span><span class="n">st_size</span> <span class="o">/</span> <span class="mi">1024</span><span class="o">**</span><span class="mi">3</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="s2"> is </span><span class="si">{</span><span class="n">file_size</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> GB&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="verify_bioformats_jar"><a class="viewcode-back" href="../../api.html#ddm.utils.verify_bioformats_jar">[docs]</a><span class="k">def</span> <span class="nf">verify_bioformats_jar</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Check presence of .jar file for pims.bioformats and download verison 6.5 if missing&quot;&quot;&quot;</span>
     <span class="c1"># Catch problem with jar library</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">pims</span><span class="o">.</span><span class="n">bioformats</span><span class="o">.</span><span class="n">_find_jar</span><span class="p">()</span>
