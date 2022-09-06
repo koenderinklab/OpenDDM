@@ -1,12 +1,43 @@
-#!/usr/bin/env python
-# coding: utf-8
-
 import numpy as np
 from scipy.optimize import curve_fit
+import xarray as xr
 import dask.array as da
 import dask
-from typing import Tuple
+from dask.diagnostics import ProgressBar
+from typing import Tuple, Type, Union
 from .processing import radial_profile
+
+
+def compute_AB(dData: xr.DataArray) -> Tuple[np.ndarray, float]:
+    """
+    Function to calculate the parameters A and B
+
+    Parameters
+    ----------
+    dData : xarray.DataArray
+        xarray containing the raw image data
+
+    Returns
+    -------
+    A : np.ndarray
+        array containing A(q), the pre-factor of the image structure function which contains info on the imaging conditions
+    B : float
+        the magnitude of the noise of the image data
+    """
+
+    if isinstance(dData.data, np.ndarray):
+        sqFFTmean = findMeanSqFFT_numpy(dData)
+    elif isinstance(dData.data, dask.array.core.Array):
+        sqFFTmean = findMeanSqFFT(dData)
+    else:
+        raise TypeError(f"Type {type(dData)} is not supported")
+
+    sqFFTrad = radial_profile(
+        sqFFTmean, (np.shape(sqFFTmean)[0] / 2, np.shape(sqFFTmean)[1] / 2)
+    )
+    b = np.mean(sqFFTrad[-100:-50])  # change depending on size of array
+    a = sqFFTrad - b
+    return a, b
 
 
 def findMeanSqFFT(dData: dask.array) -> np.ndarray:
@@ -22,10 +53,12 @@ def findMeanSqFFT(dData: dask.array) -> np.ndarray:
     -------
     sqFFTmean : the mean over all frames of the square of the fourier transform
     """
-    sqFFT = 2 * da.abs(da.fft.fft2(dData.data).astype(np.complex64)) ** 2
-    sqFFT = da.fft.fftshift(sqFFT)
-    sqFFTmean = da.mean(sqFFT, axis=0)
-    return sqFFTmean.compute()
+
+    with ProgressBar():
+        sqFFT = 2 * da.abs(da.fft.fft2(dData.data).astype(np.complex64)) ** 2
+        sqFFT = da.fft.fftshift(sqFFT)
+        sqFFTmean = da.mean(sqFFT, axis=0).compute()
+    return sqFFTmean
 
 
 def findMeanSqFFT_numpy(dData: np.array) -> np.ndarray:
@@ -45,30 +78,6 @@ def findMeanSqFFT_numpy(dData: np.array) -> np.ndarray:
     sqFFT = np.fft.fftshift(sqFFT)
     sqFFTmean = np.mean(sqFFT, axis=0)
     return sqFFTmean
-
-
-def computeAB(sqFFTmean: np.ndarray) -> Tuple[np.array, float]:
-    """
-    Function to calculate the parameters A and B
-
-    Parameters
-    ----------
-    sqFFTmean : numpy array
-        the result of findMeanSqFFT, the mean over all frames of the square of the fourier transform
-
-    Returns
-    -------
-    a : numpy array
-        array containing A(q), the pre-factor of the image structure function which contains info on the imaging conditions
-    b : float
-        the magnitude of the noise of the image data
-    """
-    sqFFTrad = radial_profile(
-        sqFFTmean, (np.shape(sqFFTmean)[0] / 2, np.shape(sqFFTmean)[1] / 2)
-    )
-    b = np.mean(sqFFTrad[-100:-50])  # change depending on size of array
-    a = sqFFTrad - b
-    return a, b
 
 
 def singleExp(t, tau, S):
@@ -223,3 +232,25 @@ def DDM_Matrix(ISF, A, B):
     """
 
     return A * (1 - ISF) + B
+
+
+def compute_ISF(ddmMatrix: np.ndarray, A: np.ndarray, B: float) -> np.ndarray:
+    """Calculate ISF
+
+    Parameters
+    ----------
+    ddmMatrix : np.ndarray
+        theoretical DDM matrix for given ISF
+    A : float
+        scaling amplitude factor
+    B : float
+        background term
+
+    Returns
+    -------
+    np.ndarray
+        ISF
+    """
+
+    isf = 1.0 - (ddmMatrix - B) / A
+    return np.transpose(isf)
