@@ -103,7 +103,7 @@ def ddm_dask_cpu(data, taus: np.ndarray):
     num_frames, _, _ = data.shape
     results = []
 
-    fft_data = da.fft.fft2(data.data)
+    fft_data = da.fft.fft2(data.data).astype(np.complex64)
 
     for tau in taus:
         result = calc_matrix_dask(fft_data, tau)
