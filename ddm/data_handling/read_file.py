@@ -18,7 +18,7 @@ SUPPORTED_FORMATS = [".lif", ".nd2", ".tif", ".tiff"]
 def read_file(
     filename: str,
     delayed: bool = True,
-    chunk_size: int = 1,
+    chunk_size: int = 25,
     img_selection: slice = slice(0, None, 1),
     xscale: float = None,
     tscale: float = None,
@@ -33,7 +33,7 @@ def read_file(
     delayed : bool, optional
         Lazy import of data as a dask array. Defaults is True.
     chunk_size : int, optional
-        Number of the frames to include in each dask chunk. Default is 1.
+        Number of the frames to include in each dask chunk. Default is 25.
     img_selection : slice, optional
         Selection of images to load if delayed=False. Default is all images.
     xscale : float, optional
