@@ -9,7 +9,7 @@ from typing import Tuple
 from .processing import radial_profile
 
 
-def findMeanSqFFT(dData: dask.array):
+def findMeanSqFFT(dData: dask.array) -> np.ndarray:
     """
     Function to calculate the mean of the square of the FFT over all frames
 
@@ -22,13 +22,13 @@ def findMeanSqFFT(dData: dask.array):
     -------
     sqFFTmean : the mean over all frames of the square of the fourier transform
     """
-    sqFFT = 2 * da.abs(da.fft.fft2(dData).astype("complex64")) ** 2
+    sqFFT = 2 * da.abs(da.fft.fft2(dData.data).astype(np.complex64)) ** 2
     sqFFT = da.fft.fftshift(sqFFT)
     sqFFTmean = da.mean(sqFFT, axis=0)
-    return sqFFTmean
+    return sqFFTmean.compute()
 
 
-def findMeanSqFFT_np(dData: np.array):
+def findMeanSqFFT_numpy(dData: np.array) -> np.ndarray:
     """
     Function to calculate the mean of the square of the FFT over all frames
 
@@ -41,13 +41,13 @@ def findMeanSqFFT_np(dData: np.array):
     -------
     sqFFTmean : the mean over all frames of the square of the fourier transform
     """
-    sqFFT = 2 * np.abs(np.fft.fft2(dData).astype("complex64")) ** 2
+    sqFFT = 2 * np.abs(np.fft.fft2(dData).astype(np.complex64)) ** 2
     sqFFT = np.fft.fftshift(sqFFT)
     sqFFTmean = np.mean(sqFFT, axis=0)
     return sqFFTmean
 
 
-def computeAB(sqFFTmean: np.array) -> Tuple[np.array, float]:
+def computeAB(sqFFTmean: np.ndarray) -> Tuple[np.array, float]:
     """
     Function to calculate the parameters A and B
 

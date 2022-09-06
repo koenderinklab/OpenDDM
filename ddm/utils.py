@@ -7,6 +7,18 @@ import psutil
 import pims
 
 
+def is_gpu_available():
+    try:
+        import cupy
+    except ImportError:
+        return False
+
+    if cupy.cuda.runtime.getDeviceCount() > 0:
+        return True
+    else:
+        return False
+
+
 def print_cpu_count():
     ncpus = multiprocessing.cpu_count()
     print(f"We have {ncpus} cores to work on!")
