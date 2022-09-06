@@ -30,6 +30,11 @@ def export_data(
     xr.dataArray
         data as xarray dataArray
     """
+
+    # Create output folder if it doesn't exist
+    if not os.path.isdir(os.path.abspath(pathname)):
+        os.mkdir(os.path.abspath(pathname))
+
     arr = create_data_array(data, taus, os.path.abspath(img_pathname))
 
     # Create file names
