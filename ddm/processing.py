@@ -49,7 +49,7 @@ def ddm(
                 print("Running analysis on GPU")
                 return ddm_dask_gpu(data, taus)
             except ImportError:
-                print("ImportError CuPy, running analysis on CPU")
+                print("Running analysis on CPU")
                 return ddm_dask_cpu(data, taus)
         else:
             print("Running analysis on CPU")
@@ -109,8 +109,7 @@ def ddm_dask_cpu(data, taus: np.ndarray):
         result = calc_matrix_dask(fft_data, tau)
         results.append(result)
 
-    with ProgressBar():
-        fft_shift = dask.compute(*results)
+    fft_shift = dask.compute(*results)
 
     out = []
     for row, tau in zip(fft_shift, taus):
