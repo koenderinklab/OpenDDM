@@ -249,7 +249,7 @@ title="Fullscreen mode"
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Running analysis on GPU&quot;</span><span class="p">)</span>
                 <span class="k">return</span> <span class="n">ddm_dask_gpu</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">taus</span><span class="p">)</span>
             <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ImportError CuPy, running analysis on CPU&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Running analysis on CPU&quot;</span><span class="p">)</span>
                 <span class="k">return</span> <span class="n">ddm_dask_cpu</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">taus</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Running analysis on CPU&quot;</span><span class="p">)</span>
@@ -309,8 +309,7 @@ title="Fullscreen mode"
         <span class="n">result</span> <span class="o">=</span> <span class="n">calc_matrix_dask</span><span class="p">(</span><span class="n">fft_data</span><span class="p">,</span> <span class="n">tau</span><span class="p">)</span>
         <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 
-    <span class="k">with</span> <span class="n">ProgressBar</span><span class="p">():</span>
-        <span class="n">fft_shift</span> <span class="o">=</span> <span class="n">dask</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="o">*</span><span class="n">results</span><span class="p">)</span>
+    <span class="n">fft_shift</span> <span class="o">=</span> <span class="n">dask</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="o">*</span><span class="n">results</span><span class="p">)</span>
 
     <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">row</span><span class="p">,</span> <span class="n">tau</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">fft_shift</span><span class="p">,</span> <span class="n">taus</span><span class="p">):</span>
