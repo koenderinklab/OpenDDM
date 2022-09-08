@@ -3,8 +3,7 @@ from scipy.optimize import curve_fit
 import xarray as xr
 import dask.array as da
 import dask
-from dask.diagnostics import ProgressBar
-from typing import Tuple, Type, Union
+from typing import Tuple
 from .processing import radial_profile
 
 
@@ -54,10 +53,9 @@ def findMeanSqFFT(dData: dask.array) -> np.ndarray:
     sqFFTmean : the mean over all frames of the square of the fourier transform
     """
 
-    with ProgressBar():
-        sqFFT = 2 * da.abs(da.fft.fft2(dData.data).astype(np.complex64)) ** 2
-        sqFFT = da.fft.fftshift(sqFFT)
-        sqFFTmean = da.mean(sqFFT, axis=0).compute()
+    sqFFT = 2 * da.abs(da.fft.fft2(dData.data).astype(np.complex64)) ** 2
+    sqFFT = da.fft.fftshift(sqFFT)
+    sqFFTmean = da.mean(sqFFT, axis=0).compute()
     return sqFFTmean
 
 

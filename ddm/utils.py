@@ -2,9 +2,16 @@ import os
 import multiprocessing
 from urllib.error import HTTPError
 import psutil
-
-
+from dask.diagnostics import ProgressBar
 import pims
+
+
+def dask_progressbar(show=True):
+    pbar = ProgressBar()
+    if show:
+        pbar.register()
+    else:
+        pbar.unregister()
 
 
 def is_gpu_available():
