@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>API Reference &#8212; openddm 0.1.0 documentation</title>
+    <title>API reference &#8212; OpenDDM</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -38,7 +38,8 @@
     <script>mermaid.initialize({startOnLoad:true});</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Changelog" href="changelog.html" />
+    <link rel="next" title="ddm.data_handling" href="_autosummary/ddm.data_handling.html" />
+    <link rel="prev" title="DDM theory" href="theory.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -77,7 +78,7 @@
       
       
       
-      <h1 class="site-logo" id="site-title">openddm 0.1.0 documentation</h1>
+      <h1 class="site-logo" id="site-title">OpenDDM</h1>
       
     </a>
 </div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
@@ -87,13 +88,13 @@
     <div class="bd-toc-item active">
         <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
-  Contents:
+  For users
  </span>
 </p>
 <ul class="current nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="readme.html">
-   Open DDM
+   OpenDDM
   </a>
  </li>
  <li class="toctree-l1">
@@ -101,14 +102,378 @@
    DDM theory
   </a>
  </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="current reference internal" href="#">
+   API reference
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="_autosummary/ddm.data_handling.html">
+     ddm.data_handling
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+    <label for="toctree-checkbox-2">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3 has-children">
+      <a class="reference internal" href="_autosummary/ddm.data_handling.dask_image.html">
+       ddm.data_handling.dask_image
+      </a>
+      <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+      <label for="toctree-checkbox-3">
+       <i class="fas fa-chevron-down">
+       </i>
+      </label>
+      <ul>
+       <li class="toctree-l4">
+        <a class="reference internal" href="_autosummary/ddm.data_handling.dask_image.read_data_into_dask.html">
+         ddm.data_handling.dask_image.read_data_into_dask
+        </a>
+       </li>
+      </ul>
+     </li>
+     <li class="toctree-l3 has-children">
+      <a class="reference internal" href="_autosummary/ddm.data_handling.exporting.html">
+       ddm.data_handling.exporting
+      </a>
+      <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+      <label for="toctree-checkbox-4">
+       <i class="fas fa-chevron-down">
+       </i>
+      </label>
+      <ul>
+       <li class="toctree-l4">
+        <a class="reference internal" href="_autosummary/ddm.data_handling.exporting.create_data_array.html">
+         ddm.data_handling.exporting.create_data_array
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="_autosummary/ddm.data_handling.exporting.export_data.html">
+         ddm.data_handling.exporting.export_data
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="_autosummary/ddm.data_handling.exporting.update_stored_data_array.html">
+         ddm.data_handling.exporting.update_stored_data_array
+        </a>
+       </li>
+      </ul>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="_autosummary/ddm.data_handling.read_file.html">
+       ddm.data_handling.read_file
+      </a>
+     </li>
+     <li class="toctree-l3 has-children">
+      <a class="reference internal" href="_autosummary/ddm.data_handling.read_metadata.html">
+       ddm.data_handling.read_metadata
+      </a>
+      <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+      <label for="toctree-checkbox-5">
+       <i class="fas fa-chevron-down">
+       </i>
+      </label>
+      <ul>
+       <li class="toctree-l4">
+        <a class="reference internal" href="_autosummary/ddm.data_handling.read_metadata.read_metadata.html">
+         ddm.data_handling.read_metadata.read_metadata
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="_autosummary/ddm.data_handling.read_metadata.read_metadata_lif.html">
+         ddm.data_handling.read_metadata.read_metadata_lif
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="_autosummary/ddm.data_handling.read_metadata.read_metadata_nd2.html">
+         ddm.data_handling.read_metadata.read_metadata_nd2
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="_autosummary/ddm.data_handling.read_metadata.read_metadata_tif.html">
+         ddm.data_handling.read_metadata.read_metadata_tif
+        </a>
+       </li>
+      </ul>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="_autosummary/ddm.fitting.html">
+     ddm.fitting
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+    <label for="toctree-checkbox-6">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="_autosummary/ddm.fitting.DDM_Matrix.html">
+       ddm.fitting.DDM_Matrix
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="_autosummary/ddm.fitting.compute_AB.html">
+       ddm.fitting.compute_AB
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="_autosummary/ddm.fitting.compute_ISF.html">
+       ddm.fitting.compute_ISF
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="_autosummary/ddm.fitting.doubleExp.html">
+       ddm.fitting.doubleExp
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="_autosummary/ddm.fitting.findMeanSqFFT.html">
+       ddm.fitting.findMeanSqFFT
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="_autosummary/ddm.fitting.findMeanSqFFT_numpy.html">
+       ddm.fitting.findMeanSqFFT_numpy
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="_autosummary/ddm.fitting.genFit.html">
+       ddm.fitting.genFit
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="_autosummary/ddm.fitting.schultz.html">
+       ddm.fitting.schultz
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="_autosummary/ddm.fitting.singleExp.html">
+       ddm.fitting.singleExp
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="_autosummary/ddm.fitting.test_linear.html">
+       ddm.fitting.test_linear
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="_autosummary/ddm.plotting.html">
+     ddm.plotting
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
+    <label for="toctree-checkbox-7">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="_autosummary/ddm.plotting.plotISF.html">
+       ddm.plotting.plotISF
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="_autosummary/ddm.plotting.plotSingleExpFit.html">
+       ddm.plotting.plotSingleExpFit
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="_autosummary/ddm.processing.html">
+     ddm.processing
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
+    <label for="toctree-checkbox-8">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="_autosummary/ddm.processing.calc_matrix.html">
+       ddm.processing.calc_matrix
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="_autosummary/ddm.processing.calc_matrix_dask.html">
+       ddm.processing.calc_matrix_dask
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="_autosummary/ddm.processing.calc_radial.html">
+       ddm.processing.calc_radial
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="_autosummary/ddm.processing.calc_radial_gpu.html">
+       ddm.processing.calc_radial_gpu
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="_autosummary/ddm.processing.ddm.html">
+       ddm.processing.ddm
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="_autosummary/ddm.processing.ddm_dask_cpu.html">
+       ddm.processing.ddm_dask_cpu
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="_autosummary/ddm.processing.ddm_dask_gpu.html">
+       ddm.processing.ddm_dask_gpu
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="_autosummary/ddm.processing.ddm_numpy.html">
+       ddm.processing.ddm_numpy
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="_autosummary/ddm.processing.radial_profile.html">
+       ddm.processing.radial_profile
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="_autosummary/ddm.processing.radial_profile_gpu.html">
+       ddm.processing.radial_profile_gpu
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="_autosummary/ddm.simulation.html">
+     ddm.simulation
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
+    <label for="toctree-checkbox-9">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="_autosummary/ddm.simulation.generate_frame.html">
+       ddm.simulation.generate_frame
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="_autosummary/ddm.simulation.generate_images.html">
+       ddm.simulation.generate_images
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="_autosummary/ddm.simulation.generate_tracks.html">
+       ddm.simulation.generate_tracks
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="_autosummary/ddm.simulation.get_diffusion_coefficient.html">
+       ddm.simulation.get_diffusion_coefficient
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="_autosummary/ddm.simulation.save_stack.html">
+       ddm.simulation.save_stack
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="_autosummary/ddm.utils.html">
+     ddm.utils
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/>
+    <label for="toctree-checkbox-10">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="_autosummary/ddm.utils.dask_progressbar.html">
+       ddm.utils.dask_progressbar
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="_autosummary/ddm.utils.is_gpu_available.html">
+       ddm.utils.is_gpu_available
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="_autosummary/ddm.utils.print_available_ram.html">
+       ddm.utils.print_available_ram
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="_autosummary/ddm.utils.print_cpu_count.html">
+       ddm.utils.print_cpu_count
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="_autosummary/ddm.utils.print_file_size.html">
+       ddm.utils.print_file_size
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="_autosummary/ddm.utils.verify_bioformats_jar.html">
+       ddm.utils.verify_bioformats_jar
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  For developers/contributors
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="development-guides/index.html">
+   Development Guides
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/>
+  <label for="toctree-checkbox-11">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="development-guides/testing.html">
+     Testing
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="development-guides/documentation.html">
+     Documentation
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="contributing.html">
+   Contributing Guide
+  </a>
+ </li>
  <li class="toctree-l1">
   <a class="reference internal" href="changelog.html">
    Changelog
   </a>
  </li>
- <li class="toctree-l1 current active">
-  <a class="current reference internal" href="#">
-   API Reference
+ <li class="toctree-l1">
+  <a class="reference external" href="https://github.com/koenderinklab/ddmPilotCode">
+   GitHub repository
   </a>
  </li>
 </ul>
@@ -221,110 +586,23 @@ title="Print to PDF"
     </ul>
   </div>
 </div>
-<label for="__page-toc"
-  class="headerbtn headerbtn-page-toc"
-  
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-list"></i>
-  </span>
-
-</label>
 
     </div>
 </div>
 
 <!-- Table of contents -->
 <div class="col-md-3 bd-toc show noprint">
-    <div class="tocsection onthispage pt-5 pb-3">
-        <i class="fas fa-list"></i> Contents
-    </div>
-    <nav id="bd-toc-nav" aria-label="Page">
-        <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-ddm.data_handling">
-   ddm.data_handling module
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-ddm.fitting">
-   ddm.fitting module
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-ddm.plotting">
-   ddm.plotting module
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-ddm.processing">
-   ddm.processing module
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-ddm.simulation">
-   ddm.simulation module
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-ddm.utils">
-   ddm.utils module
-  </a>
- </li>
-</ul>
-
-    </nav>
 </div>
     </div>
     <div class="article row">
         <div class="col pl-md-3 pl-lg-5 content-container">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>API Reference</h1>
+                <h1>API reference</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
-                        <div>
-                            <h2> Contents </h2>
-                        </div>
-                        <nav aria-label="Page">
-                            <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-ddm.data_handling">
-   ddm.data_handling module
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-ddm.fitting">
-   ddm.fitting module
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-ddm.plotting">
-   ddm.plotting module
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-ddm.processing">
-   ddm.processing module
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-ddm.simulation">
-   ddm.simulation module
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-ddm.utils">
-   ddm.utils module
-  </a>
- </li>
-</ul>
-
-                        </nav>
                     </div>
                 </div>
             </div>
@@ -333,569 +611,34 @@ title="Print to PDF"
               <div>
                 
   <section id="api-reference">
-<h1>API Reference<a class="headerlink" href="#api-reference" title="Permalink to this headline">#</a></h1>
-<section id="module-ddm.data_handling">
-<span id="ddm-data-handling-module"></span><h2>ddm.data_handling module<a class="headerlink" href="#module-ddm.data_handling" title="Permalink to this headline">#</a></h2>
-</section>
-<section id="module-ddm.fitting">
-<span id="ddm-fitting-module"></span><h2>ddm.fitting module<a class="headerlink" href="#module-ddm.fitting" title="Permalink to this headline">#</a></h2>
-<dl class="py function">
-<dt class="sig sig-object py" id="ddm.fitting.DDM_Matrix">
-<span class="sig-prename descclassname"><span class="pre">ddm.fitting.</span></span><span class="sig-name descname"><span class="pre">DDM_Matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ISF</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">A</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/fitting.html#DDM_Matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.fitting.DDM_Matrix" title="Permalink to this definition">#</a></dt>
-<dd><p>Function to calculate the DDM matrix from a given ISF</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>ISF</strong> (<em>array_like</em>) – array containing the ISF</p></li>
-<li><p><strong>A</strong> (<em>float</em>) – scaling amplitude factor</p></li>
-<li><p><strong>B</strong> (<em>float</em>) – background term</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>theoretical DDM matrix for given ISF</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="ddm.fitting.compute_AB">
-<span class="sig-prename descclassname"><span class="pre">ddm.fitting.</span></span><span class="sig-name descname"><span class="pre">compute_AB</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dData</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">xarray.core.dataarray.DataArray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/ddm/fitting.html#compute_AB"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.fitting.compute_AB" title="Permalink to this definition">#</a></dt>
-<dd><p>Function to calculate the parameters A and B</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>dData</strong> (<em>xarray.DataArray</em>) – xarray containing the raw image data</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>A</strong> (<em>np.ndarray</em>) – array containing A(q), the pre-factor of the image structure function which contains info on the imaging conditions</p></li>
-<li><p><strong>B</strong> (<em>float</em>) – the magnitude of the noise of the image data</p></li>
-</ul>
-</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="ddm.fitting.compute_ISF">
-<span class="sig-prename descclassname"><span class="pre">ddm.fitting.</span></span><span class="sig-name descname"><span class="pre">compute_ISF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ddmMatrix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">A</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="_modules/ddm/fitting.html#compute_ISF"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.fitting.compute_ISF" title="Permalink to this definition">#</a></dt>
-<dd><p>Calculate ISF</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>ddmMatrix</strong> (<em>np.ndarray</em>) – theoretical DDM matrix for given ISF</p></li>
-<li><p><strong>A</strong> (<em>float</em>) – scaling amplitude factor</p></li>
-<li><p><strong>B</strong> (<em>float</em>) – background term</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>ISF</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>np.ndarray</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="ddm.fitting.doubleExp">
-<span class="sig-prename descclassname"><span class="pre">ddm.fitting.</span></span><span class="sig-name descname"><span class="pre">doubleExp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/fitting.html#doubleExp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.fitting.doubleExp" title="Permalink to this definition">#</a></dt>
-<dd><p>Function for single exponential DDM fits</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>t</strong> (<em>array_like</em>) – array of the lag times</p></li>
-<li><p><strong>tau1</strong> (<em>float</em>) – decay time for first exponential</p></li>
-<li><p><strong>tau2</strong> (<em>float</em>) – decay time for second exponential</p></li>
-<li><p><strong>n</strong> (<em>float</em>) – fraction of dynamics for first exponential</p></li>
-<li><p><strong>S1</strong> (<em>float</em>) – stretching exponent for first exponential</p></li>
-<li><p><strong>S2</strong> (<em>float</em>) – stretching exponent for second exponential</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>theoretical double exponential ISF for given parameters</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="ddm.fitting.findMeanSqFFT">
-<span class="sig-prename descclassname"><span class="pre">ddm.fitting.</span></span><span class="sig-name descname"><span class="pre">findMeanSqFFT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dData:</span> <span class="pre">&lt;module</span> <span class="pre">'dask.array'</span> <span class="pre">from</span> <span class="pre">'/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/dask/array/__init__.py'&gt;</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="_modules/ddm/fitting.html#findMeanSqFFT"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.fitting.findMeanSqFFT" title="Permalink to this definition">#</a></dt>
-<dd><p>Function to calculate the mean of the square of the FFT over all frames</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>dData</strong> (<em>dask.array</em>) – dask array containing the raw image data</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>sqFFTmean</strong></p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>the mean over all frames of the square of the fourier transform</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="ddm.fitting.findMeanSqFFT_numpy">
-<span class="sig-prename descclassname"><span class="pre">ddm.fitting.</span></span><span class="sig-name descname"><span class="pre">findMeanSqFFT_numpy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dData</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.array</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="_modules/ddm/fitting.html#findMeanSqFFT_numpy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.fitting.findMeanSqFFT_numpy" title="Permalink to this definition">#</a></dt>
-<dd><p>Function to calculate the mean of the square of the FFT over all frames</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>dData</strong> (<em>dask.array</em>) – dask array containing the raw image data</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>sqFFTmean</strong></p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>the mean over all frames of the square of the fourier transform</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="ddm.fitting.genFit">
-<span class="sig-prename descclassname"><span class="pre">ddm.fitting.</span></span><span class="sig-name descname"><span class="pre">genFit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">isf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">taus</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fitFunc</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/fitting.html#genFit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.fitting.genFit" title="Permalink to this definition">#</a></dt>
-<dd><p>Generalised fitting function to fit the ISF</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>isf</strong> (<em>array_like</em>) – array of the lag times</p></li>
-<li><p><strong>taus</strong> (<em>np.ndarray</em>) – decay time</p></li>
-<li><p><strong>fitFunc</strong> (<em>string</em>) – stretching exponent</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="ddm.fitting.schultz">
-<span class="sig-prename descclassname"><span class="pre">ddm.fitting.</span></span><span class="sig-name descname"><span class="pre">schultz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lagtime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/fitting.html#schultz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.fitting.schultz" title="Permalink to this definition">#</a></dt>
-<dd><p>Function for the so called Schultz model for fitting to DDM data containing
-both diffusive and actively directed motion</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>lagtime</strong> (<em>array_like</em>) – array of the lag times</p></li>
-<li><p><strong>tau1</strong> (<em>float</em>) – decay time for the exponential part of ISF</p></li>
-<li><p><strong>tau2</strong> (<em>floar</em>) – decay time for directed motion part of ISF</p></li>
-<li><p><strong>n</strong> (<em>float</em>) – fraction of dynamics undergoing ballistic motion</p></li>
-<li><p><strong>S</strong> (<em>float</em>) – stretching exponent</p></li>
-<li><p><strong>Z</strong> (<em>float</em>) – Schultz distribution number</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>theoretical ISF for schultz distribution for given values</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="ddm.fitting.singleExp">
-<span class="sig-prename descclassname"><span class="pre">ddm.fitting.</span></span><span class="sig-name descname"><span class="pre">singleExp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/fitting.html#singleExp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.fitting.singleExp" title="Permalink to this definition">#</a></dt>
-<dd><p>Function for single exponential DDM fits</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>t</strong> (<em>array_like</em>) – array of the lag times</p></li>
-<li><p><strong>tau</strong> (<em>float</em>) – decay time</p></li>
-<li><p><strong>S</strong> (<em>float</em>) – stretching exponent</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>theoretical single exponential ISF for given parameters</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="ddm.fitting.test_linear">
-<span class="sig-prename descclassname"><span class="pre">ddm.fitting.</span></span><span class="sig-name descname"><span class="pre">test_linear</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">isf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">taus</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/fitting.html#test_linear"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.fitting.test_linear" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
-</section>
-<section id="module-ddm.plotting">
-<span id="ddm-plotting-module"></span><h2>ddm.plotting module<a class="headerlink" href="#module-ddm.plotting" title="Permalink to this headline">#</a></h2>
-<dl class="py function">
-<dt class="sig sig-object py" id="ddm.plotting.plotISF">
-<span class="sig-prename descclassname"><span class="pre">ddm.plotting.</span></span><span class="sig-name descname"><span class="pre">plotISF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">isf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">taus</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/plotting.html#plotISF"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.plotting.plotISF" title="Permalink to this definition">#</a></dt>
-<dd><p>_summary_</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>isf</strong> (<em>np.ndarray</em>) – _description_</p></li>
-<li><p><strong>taus</strong> (<em>np.ndarray</em>) – _description_</p></li>
-<li><p><strong>q</strong> (<em>int</em><em> or </em><em>tuple of ints</em><em>, </em><em>optional</em>) – _description_</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>_description_</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>_type_</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="ddm.plotting.plotSingleExpFit">
-<span class="sig-prename descclassname"><span class="pre">ddm.plotting.</span></span><span class="sig-name descname"><span class="pre">plotSingleExpFit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">isf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">taus</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/plotting.html#plotSingleExpFit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.plotting.plotSingleExpFit" title="Permalink to this definition">#</a></dt>
-<dd><p>_summary_</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>isf</strong> (<em>np.ndarray</em>) – _description_</p></li>
-<li><p><strong>taus</strong> (<em>np.ndarray</em>) – _description_</p></li>
-<li><p><strong>q</strong> (<em>int</em><em> or </em><em>tuple of ints</em><em>, </em><em>optional</em>) – _description_</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>_description_</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>_type_</p>
-</dd>
-</dl>
-</dd></dl>
-
-</section>
-<section id="module-ddm.processing">
-<span id="ddm-processing-module"></span><h2>ddm.processing module<a class="headerlink" href="#module-ddm.processing" title="Permalink to this headline">#</a></h2>
-<dl class="py function">
-<dt class="sig sig-object py" id="ddm.processing.calc_matrix">
-<span class="sig-prename descclassname"><span class="pre">ddm.processing.</span></span><span class="sig-name descname"><span class="pre">calc_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img_fft</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_frames</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/processing.html#calc_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.processing.calc_matrix" title="Permalink to this definition">#</a></dt>
-<dd><p>_summary_</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>img_fft</strong> (<em>np.array</em>) – _description_</p></li>
-<li><p><strong>tau</strong> (<em>_type_</em>) – _description_</p></li>
-<li><p><strong>num_frames</strong> (<em>_type_</em>) – _description_</p></li>
-<li><p><strong>height</strong> (<em>_type_</em>) – _description_</p></li>
-<li><p><strong>width</strong> (<em>_type_</em>) – _description_</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>_description_</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>_type_</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="ddm.processing.calc_matrix_dask">
-<span class="sig-prename descclassname"><span class="pre">ddm.processing.</span></span><span class="sig-name descname"><span class="pre">calc_matrix_dask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img_fft</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/processing.html#calc_matrix_dask"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.processing.calc_matrix_dask" title="Permalink to this definition">#</a></dt>
-<dd><p>_summary_</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>img_fft</strong> (<em>np.array</em>) – _description_</p></li>
-<li><p><strong>tau</strong> (<em>_type_</em>) – _description_</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>_description_</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>_type_</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="ddm.processing.calc_radial">
-<span class="sig-prename descclassname"><span class="pre">ddm.processing.</span></span><span class="sig-name descname"><span class="pre">calc_radial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fft_shift</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_frames</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/processing.html#calc_radial"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.processing.calc_radial" title="Permalink to this definition">#</a></dt>
-<dd><p>_summary_</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>fft_shift</strong> (<em>_type_</em>) – _description_</p></li>
-<li><p><strong>num_frames</strong> (<em>_type_</em>) – _description_</p></li>
-<li><p><strong>tau</strong> (<em>_type_</em>) – _description_</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>_description_</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>_type_</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="ddm.processing.calc_radial_gpu">
-<span class="sig-prename descclassname"><span class="pre">ddm.processing.</span></span><span class="sig-name descname"><span class="pre">calc_radial_gpu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fft_shift</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_frames</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/processing.html#calc_radial_gpu"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.processing.calc_radial_gpu" title="Permalink to this definition">#</a></dt>
-<dd><p>_summary_</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>fft_shift</strong> (<em>_type_</em>) – _description_</p></li>
-<li><p><strong>num_frames</strong> (<em>_type_</em>) – _description_</p></li>
-<li><p><strong>tau</strong> (<em>_type_</em>) – _description_</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>_description_</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>_type_</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="ddm.processing.ddm">
-<span class="sig-prename descclassname"><span class="pre">ddm.processing.</span></span><span class="sig-name descname"><span class="pre">ddm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">dask.array.core.Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">taus</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">array([],</span> <span class="pre">dtype=int64)</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="_modules/ddm/processing.html#ddm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.processing.ddm" title="Permalink to this definition">#</a></dt>
-<dd><p>_summary_</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<em>Union</em><em>[</em><em>dask.array.core.Array</em><em>, </em><em>np.ndarray</em><em>]</em>) – </p></li>
-<li><p><strong>taus</strong> (<em>np.ndarray</em><em>, </em><em>optional</em>) – array of lag times (in frames), by default half of number of frames</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>np.ndarray</p>
-</dd>
-<dt class="field-odd">Raises</dt>
-<dd class="field-odd"><p><strong>TypeError</strong> – Data type is not supported. Supported types are np.ndarray and dask.array.core.Array.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="ddm.processing.ddm_dask_cpu">
-<span class="sig-prename descclassname"><span class="pre">ddm.processing.</span></span><span class="sig-name descname"><span class="pre">ddm_dask_cpu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">taus</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/processing.html#ddm_dask_cpu"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.processing.ddm_dask_cpu" title="Permalink to this definition">#</a></dt>
-<dd><p>_summary_</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<em>_type_</em>) – _description_</p></li>
-<li><p><strong>taus</strong> (<em>_type_</em><em>, </em><em>optional</em>) – _description_, by default np.arange(0)</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>_description_</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>_type_</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="ddm.processing.ddm_dask_gpu">
-<span class="sig-prename descclassname"><span class="pre">ddm.processing.</span></span><span class="sig-name descname"><span class="pre">ddm_dask_gpu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">taus</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">array([],</span> <span class="pre">dtype=int64)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/processing.html#ddm_dask_gpu"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.processing.ddm_dask_gpu" title="Permalink to this definition">#</a></dt>
-<dd><p>_summary_</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<em>_type_</em>) – _description_</p></li>
-<li><p><strong>taus</strong> (<em>_type_</em><em>, </em><em>optional</em>) – _description_, by default np.arange(0)</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>_description_</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>_type_</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="ddm.processing.ddm_numpy">
-<span class="sig-prename descclassname"><span class="pre">ddm.processing.</span></span><span class="sig-name descname"><span class="pre">ddm_numpy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">taus</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/processing.html#ddm_numpy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.processing.ddm_numpy" title="Permalink to this definition">#</a></dt>
-<dd><p>_summary_</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>data</strong> (<em>np.array</em>) – image stack</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>ddm matrix</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>np.array</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="ddm.processing.radial_profile">
-<span class="sig-prename descclassname"><span class="pre">ddm.processing.</span></span><span class="sig-name descname"><span class="pre">radial_profile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">centre</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/processing.html#radial_profile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.processing.radial_profile" title="Permalink to this definition">#</a></dt>
-<dd><p>_summary_</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<em>np.ndarray</em>) – _description_</p></li>
-<li><p><strong>centre</strong> (<em>tuple</em>) – _description_</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>_description_</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>_type_</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="ddm.processing.radial_profile_gpu">
-<span class="sig-prename descclassname"><span class="pre">ddm.processing.</span></span><span class="sig-name descname"><span class="pre">radial_profile_gpu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">centre</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/processing.html#radial_profile_gpu"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.processing.radial_profile_gpu" title="Permalink to this definition">#</a></dt>
-<dd><p>_summary_</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<em>np.ndarray</em>) – _description_</p></li>
-<li><p><strong>centre</strong> (<em>tuple</em>) – _description_</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>_description_</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>_type_</p>
-</dd>
-</dl>
-</dd></dl>
-
-</section>
-<section id="module-ddm.simulation">
-<span id="ddm-simulation-module"></span><h2>ddm.simulation module<a class="headerlink" href="#module-ddm.simulation" title="Permalink to this headline">#</a></h2>
-<dl class="py function">
-<dt class="sig sig-object py" id="ddm.simulation.generate_frame">
-<span class="sig-prename descclassname"><span class="pre">ddm.simulation.</span></span><span class="sig-name descname"><span class="pre">generate_frame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coords</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(512,</span> <span class="pre">512)</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="_modules/ddm/simulation.html#generate_frame"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.simulation.generate_frame" title="Permalink to this definition">#</a></dt>
-<dd><p>Create microscopy image from tracks at single timepoint</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>coords</strong> (<em>np.array</em>) – coordinates of particles</p></li>
-<li><p><strong>window</strong> (<em>Tuple</em><em>[</em><em>int</em><em>, </em><em>int</em><em>]</em><em>, </em><em>optional</em>) – size of the simulated image in pixels, by default (512, 512)</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>2D array of microscope image with particles</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>np.array</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="ddm.simulation.generate_images">
-<span class="sig-prename descclassname"><span class="pre">ddm.simulation.</span></span><span class="sig-name descname"><span class="pre">generate_images</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tracks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(512,</span> <span class="pre">512)</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="_modules/ddm/simulation.html#generate_images"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.simulation.generate_images" title="Permalink to this definition">#</a></dt>
-<dd><p>Create an image stack of simulated microscopy images</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>tracks</strong> (<em>np.array</em>) – 3D array with particle tracks with shape (n_particles, 2, time points)</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>3D array of simulated microscopy images</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>np.array</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="ddm.simulation.generate_tracks">
-<span class="sig-prename descclassname"><span class="pre">ddm.simulation.</span></span><span class="sig-name descname"><span class="pre">generate_tracks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_particles</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">steps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drift</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(0.1,</span> <span class="pre">0.1)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(512,</span> <span class="pre">512)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pixel_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1e-07</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">D</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="_modules/ddm/simulation.html#generate_tracks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.simulation.generate_tracks" title="Permalink to this definition">#</a></dt>
-<dd><p>Generate tracks of particles undergoing 2D Brownian motion</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>n_particles</strong> (<em>int</em><em>, </em><em>optional</em>) – number of particles, by default 100</p></li>
-<li><p><strong>steps</strong> (<em>int</em><em>, </em><em>optional</em>) – number of time points to be simulated, by default 1000</p></li>
-<li><p><strong>tau</strong> (<em>float</em><em>, </em><em>optional</em>) – time between steps in seconds, by default 0.01</p></li>
-<li><p><strong>drift</strong> (<em>Tuple</em><em>[</em><em>float</em><em>, </em><em>float</em><em>]</em><em>, </em><em>optional</em>) – drift in x and y direction in fraction of step size, by default (-0.1, -0.1)</p></li>
-<li><p><strong>window</strong> (<em>Tuple</em><em>[</em><em>int</em><em>, </em><em>int</em><em>]</em><em>, </em><em>optional</em>) – size of the simulated image in pixels, by default (512, 512)</p></li>
-<li><p><strong>pixel_size</strong> (<em>float</em><em>, </em><em>optional</em>) – size of the pixel in meters, by default 1e-7</p></li>
-<li><p><strong>D</strong> (<em>float</em>) – diffusion coefficient</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>3D array with particle tracks with shape (n_particles, dimensions, time points)</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>np.array</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="ddm.simulation.get_diffusion_coefficient">
-<span class="sig-prename descclassname"><span class="pre">ddm.simulation.</span></span><span class="sig-name descname"><span class="pre">get_diffusion_coefficient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">particle_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1e-06</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">293</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/ddm/simulation.html#get_diffusion_coefficient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.simulation.get_diffusion_coefficient" title="Permalink to this definition">#</a></dt>
-<dd><p>Calculate diffusion coefficient</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>particle_size</strong> (<em>float</em>) – size of the particles in meters, defaults to 1e-6</p></li>
-<li><p><strong>eta</strong> (<em>float</em>) – viscosity of the medium in Pascal-seconds, defaults to 1e-3</p></li>
-<li><p><strong>T</strong> (<em>float</em>) – temperature in Kelvin, defaults to 293</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>diffusion coefficient</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>float</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="ddm.simulation.save_stack">
-<span class="sig-prename descclassname"><span class="pre">ddm.simulation.</span></span><span class="sig-name descname"><span class="pre">save_stack</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stack</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/simulation.html#save_stack"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.simulation.save_stack" title="Permalink to this definition">#</a></dt>
-<dd><p>Save image stack</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>stack</strong> (<em>np.array</em>) – 3D array of simulated microscopy images</p></li>
-<li><p><strong>file_path</strong> (<em>str</em><em>, </em><em>optional</em>) – path to save file”</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-</section>
-<section id="module-ddm.utils">
-<span id="ddm-utils-module"></span><h2>ddm.utils module<a class="headerlink" href="#module-ddm.utils" title="Permalink to this headline">#</a></h2>
-<dl class="py function">
-<dt class="sig sig-object py" id="ddm.utils.dask_progressbar">
-<span class="sig-prename descclassname"><span class="pre">ddm.utils.</span></span><span class="sig-name descname"><span class="pre">dask_progressbar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/utils.html#dask_progressbar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.utils.dask_progressbar" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="ddm.utils.is_gpu_available">
-<span class="sig-prename descclassname"><span class="pre">ddm.utils.</span></span><span class="sig-name descname"><span class="pre">is_gpu_available</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/utils.html#is_gpu_available"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.utils.is_gpu_available" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="ddm.utils.print_available_ram">
-<span class="sig-prename descclassname"><span class="pre">ddm.utils.</span></span><span class="sig-name descname"><span class="pre">print_available_ram</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/utils.html#print_available_ram"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.utils.print_available_ram" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="ddm.utils.print_cpu_count">
-<span class="sig-prename descclassname"><span class="pre">ddm.utils.</span></span><span class="sig-name descname"><span class="pre">print_cpu_count</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/utils.html#print_cpu_count"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.utils.print_cpu_count" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="ddm.utils.print_file_size">
-<span class="sig-prename descclassname"><span class="pre">ddm.utils.</span></span><span class="sig-name descname"><span class="pre">print_file_size</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/utils.html#print_file_size"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.utils.print_file_size" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="ddm.utils.verify_bioformats_jar">
-<span class="sig-prename descclassname"><span class="pre">ddm.utils.</span></span><span class="sig-name descname"><span class="pre">verify_bioformats_jar</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddm/utils.html#verify_bioformats_jar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddm.utils.verify_bioformats_jar" title="Permalink to this definition">#</a></dt>
-<dd><p>Check presence of .jar file for pims.bioformats and download verison 6.5 if missing</p>
-</dd></dl>
-
-</section>
+<h1>API reference<a class="headerlink" href="#api-reference" title="Permalink to this headline">#</a></h1>
+<p>This page provides an auto-generated summary of OpenDDM’s API.</p>
+<table class="autosummary longtable table autosummary">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/ddm.data_handling.html#module-ddm.data_handling" title="ddm.data_handling"><code class="xref py py-obj docutils literal notranslate"><span class="pre">data_handling</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/ddm.fitting.html#module-ddm.fitting" title="ddm.fitting"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fitting</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/ddm.plotting.html#module-ddm.plotting" title="ddm.plotting"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plotting</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/ddm.processing.html#module-ddm.processing" title="ddm.processing"><code class="xref py py-obj docutils literal notranslate"><span class="pre">processing</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/ddm.simulation.html#module-ddm.simulation" title="ddm.simulation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">simulation</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/ddm.utils.html#module-ddm.utils" title="ddm.utils"><code class="xref py py-obj docutils literal notranslate"><span class="pre">utils</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
 </section>
 
 
@@ -906,12 +649,19 @@ both diffusive and actively directed motion</p>
                 
     <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="changelog.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="theory.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Changelog</p>
+            <p class="prev-next-title">DDM theory</p>
         </div>
+    </a>
+    <a class='right-next' id="next-link" href="_autosummary/ddm.data_handling.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">ddm.data_handling</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
     </a>
 </div>
             </footer>
@@ -920,9 +670,9 @@ both diffusive and actively directed motion</p>
     <div class="footer-content row">
         <footer class="col footer"><p>
   
-    By Iain Muntz, James Conboy, Irene Istúriz<br/>
+    By Iain Muntz, Maurits Kok, James Conboy, Irene Istúriz<br/>
   
-      &copy; Copyright 2022, Iain Muntz, James Conboy, Irene Istúriz.<br/>
+      &copy; Copyright 2022, Technische Universiteit Delft.<br/>
 </p>
         </footer>
     </div>

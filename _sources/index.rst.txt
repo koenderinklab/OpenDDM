@@ -1,11 +1,29 @@
-Welcome to openddm's documentation!
+.. module:: ddm
+
+Welcome to OpenDDM's documentation!
 ===================================
+
+.. attention:: 
+   OpenDDM is under active development and currently in a pre-alpha state.
+
+
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :hidden:
+   :caption: For users
   
-   readme
-   theory
-   changelog
-   api
+   OpenDDM <readme>
+   DDM theory <theory>
+   API reference <api>
+
+.. toctree::
+   :maxdepth: 2
+   :hidden:
+   :caption: For developers/contributors
+
+   Development Guides <development-guides/index>
+   Contributing Guide <contributing>
+   Changelog <changelog>
+   GitHub repository <https://github.com/koenderinklab/ddmPilotCode>
+  
