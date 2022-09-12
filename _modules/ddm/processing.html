@@ -578,7 +578,9 @@ title="Fullscreen mode"
 
 
 <div class="viewcode-block" id="ddm"><a class="viewcode-back" href="../../_autosummary/ddm.processing.ddm.html#ddm.processing.ddm">[docs]</a><span class="k">def</span> <span class="nf">ddm</span><span class="p">(</span>
-    <span class="n">data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">dask</span><span class="o">.</span><span class="n">array</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">Array</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">taus</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">dask</span><span class="o">.</span><span class="n">array</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">Array</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
+    <span class="n">taus</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
+    <span class="n">bulk</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;_summary_</span>
 
@@ -587,6 +589,8 @@ title="Fullscreen mode"
 <span class="sd">    data : Union[dask.array.core.Array, np.ndarray]</span>
 <span class="sd">    taus : np.ndarray, optional</span>
 <span class="sd">        array of lag times (in frames), by default half of number of frames</span>
+<span class="sd">    bulk : bool, optional</span>
+<span class="sd">        Call dask.compute on entire tau range for GPU processing, by default False</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -611,7 +615,7 @@ title="Fullscreen mode"
                 <span class="kn">import</span> <span class="nn">cupy</span> <span class="k">as</span> <span class="nn">cp</span>
 
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Running analysis on GPU&quot;</span><span class="p">)</span>
-                <span class="k">return</span> <span class="n">ddm_dask_gpu</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">taus</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">ddm_dask_gpu</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">taus</span><span class="p">,</span> <span class="n">bulk</span><span class="p">)</span>
             <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Running analysis on CPU&quot;</span><span class="p">)</span>
                 <span class="k">return</span> <span class="n">ddm_dask_cpu</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">taus</span><span class="p">)</span>
@@ -681,7 +685,7 @@ title="Fullscreen mode"
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">out</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="ddm_dask_gpu"><a class="viewcode-back" href="../../_autosummary/ddm.processing.ddm_dask_gpu.html#ddm.processing.ddm_dask_gpu">[docs]</a><span class="k">def</span> <span class="nf">ddm_dask_gpu</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">taus</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">)):</span>
+<div class="viewcode-block" id="ddm_dask_gpu"><a class="viewcode-back" href="../../_autosummary/ddm.processing.ddm_dask_gpu.html#ddm.processing.ddm_dask_gpu">[docs]</a><span class="k">def</span> <span class="nf">ddm_dask_gpu</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">taus</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">bulk</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;_summary_</span>
 
 <span class="sd">    Parameters</span>
@@ -690,6 +694,8 @@ title="Fullscreen mode"
 <span class="sd">        _description_</span>
 <span class="sd">    taus : _type_, optional</span>
 <span class="sd">        _description_, by default np.arange(0)</span>
+<span class="sd">    bulk : bool, optional</span>
+<span class="sd">        Call dask.compute on entire tau range, by default False</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -706,19 +712,38 @@ title="Fullscreen mode"
     <span class="n">fft_data</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft2</span><span class="p">(</span><span class="n">data_gpu</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">cp</span><span class="o">.</span><span class="n">complex64</span><span class="p">)</span>
     <span class="k">del</span> <span class="n">data_gpu</span>
 
-    <span class="k">for</span> <span class="n">tau</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">taus</span><span class="p">):</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="n">calc_matrix_dask</span><span class="p">(</span><span class="n">fft_data</span><span class="p">,</span> <span class="n">tau</span><span class="p">)</span>
-        <span class="n">out</span> <span class="o">=</span> <span class="n">dask</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">scheduler</span><span class="o">=</span><span class="s2">&quot;single-threaded&quot;</span><span class="p">)</span>
-        <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cp</span><span class="o">.</span><span class="n">asnumpy</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
-        <span class="k">del</span> <span class="n">result</span><span class="p">,</span> <span class="n">out</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">bulk</span><span class="p">:</span>  <span class="c1"># compute taus in separate steps</span>
+
+        <span class="k">for</span> <span class="n">tau</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">taus</span><span class="p">):</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">calc_matrix_dask</span><span class="p">(</span><span class="n">fft_data</span><span class="p">,</span> <span class="n">tau</span><span class="p">)</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">dask</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">scheduler</span><span class="o">=</span><span class="s2">&quot;single-threaded&quot;</span><span class="p">)</span>
+            <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cp</span><span class="o">.</span><span class="n">asnumpy</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+            <span class="k">del</span> <span class="n">result</span><span class="p">,</span> <span class="n">out</span>
+            <span class="n">cp</span><span class="o">.</span><span class="n">_default_memory_pool</span><span class="o">.</span><span class="n">free_all_blocks</span><span class="p">()</span>
+
+        <span class="k">del</span> <span class="n">fft_data</span>
         <span class="n">cp</span><span class="o">.</span><span class="n">_default_memory_pool</span><span class="o">.</span><span class="n">free_all_blocks</span><span class="p">()</span>
 
-    <span class="k">del</span> <span class="n">fft_data</span>
-    <span class="n">cp</span><span class="o">.</span><span class="n">_default_memory_pool</span><span class="o">.</span><span class="n">free_all_blocks</span><span class="p">()</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">data</span><span class="p">,</span> <span class="n">tau</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">taus</span><span class="p">):</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">calc_radial</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">num_frames</span><span class="p">,</span> <span class="n">tau</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>  <span class="c1"># compute all taus in one step</span>
+        <span class="k">for</span> <span class="n">tau</span> <span class="ow">in</span> <span class="n">taus</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">calc_matrix_dask</span><span class="p">(</span><span class="n">fft_data</span><span class="p">,</span> <span class="n">tau</span><span class="p">)</span>
+            <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+            <span class="k">del</span> <span class="n">result</span>
+            <span class="n">cp</span><span class="o">.</span><span class="n">_default_memory_pool</span><span class="o">.</span><span class="n">free_all_blocks</span><span class="p">()</span>
 
-    <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">data</span><span class="p">,</span> <span class="n">tau</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">taus</span><span class="p">):</span>
-        <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">calc_radial</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">num_frames</span><span class="p">,</span> <span class="n">tau</span><span class="p">))</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">dask</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="o">*</span><span class="n">results</span><span class="p">,</span> <span class="n">scheduler</span><span class="o">=</span><span class="s2">&quot;single-threaded&quot;</span><span class="p">)</span>
+        <span class="k">del</span> <span class="n">fft_data</span><span class="p">,</span> <span class="n">results</span>
+        <span class="n">cp</span><span class="o">.</span><span class="n">_default_memory_pool</span><span class="o">.</span><span class="n">free_all_blocks</span><span class="p">()</span>
+
+        <span class="n">fft_shift</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">cp</span><span class="o">.</span><span class="n">asnumpy</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">out</span><span class="p">])</span>
+        <span class="c1"># return fft_shift</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">data</span><span class="p">,</span> <span class="n">tau</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">fft_shift</span><span class="p">,</span> <span class="n">taus</span><span class="p">):</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">calc_radial</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">num_frames</span><span class="p">,</span> <span class="n">tau</span><span class="p">))</span>
+
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">out</span><span class="p">)</span></div>
 
 
