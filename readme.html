@@ -712,14 +712,14 @@ title="Print to PDF"
                 
   <section class="tex2jax_ignore mathjax_ignore" id="openddm">
 <h1>OpenDDM<a class="headerlink" href="#openddm" title="Permalink to this headline">#</a></h1>
-<p><a class="reference external" href="https://github.com/koenderinklab/ddmPilotCode/blob/master/LICENSE"><img alt="GitHub" src="https://img.shields.io/github/license/koenderinklab/ddmPilotCode?" /></a>
-<a class="reference external" href="https://codecov.io/gh/koenderinklab/ddmPilotCode"><img alt="codecov" src="https://codecov.io/gh/koenderinklab/ddmPilotCode/branch/master/graph/badge.svg?token=V4VZcNYyMG" /></a>
-<img alt="GitHub Workflow Status (event)" src="https://img.shields.io/github/workflow/status/koenderinklab/ddmPilotCode/deploy-documentation?label=documentation" />
-<img alt="GitHub Workflow Status (event)" src="https://img.shields.io/github/workflow/status/koenderinklab/ddmPilotCode/Build%20and%20test%20Python%20package" />
-<img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/koenderinklab/ddmPilotCode" /></p>
+<p><a class="reference external" href="https://github.com/koenderinklab/openddm/blob/master/LICENSE"><img alt="GitHub" src="https://img.shields.io/github/license/koenderinklab/openddm?" /></a>
+<a class="reference external" href="https://codecov.io/gh/koenderinklab/openddm"><img alt="codecov" src="https://codecov.io/gh/koenderinklab/openddm/branch/master/graph/badge.svg?token=V4VZcNYyMG" /></a>
+<img alt="GitHub Workflow Status (event)" src="https://img.shields.io/github/workflow/status/koenderinklab/openddm/deploy-documentation?label=documentation" />
+<img alt="GitHub Workflow Status (event)" src="https://img.shields.io/github/workflow/status/koenderinklab/openddm/Build%20and%20test%20Python%20package" />
+<img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/koenderinklab/openddm" /></p>
 <p>A Python package to analyse an image sequence and measure diffusion properties through Fourier techniques.</p>
 <p><strong>This package is under active development and currently in a pre-alpha state.</strong></p>
-<p>Additional information as well as API references can be found on our <a class="reference external" href="https://koenderinklab.github.io/ddmPilotCode/">webpage</a>.</p>
+<p>Additional information as well as API references can be found on our <a class="reference external" href="https://koenderinklab.github.io/openddm/">webpage</a>.</p>
 <section id="installation-for-users">
 <h2>Installation for users<a class="headerlink" href="#installation-for-users" title="Permalink to this headline">#</a></h2>
 <section id="required-dependencies">
@@ -735,13 +735,13 @@ title="Print to PDF"
 <p>OpenDDM is under development and not (yet) available through PyPI. We recommend installing the package in a conda environment. To install the software locally:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda env create -n ddm_env <span class="nv">python</span><span class="o">=</span><span class="m">3</span>.8
 conda activate ddm_env
-pip install git+https://github.com/koenderinklab/ddmPilotCode
+pip install git+https://github.com/koenderinklab/openddm
 </pre></div>
 </div>
 <p>In order to make use of a CUDA-enabled GPU with cupy, you can install the additional dependencies with</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># conda env create -n ddm_env python=3.8</span>
 <span class="c1"># conda activate ddm_env</span>
-pip install git+https://github.com/koenderinklab/ddmPilotCode#egg<span class="o">=</span>ddm<span class="o">[</span>cuda<span class="o">]</span>
+pip install git+https://github.com/koenderinklab/openddm#egg<span class="o">=</span>ddm<span class="o">[</span>cuda<span class="o">]</span>
 </pre></div>
 </div>
 <p>Please look at the <a class="reference external" href="https://docs.cupy.dev/en/stable/install.html">CuPy requirements</a> for more info on suitable GPUs.</p>
@@ -749,7 +749,7 @@ pip install git+https://github.com/koenderinklab/ddmPilotCode#egg<span class="o"
 </section>
 <section id="installation-for-developers">
 <h2>Installation for developers<a class="headerlink" href="#installation-for-developers" title="Permalink to this headline">#</a></h2>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone git@github.com:koenderinklab/ddmPilotCode.git ddm
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone git@github.com:koenderinklab/openddm.git ddm
 <span class="nb">cd</span> ddm
 conda env create -f environment.yml
 conda activate ddm_env
