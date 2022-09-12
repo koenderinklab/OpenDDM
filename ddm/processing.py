@@ -14,7 +14,9 @@ except ImportError:
 
 
 def ddm(
-    data: Union[dask.array.core.Array, np.ndarray], taus: np.ndarray = np.arange(0)
+    data: Union[dask.array.core.Array, np.ndarray],
+    taus: np.ndarray = np.arange(0),
+    bulk: bool = False,
 ) -> np.ndarray:
     """_summary_
 
@@ -23,6 +25,8 @@ def ddm(
     data : Union[dask.array.core.Array, np.ndarray]
     taus : np.ndarray, optional
         array of lag times (in frames), by default half of number of frames
+    bulk : bool, optional
+        Call dask.compute on entire tau range for GPU processing, by default False
 
     Returns
     -------
@@ -47,7 +51,7 @@ def ddm(
                 import cupy as cp
 
                 print("Running analysis on GPU")
-                return ddm_dask_gpu(data, taus)
+                return ddm_dask_gpu(data, taus, bulk)
             except ImportError:
                 print("Running analysis on CPU")
                 return ddm_dask_cpu(data, taus)
@@ -117,7 +121,7 @@ def ddm_dask_cpu(data, taus: np.ndarray):
     return np.asarray(out)
 
 
-def ddm_dask_gpu(data, taus: np.ndarray = np.arange(0)):
+def ddm_dask_gpu(data, taus: np.ndarray = np.arange(0), bulk: bool = False):
     """_summary_
 
     Parameters
@@ -126,6 +130,8 @@ def ddm_dask_gpu(data, taus: np.ndarray = np.arange(0)):
         _description_
     taus : _type_, optional
         _description_, by default np.arange(0)
+    bulk : bool, optional
+        Call dask.compute on entire tau range, by default False
 
     Returns
     -------
@@ -142,19 +148,38 @@ def ddm_dask_gpu(data, taus: np.ndarray = np.arange(0)):
     fft_data = da.fft.fft2(data_gpu).astype(cp.complex64)
     del data_gpu
 
-    for tau in tqdm(taus):
-        result = calc_matrix_dask(fft_data, tau)
-        out = dask.compute(result, scheduler="single-threaded")
-        results.append(cp.asnumpy(out[0]))
-        del result, out
+    if not bulk:  # compute taus in separate steps
+
+        for tau in tqdm(taus):
+            result = calc_matrix_dask(fft_data, tau)
+            out = dask.compute(result, scheduler="single-threaded")
+            results.append(cp.asnumpy(out[0]))
+            del result, out
+            cp._default_memory_pool.free_all_blocks()
+
+        del fft_data
         cp._default_memory_pool.free_all_blocks()
 
-    del fft_data
-    cp._default_memory_pool.free_all_blocks()
+        out = []
+        for data, tau in zip(results, taus):
+            out.append(calc_radial(data, num_frames, tau))
+    else:  # compute all taus in one step
+        for tau in taus:
+            result = calc_matrix_dask(fft_data, tau)
+            results.append(result)
+            del result
+            cp._default_memory_pool.free_all_blocks()
 
-    out = []
-    for data, tau in zip(results, taus):
-        out.append(calc_radial(data, num_frames, tau))
+        out = dask.compute(*results, scheduler="single-threaded")
+        del fft_data, results
+        cp._default_memory_pool.free_all_blocks()
+
+        fft_shift = np.asarray([cp.asnumpy(x) for x in out])
+        # return fft_shift
+        out = []
+        for data, tau in zip(fft_shift, taus):
+            out.append(calc_radial(data, num_frames, tau))
+
     return np.asarray(out)
 
 
