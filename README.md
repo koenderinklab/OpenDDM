@@ -1,17 +1,17 @@
 # OpenDDM 
 
-[![GitHub](https://img.shields.io/github/license/koenderinklab/ddmPilotCode?)](https://github.com/koenderinklab/ddmPilotCode/blob/master/LICENSE)
-[![codecov](https://codecov.io/gh/koenderinklab/ddmPilotCode/branch/master/graph/badge.svg?token=V4VZcNYyMG)](https://codecov.io/gh/koenderinklab/ddmPilotCode)
-![GitHub Workflow Status (event)](https://img.shields.io/github/workflow/status/koenderinklab/ddmPilotCode/deploy-documentation?label=documentation)
-![GitHub Workflow Status (event)](https://img.shields.io/github/workflow/status/koenderinklab/ddmPilotCode/Build%20and%20test%20Python%20package)
-![GitHub repo size](https://img.shields.io/github/repo-size/koenderinklab/ddmPilotCode)
+[![GitHub](https://img.shields.io/github/license/koenderinklab/openddm?)](https://github.com/koenderinklab/openddm/blob/master/LICENSE)
+[![codecov](https://codecov.io/gh/koenderinklab/openddm/branch/master/graph/badge.svg?token=V4VZcNYyMG)](https://codecov.io/gh/koenderinklab/openddm)
+![GitHub Workflow Status (event)](https://img.shields.io/github/workflow/status/koenderinklab/openddm/deploy-documentation?label=documentation)
+![GitHub Workflow Status (event)](https://img.shields.io/github/workflow/status/koenderinklab/openddm/Build%20and%20test%20Python%20package)
+![GitHub repo size](https://img.shields.io/github/repo-size/koenderinklab/openddm)
 
 
 A Python package to analyse an image sequence and measure diffusion properties through Fourier techniques.
 
 **This package is under active development and currently in a pre-alpha state.**
 
-Additional information as well as API references can be found on our [webpage](https://koenderinklab.github.io/ddmPilotCode/).
+Additional information as well as API references can be found on our [webpage](https://koenderinklab.github.io/openddm/).
 
 ## Installation for users
 
@@ -26,7 +26,7 @@ OpenDDM is under development and not (yet) available through PyPI. We recommend 
 ```bash
 conda env create -n ddm_env python=3.8
 conda activate ddm_env
-pip install git+https://github.com/koenderinklab/ddmPilotCode
+pip install git+https://github.com/koenderinklab/openddm
 ```
 
 In order to make use of a CUDA-enabled GPU with cupy, you can install the additional dependencies with
@@ -34,7 +34,7 @@ In order to make use of a CUDA-enabled GPU with cupy, you can install the additi
 ```bash
 # conda env create -n ddm_env python=3.8
 # conda activate ddm_env
-pip install git+https://github.com/koenderinklab/ddmPilotCode#egg=ddm[cuda]
+pip install git+https://github.com/koenderinklab/openddm#egg=ddm[cuda]
 ```
 
 Please look at the [CuPy requirements](https://docs.cupy.dev/en/stable/install.html) for more info on suitable GPUs.
@@ -42,7 +42,7 @@ Please look at the [CuPy requirements](https://docs.cupy.dev/en/stable/install.h
 ## Installation for developers
 
 ```bash
-git clone git@github.com:koenderinklab/ddmPilotCode.git ddm
+git clone git@github.com:koenderinklab/openddm.git ddm
 cd ddm
 conda env create -f environment.yml
 conda activate ddm_env
