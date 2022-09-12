@@ -15,10 +15,10 @@ from tifffile import natural_sorted
 
 
 def read_data_into_dask(fname, nframes: int = 1, *, experiment: int = 0):
-    """
-    Read image data into a Dask Array.
+    """Read image data into a Dask Array.
     Provides a simple, fast mechanism to ingest image data into a
     Dask Array.
+
     Parameters
     ----------
     fname : str or pathlib.Path
