@@ -15,6 +15,7 @@ Welcome to OpenDDM's documentation!
   
    OpenDDM <readme>
    DDM theory <theory>
+   Performance OpenDDM <performance>
    API reference <api>
 
 .. toctree::
