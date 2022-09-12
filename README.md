@@ -1,21 +1,21 @@
 # OpenDDM 
 
-![GitHub](https://img.shields.io/github/license/koenderinklab/ddmPilotCode)
-[![codecov](https://codecov.io/gh/koenderinklab/ddmPilotCode/branch/develop/graph/badge.svg?token=V4VZcNYyMG)](https://codecov.io/gh/koenderinklab/ddmPilotCode)
+[![GitHub](https://img.shields.io/github/license/koenderinklab/ddmPilotCode?)](https://github.com/koenderinklab/ddmPilotCode/blob/master/LICENSE)
+[![codecov](https://codecov.io/gh/koenderinklab/ddmPilotCode/branch/master/graph/badge.svg?token=V4VZcNYyMG)](https://codecov.io/gh/koenderinklab/ddmPilotCode)
 ![GitHub Workflow Status (event)](https://img.shields.io/github/workflow/status/koenderinklab/ddmPilotCode/deploy-documentation?label=documentation)
 ![GitHub Workflow Status (event)](https://img.shields.io/github/workflow/status/koenderinklab/ddmPilotCode/Build%20and%20test%20Python%20package)
 ![GitHub repo size](https://img.shields.io/github/repo-size/koenderinklab/ddmPilotCode)
+
 
 A Python package to analyse an image sequence and measure diffusion properties through Fourier techniques.
 
 **This package is under active development and currently in a pre-alpha state.**
 
-Additional information as well as an API reference can be found on our [webpage](https://koenderinklab.github.io/ddmPilotCode/).
+Additional information as well as API references can be found on our [webpage](https://koenderinklab.github.io/ddmPilotCode/).
 
 ## Installation for users
 
 ### Required dependencies
-
 - Python 3.8 or 3.9
 - Anaconda (recommended)
 - Optional: Nvidia CUDA GPU
