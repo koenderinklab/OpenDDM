@@ -43,6 +43,6 @@ sphinx-build ./docs _build
 You can then view the documentation by opening the file `docs/_build/html/index.rst` in a webbrowser.
 
 ## Automatically publish a documentation website
-We have set up a GitHub action to build and publish the documentation when we push a new commit to the master branch. The workflow can be found in `.github/workflows/CI_pages.yml` and the webpage at https://koenderinklab.github.io/ddmPilotCode/. 
+We have set up a GitHub action to build and publish the documentation when we push a new commit to the master branch. The workflow can be found in [`.github/workflows/CI_pages.yml`](https://github.com/koenderinklab/OpenDDM/blob/master/.github/workflows/CI_pages.yml) and the webpage at https://koenderinklab.github.io/OpenDDM/. 
 
 Publishing documentation as a website is handled by GitHub with [GitHub pages](https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site). In the settings of the repository, under the tab `pages`, we have pointed GitHub to the branch `gh-pages` to find the (sphinx-build) documentation. When the `CI_pages` action is run, it will build the documentation with sphinx and push the changes to the branch `gh-pages`. GitHub will then update the webpages accordingly. 

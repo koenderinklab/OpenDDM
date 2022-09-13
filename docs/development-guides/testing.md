@@ -47,10 +47,10 @@ The general skeleton of a tests will follow:
 1. Compare expected and actual result with an `assert` statement
 
 ## Automating testing
-We have set up a GitHub Action to automatically run all the tests when a pushing changes to GitHub and upon opening a pull request. The workflow can be found in the folder `./github/workflows/CI_build.yml`. For more information on GitHub Actions for running tests, have a look at https://docs.github.com/en/actions/guides/building-and-testing-python.
+We have set up a GitHub Action to automatically run all the tests when a pushing changes to GitHub and upon opening a pull request. The workflow can be found in the folder [`./github/workflows/CI_build.yml`](https://github.com/koenderinklab/OpenDDM/blob/master/.github/workflows/CI_build.yml). For more information on GitHub Actions for running tests, have a look at https://docs.github.com/en/actions/guides/building-and-testing-python.
 
 ## Code coverage
-Code coverage establishes the percentage of code under tests. A good goal would be to have at least 70% of the code base under unit testing. To make inspection of the coverage easy, we are using the online service [Codecov](https://about.codecov.io/). Whenever we (automatically) run the tests with GitHub actions, the results will be uploaded to Codecov and made available at https://app.codecov.io/gh/koenderinklab/ddmPilotCode/. At the bottom of the page, you can look through the codebase and check which parts are currently covered by tests.  
+Code coverage establishes the percentage of code under tests. A good goal would be to have at least 70% of the code base under unit testing. To make inspection of the coverage easy, we are using the online service [Codecov](https://about.codecov.io/). Whenever we (automatically) run the tests with GitHub actions, the results will be uploaded to Codecov and made available at https://app.codecov.io/gh/koenderinklab/OpenDDM/. At the bottom of the page, you can look through the codebase and check which parts are currently covered by tests.  
 
 Additionally, Codecov will produce coverage reports in pull requests for a quick check of the tests.
 
