@@ -32,15 +32,13 @@ pip install git+https://github.com/koenderinklab/openddm
 conda install -c conda-forge sdt-python
 ```
 
-In order to make use of a CUDA-enabled GPU with cupy, you can install the additional dependencies with
+In order to make use of a CUDA-enabled GPU with cupy, you need install the additional dependencies with
 
 ```bash
-# conda env create -n ddm_env python=3.8
-# conda activate ddm_env
-pip install git+https://github.com/koenderinklab/openddm#egg=ddm[cuda]
+conda install -c conda-forge cupy
 ```
 
-Please look at the [CuPy requirements](https://docs.cupy.dev/en/stable/install.html) for more info on suitable GPUs.
+Please consult at the [CuPy requirements](https://docs.cupy.dev/en/stable/install.html) for more info on suitable GPUs and installation options.
 
 ## Installation for developers
 We recommend using mamba to build the environment. Install mamba in your conda base environment with
