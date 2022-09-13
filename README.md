@@ -27,6 +27,9 @@ OpenDDM is under development and not (yet) available through PyPI. We recommend 
 conda env create -n ddm_env python=3.8
 conda activate ddm_env
 pip install git+https://github.com/koenderinklab/openddm
+
+# To make use of the simulation module, you will also need to run
+conda install -c conda-forge sdt-python
 ```
 
 In order to make use of a CUDA-enabled GPU with cupy, you can install the additional dependencies with
@@ -40,11 +43,19 @@ pip install git+https://github.com/koenderinklab/openddm#egg=ddm[cuda]
 Please look at the [CuPy requirements](https://docs.cupy.dev/en/stable/install.html) for more info on suitable GPUs.
 
 ## Installation for developers
+We recommend using mamba to build the environment. Install mamba in your conda base environment with
+
+```bash
+conda install -c conda-forge mamba
+```
+
+Then, to create the development environment:
 
 ```bash
 git clone git@github.com:koenderinklab/openddm.git ddm
 cd ddm
-conda env create -f environment.yml
+# conda env create -f environment.yml
+mamba env create -f environment.yml
 conda activate ddm_env
 pip install -e .[dev]
 ``` 

@@ -6,14 +6,11 @@ channels:
   - defaults
 dependencies:
   - dask
-  - dask-image
   - ipympl
   - ipywidgets
   - jpype1=>0.6.1
   - matplotlib
-  - nd2reader
   - notebook
-  - numba
   - numpy
   - pims
   - pip
@@ -21,10 +18,8 @@ dependencies:
       - nd2==0.3.0
       - git+https://github.com/schuetzgroup/sdt-python.git@17.3
   - psutil
-  - pyfftw
   - python=3.8
   - python-graphviz
-  - readlif
   - scikit-image
   - scipy
   - tqdm
