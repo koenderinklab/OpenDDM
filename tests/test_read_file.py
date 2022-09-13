@@ -27,13 +27,13 @@ def test_load_unknown_file():
 
 def test_import_lif_type():
     data_path = THIS_DIR / "data/testData1series.lif"
-    data = read_file(data_path)
+    data = read_file(data_path, chunk_size=1)
     assert isinstance(data, xarray.DataArray)
 
 
 def test_import_lif_multi_experiment():
     data_path = THIS_DIR / "data/testData3series.lif"
-    data = read_file(data_path, experiment=1)
+    data = read_file(data_path, chunk_size=1, experiment=1)
     assert isinstance(data, xarray.DataArray)
 
 
@@ -55,7 +55,7 @@ def test_lif_invalid_type_experiment(monkeypatch):
 
 def test_import_nd2_type():
     data_path = THIS_DIR / "data/testData10frames.nd2"
-    data = read_file(data_path)
+    data = read_file(data_path, chunk_size=1)
     assert isinstance(data, xarray.DataArray)
 
 
@@ -74,7 +74,7 @@ def test_import_tif_img_selection():
 
 def test_import_tif_type_delayed():
     data_path = THIS_DIR / "data/21-03-31_ddm_fb_2mg-mll_sample.tif"
-    data = read_file(data_path, delayed=True)
+    data = read_file(data_path, delayed=True, chunk_size=1)
     assert isinstance(data, xarray.DataArray)
     assert isinstance(data.data, dask.array.core.Array)
 
@@ -82,7 +82,9 @@ def test_import_tif_type_delayed():
 def test_custom_scales_tif():
     data_path = THIS_DIR / "data/21-03-31_ddm_fb_2mg-mll_sample.tif"
     expected_result = 5
-    data = read_file(data_path, xscale=expected_result, tscale=expected_result)
+    data = read_file(
+        data_path, delayed=False, xscale=expected_result, tscale=expected_result
+    )
     assert data.attrs["xyScale"] == expected_result
     assert data.attrs["tScale"] == expected_result
 
@@ -90,6 +92,8 @@ def test_custom_scales_tif():
 def test_custom_scales_lif():
     data_path = THIS_DIR / "data/testData1series.lif"
     expected_result = 10
-    data = read_file(data_path, xscale=expected_result, tscale=expected_result)
+    data = read_file(
+        data_path, delayed=False, xscale=expected_result, tscale=expected_result
+    )
     assert data.attrs["xyScale"] == expected_result
     assert data.attrs["tScale"] == expected_result

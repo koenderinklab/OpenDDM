@@ -7,3 +7,6 @@ testpaths = "tests"
 
 [tool.coverage.run]
 source = ["openddm"]
+
+[tool.mypy]
+ignore_missing_imports = "True"
