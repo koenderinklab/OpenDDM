@@ -1,9 +1,11 @@
-import numpy as np
-from scipy.optimize import curve_fit
-import xarray as xr
-import dask.array as da
-import dask
 from typing import Tuple
+
+import dask
+import dask.array as da
+import numpy as np
+import xarray as xr
+from scipy.optimize import curve_fit
+
 from .processing import radial_profile
 
 
@@ -39,7 +41,7 @@ def compute_AB(dData: xr.DataArray) -> Tuple[np.ndarray, float]:
     return a, b
 
 
-def findMeanSqFFT(dData: dask.array) -> np.ndarray:
+def findMeanSqFFT(dData: dask.array.core.Array) -> np.ndarray:
     """
     Function to calculate the mean of the square of the FFT over all frames
 

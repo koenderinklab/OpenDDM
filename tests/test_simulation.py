@@ -1,11 +1,8 @@
 import numpy as np
 import pytest
 
-from openddm.simulation import (
-    get_diffusion_coefficient,
-    generate_tracks,
-    generate_images,
-)
+from openddm.simulation import (generate_images, generate_tracks,
+                                get_diffusion_coefficient)
 
 
 def test_default_diffusion_coefficient():

@@ -36,7 +36,7 @@ def generate_tracks(
     drift: Tuple[float, float] = (0.1, 0.1),
     window: Tuple[int, int] = (512, 512),
     pixel_size: float = 1e-7,
-    D: float = None,
+    D: float = 1,
 ) -> np.ndarray:
     """Generate tracks of particles undergoing 2D Brownian motion
 
@@ -63,7 +63,7 @@ def generate_tracks(
         3D array with particle tracks with shape (n_particles, dimensions, time points)
     """
 
-    k = np.sqrt(2 * D * tau)
+    k: float = np.sqrt(2 * D * tau)
 
     x = k * (np.random.randn(n_particles, steps - 1) + drift[0]) / pixel_size
     y = k * (np.random.randn(n_particles, steps - 1) + drift[1]) / pixel_size

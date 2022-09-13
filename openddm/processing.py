@@ -1,8 +1,9 @@
 from typing import Union
-import numpy as np
+
 import dask
-from dask.diagnostics import ProgressBar
 import dask.array as da
+import numpy as np
+from dask.diagnostics import ProgressBar
 from tqdm import tqdm
 
 from .utils import is_gpu_available

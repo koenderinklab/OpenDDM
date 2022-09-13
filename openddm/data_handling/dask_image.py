@@ -2,10 +2,9 @@
 # All rights reserved.
 
 import glob
-import threading
 import numbers
+import threading
 import warnings
-
 from typing import Any
 
 import dask.array as da

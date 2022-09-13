@@ -1,6 +1,8 @@
 import matplotlib.pyplot as pl
 import numpy as np
-from .fitting import singleExp, genFit
+
+from .fitting import genFit, singleExp
+
 
 def plotISF(isf, taus, q = None):
     """_summary_

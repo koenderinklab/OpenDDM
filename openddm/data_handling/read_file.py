@@ -1,16 +1,15 @@
 import os
 import warnings
+from typing import Dict, Union
 
 import dask
 import numpy as np
-import xarray
-from typing import Dict, Union
 import pims
+import xarray
 
-from .read_metadata import read_metadata
-from .dask_image import read_data_into_dask
 from ..utils import verify_bioformats_jar
-
+from .dask_image import read_data_into_dask
+from .read_metadata import read_metadata
 
 SUPPORTED_FORMATS = [".lif", ".nd2", ".tif", ".tiff"]
 

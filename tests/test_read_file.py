@@ -1,9 +1,9 @@
 from pathlib import Path
 
-import pytest
-import xarray
 import dask
 import numpy
+import pytest
+import xarray
 
 from openddm.data_handling.read_file import read_file
 from openddm.utils import verify_bioformats_jar

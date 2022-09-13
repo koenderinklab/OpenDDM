@@ -1,9 +1,10 @@
-import os
 import multiprocessing
+import os
 from urllib.error import HTTPError
+
+import pims
 import psutil
 from dask.diagnostics import ProgressBar
-import pims
 
 
 def dask_progressbar(show=True):

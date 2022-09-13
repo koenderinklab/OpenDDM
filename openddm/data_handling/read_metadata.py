@@ -1,7 +1,8 @@
 import os
-import pims
-import nd2
 from typing import Dict
+
+import nd2
+import pims
 
 
 def read_metadata(filename: str) -> Dict:
