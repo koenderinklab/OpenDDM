@@ -1,0 +1,1 @@
+sdt-python @ git+https://git@github.com/schuetzgroup/sdt-python.git@17.3
