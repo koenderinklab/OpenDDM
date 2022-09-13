@@ -57,3 +57,4 @@ Uses ~4.5Gb of GPU memory
 ## References
 - https://blog.dask.org/2019/01/03/dask-array-gpus-first-steps
 - https://stackoverflow.com/questions/56776385/how-to-create-a-dask-array-from-cupy-array
+- https://medium.com/rapids-ai/reading-larger-than-memory-csvs-with-rapids-and-dask-e6e27dfa6c0f
