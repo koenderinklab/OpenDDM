@@ -11,6 +11,7 @@ dependencies:
   - jpype1=>0.6.1
   - matplotlib
   - notebook
+  - numba
   - numpy
   - pims
   - pip
