@@ -38,7 +38,7 @@ In order to make use of a CUDA-enabled GPU with cupy, you need install the addit
 conda install -c conda-forge cupy
 ```
 
-Please consult at the [CuPy requirements](https://docs.cupy.dev/en/stable/install.html) for more info on suitable GPUs and installation options.
+Please consult the [CuPy requirements](https://docs.cupy.dev/en/stable/install.html) for more info on suitable GPUs and installation options.
 
 ## Installation for developers
 We recommend using mamba to build the environment. Install mamba in your conda base environment with
@@ -50,8 +50,8 @@ conda install -c conda-forge mamba
 Then, to create the development environment:
 
 ```bash
-git clone git@github.com:koenderinklab/openddm.git ddm
-cd ddm
+git clone git@github.com:koenderinklab/openddm.git
+cd openddm
 # conda env create -f environment.yml
 mamba env create -f environment.yml
 conda activate ddm_env
@@ -60,7 +60,7 @@ pip install -e .[dev]
 
 ### Running tests
 
-To run the test suite after installing OpenDDM with the development depednencies, run `pytest` in the root directory of the openddm repository.
+To run the test suite after installing OpenDDM with the development dependencies, run `pytest` in the root directory of the openddm repository.
 
 ## License
 Copyright 2022 Technische Universiteit Delft
