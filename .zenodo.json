@@ -1,0 +1,33 @@
+{
+    "creators": [
+        {
+            "affiliation": "Technische Universiteit Delft, Department of Bionanoscience",
+            "name": "Muntz, Iain",
+            "orcid": "https://orcid.org/0000-0002-8434-8316"
+        },
+        {
+            "affiliation": "Technische Universiteit Delft, Digital Competence Center",
+            "name": "Kok, Maurits",
+            "orcid": "https://orcid.org/0000-0002-0564-2614"
+        },
+        {
+            "affiliation": "Technische Universiteit Delft, Digital Competence Center",
+            "name": "Comboy, James",
+            "orcid": ""
+        },
+        {
+            "affiliation": "Technische Universiteit Delft, Digital Competence Center",
+            "name": "Istúriz Petitjean, Irene",
+            "orcid": ""
+        }
+    ],
+    "description": "Python package to analyse image sequences and measure diffusion properties through Fourier techniques.",
+    "keywords": [
+        "differential dynamic microscopy",
+        "biological soft matter"
+    ],
+    "license": {
+        "id": "Apache-2.0"
+    },
+    "title": "openddm"
+}

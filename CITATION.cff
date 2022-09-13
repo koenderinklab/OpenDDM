@@ -2,22 +2,23 @@
 ---
 abstract: "Python package to analyse image sequences and measure diffusion properties through Fourier techniques."
 authors:
-  - affiliation: "Technische Universiteit Delft"
+  - affiliation: "Technische Universiteit Delft, Department of Bionanoscience"
     family-names: Muntz
     given-names: Iain
     orcid: "https://orcid.org/0000-0002-8434-8316"
-  - affiliation: "Technische Universiteit Delft"
-    family-names: Conboy
-    given-names: James
-    orcid: ""
-  - affiliation: "Technische Universiteit Delft"
-    family-names: "Istúriz"
-    given-names: Irene
-    orcid: ""
-  - affiliation: "Technische Universiteit Delft"
+  - affiliation: "Technische Universiteit Delft, Digital Competence Center"
     family-names: Kok
     given-names: Maurits
     orcid: "https://orcid.org/0000-0002-0564-2614"
+  - affiliation: "Technische Universiteit Delft, Department of Bionanoscience"
+    family-names: Conboy
+    given-names: James
+    orcid: ""
+  - affiliation: "Technische Universiteit Delft, Department of Bionanoscience"
+    family-names: "Istúriz"
+    given-names: Irene
+    orcid: ""
+
 cff-version: "1.1.0"
 keywords:
   - "python"
