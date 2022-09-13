@@ -5,8 +5,8 @@ import xarray
 import dask
 import numpy
 
-from ddm.data_handling.read_file import read_file
-from ddm.utils import verify_bioformats_jar
+from openddm.data_handling.read_file import read_file
+from openddm.utils import verify_bioformats_jar
 
 THIS_DIR = Path(__file__).parent
 

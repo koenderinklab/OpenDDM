@@ -26,8 +26,8 @@ copyright = "2022, Technische Universiteit Delft"
 author = "Iain Muntz, Maurits Kok, James Conboy, Irene Istúriz"
 
 # The full version, including alpha/beta/rc tags
-release = "0.1.0"
-
+version = "0.1.0"
+release = version
 
 # -- General configuration ---------------------------------------------------
 

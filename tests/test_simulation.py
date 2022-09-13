@@ -1,7 +1,11 @@
 import numpy as np
 import pytest
 
-from ddm.simulation import get_diffusion_coefficient, generate_tracks, generate_images
+from openddm.simulation import (
+    get_diffusion_coefficient,
+    generate_tracks,
+    generate_images,
+)
 
 
 def test_default_diffusion_coefficient():
@@ -23,6 +27,7 @@ def test_generate_tracks():
     assert isinstance(tracks, np.ndarray)
     assert tracks.shape == (10, 2, 100)
 
+
 def test_generate_images():
     D = get_diffusion_coefficient()
     tracks = generate_tracks(
@@ -33,4 +38,4 @@ def test_generate_images():
     )
     images = generate_images(tracks)
     assert isinstance(images, np.ndarray)
-    assert images.shape == (2, 512, 512)    
+    assert images.shape == (2, 512, 512)

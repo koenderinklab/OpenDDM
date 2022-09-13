@@ -2,8 +2,8 @@ from pathlib import Path
 
 import pytest
 
-from ddm.data_handling.read_metadata import read_metadata
-from ddm.utils import verify_bioformats_jar
+from openddm.data_handling.read_metadata import read_metadata
+from openddm.utils import verify_bioformats_jar
 
 THIS_DIR = Path(__file__).parent
 
