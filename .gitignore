@@ -5,6 +5,7 @@ dask-worker-space/
 .vscode/
 
 # Data files
+results/
 data/
 *.nd2
 *.lif
