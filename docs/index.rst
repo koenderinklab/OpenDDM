@@ -26,5 +26,5 @@ Welcome to OpenDDM's documentation!
    Development Guides <development-guides/index>
    Contributing Guide <contributing>
    Changelog <changelog>
-   GitHub repository <https://github.com/koenderinklab/ddmPilotCode>
+   GitHub repository <https://github.com/koenderinklab/OpenDDM>
   
