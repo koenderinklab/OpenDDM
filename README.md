@@ -11,7 +11,7 @@ A Python package to analyse an image sequence and measure diffusion properties t
 
 **This package is under active development and currently in a pre-alpha state.**
 
-Additional information as well as API references can be found on our [webpage](https://koenderinklab.github.io/openddm/).
+Additional information as well as API references can be found on our [webpage](https://koenderinklab.github.io/OpenDDM/).
 
 ## Installation for users
 
