@@ -1,9 +1,9 @@
 # OpenDDM 
 
 [![GitHub](https://img.shields.io/github/license/koenderinklab/openddm?)](https://github.com/koenderinklab/openddm/blob/master/LICENSE)
+![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/koenderinklab/OpenDDM/CI_build.yml)
+![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/koenderinklab/OpenDDM/CI_pages.yml)
 [![codecov](https://codecov.io/gh/koenderinklab/openddm/branch/master/graph/badge.svg?token=V4VZcNYyMG)](https://codecov.io/gh/koenderinklab/openddm)
-![GitHub Workflow Status (event)](https://img.shields.io/github/workflow/status/koenderinklab/openddm/deploy-documentation?label=documentation)
-![GitHub Workflow Status (event)](https://img.shields.io/github/workflow/status/koenderinklab/openddm/Build%20and%20test%20Python%20package)
 ![GitHub repo size](https://img.shields.io/github/repo-size/koenderinklab/openddm)
 
 
